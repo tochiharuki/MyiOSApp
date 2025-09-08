@@ -13,7 +13,7 @@ logger = logging.getLogger(__name__)
 app = Flask(__name__)
 
 # ─── CSV読み込み ─────────────────────────
-CSV_PATH = Path.home() / "Library/Mobile Documents/com~apple~CloudDocs/usd_jpy_features.csv"
+CSV_PATH = "usd_jpy_features.csv"
 
 try:
     df = pd.read_csv(CSV_PATH)
