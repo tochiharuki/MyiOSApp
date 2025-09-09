@@ -1,0 +1,48 @@
+name: iOS Build
+
+# いつ実行するか
+on:
+  push:
+    branches: [ main ]       # mainブランチにpushされたら自動実行
+  workflow_dispatch:         # 手動実行も可能
+
+jobs:
+  build:
+    runs-on: macos-latest    # 最新macOSランナーで実行
+
+    steps:
+    # 1. リポジトリをチェックアウト
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    # 2. CocoaPodsやSwift Package Managerなど依存関係があればインストール
+    - name: Install dependencies
+      run: |
+        # CocoaPodsなら
+        pod install || true
+        # SPMなら不要
+
+    # 3. Xcodeでアーカイブ（.xcarchive）を作成
+    - name: Build iOS app
+      run: |
+        xcodebuild \
+          -workspace YourApp.xcworkspace \  # ワークスペース名
+          -scheme YourApp \                  # スキーム名
+          -sdk iphoneos \
+          -configuration Release \
+          -archivePath $PWD/build/YourApp.xcarchive archive
+
+    # 4. .ipaにエクスポート
+    - name: Export .ipa
+      run: |
+        xcodebuild -exportArchive \
+          -archivePath $PWD/build/YourApp.xcarchive \
+          -exportOptionsPlist ExportOptions.plist \
+          -exportPath $PWD/build
+
+    # 5. .ipaをArtifactとしてアップロード
+    - name: Upload IPA
+      uses: actions/upload-artifact@v3
+      with:
+        name: ios-app
+        path: build/*.ipa
