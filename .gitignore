@@ -1,0 +1,17 @@
+  # Xcode
+DerivedData/
+build/
+*.xcuserstate
+*.xcuserdata
+*.xcworkspace/xcuserdata
+
+# CocoaPods
+Pods/
+
+# Swift Package Manager
+.build/
+
+# その他
+*.ipa
+*.dSYM.zip
+*.dSYM
