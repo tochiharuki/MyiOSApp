@@ -1,6 +1,5 @@
 name: iOS Build
 
-# いつ実行するか
 on:
   push:
     branches: [ main ]       # mainブランチにpushされたら自動実行
@@ -15,29 +14,22 @@ jobs:
     - name: Checkout code
       uses: actions/checkout@v3
 
-    # 2. スキーム確認（クラウド上で有効なスキーム名を確認）
+    # 2. Xcodeプロジェクトのスキーム確認
     - name: List Xcode schemes
       run: |
-        xcodebuild -workspace MyiOSApp.xcworkspace -list
+        xcodebuild -project MyiOSApp.xcodeproj -list
 
-    # 3. CocoaPodsやSwift Package Managerなど依存関係があればインストール
-    - name: Install dependencies
-      run: |
-        # CocoaPodsなら
-        pod install || true
-        # SPMなら不要
-
-    # 4. Xcodeでアーカイブ（.xcarchive）を作成
+    # 3. Xcodeでアーカイブ（.xcarchive）を作成
     - name: Build iOS app
       run: |
         xcodebuild \
-          -workspace MyiOSApp.xcworkspace \  # ワークスペース名
-          -scheme FXForecastGame \            # スキーム名（クラウドで確認したもの）
+          -project MyiOSApp.xcodeproj \       # プロジェクト名
+          -scheme FXForecastGame \            # スキーム名（クラウドで確認済み）
           -sdk iphoneos \
           -configuration Release \
           -archivePath $PWD/build/FXForecastGame.xcarchive archive
 
-    # 5. .ipaにエクスポート
+    # 4. .ipaにエクスポート
     - name: Export .ipa
       run: |
         xcodebuild -exportArchive \
@@ -45,7 +37,7 @@ jobs:
           -exportOptionsPlist ExportOptions.plist \
           -exportPath $PWD/build
 
-    # 6. .ipaをArtifactとしてアップロード
+    # 5. .ipaをArtifactとしてアップロード
     - name: Upload IPA
       uses: actions/upload-artifact@v4
       with:
