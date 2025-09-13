@@ -14,20 +14,15 @@ jobs:
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # 2. ディレクトリ移動（以降のステップはこのディレクトリ内で実行）
-    - name: Set working directory
-      run: cd forexgame/MyiOSApp
-      shell: bash
-
-    # 3. CocoaPods があればインストール
+    # 2. CocoaPods があればインストール
     - name: Install dependencies
       run: |
         if [ -f "Podfile" ]; then
           pod install
         fi
-      working-directory: forexgame/MyiOSApp
+      working-directory: MyiOSApp
 
-    # 4. Xcodeでアーカイブ作成
+    # 3. Xcodeでアーカイブ作成
     - name: Build app (archive)
       run: |
         xcodebuild \
@@ -36,20 +31,20 @@ jobs:
           -sdk iphoneos \
           -configuration Release \
           -archivePath $PWD/build/MyiOSApp.xcarchive archive
-      working-directory: forexgame/MyiOSApp
+      working-directory: MyiOSApp
 
-    # 5. .ipaにエクスポート
+    # 4. .ipaにエクスポート
     - name: Export IPA
       run: |
         xcodebuild -exportArchive \
           -archivePath $PWD/build/MyiOSApp.xcarchive \
           -exportOptionsPlist ExportOptions.plist \
           -exportPath $PWD/build
-      working-directory: forexgame/MyiOSApp
+      working-directory: MyiOSApp
 
-    # 6. .ipaをArtifactとしてアップロード
+    # 5. .ipaをArtifactとしてアップロード
     - name: Upload IPA artifact
       uses: actions/upload-artifact@v4
       with:
         name: MyiOSApp-ipa
-        path: forexgame/MyiOSApp/build/*.ipa
+        path: MyiOSApp/build/*.ipa
