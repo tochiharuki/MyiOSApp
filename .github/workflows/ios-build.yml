@@ -2,52 +2,44 @@ name: iOS Build
 
 on:
   push:
-    branches: [ main ]   # mainブランチにpushされたら自動実行
-  workflow_dispatch:     # 手動実行も可能
+    branches: [ main ]
+  workflow_dispatch:
 
 jobs:
   build:
     runs-on: macos-latest
 
     steps:
-    # 1. リポジトリをチェックアウト
     - name: Checkout repository
       uses: actions/checkout@v4
 
-    # 2. 依存関係のインストール（CocoaPods がある場合のみ）
     - name: Install dependencies
       run: |
-        if [ -f "forexgame/MyiOSApp/Podfile" ]; then
-          cd forexgame/MyiOSApp
+        cd forexgame/MyiOSApp
+        if [ -f "Podfile" ]; then
           pod install
         fi
 
-    # 3. スキーム一覧を表示（デバッグ用）
-    - name: List Xcode schemes
-      run: |
-        xcodebuild -project forexgame/MyiOSApp/MyiOSApp.xcodeproj -list
-
-    # 4. アーカイブ作成
     - name: Build app (archive)
       run: |
+        cd forexgame/MyiOSApp
         xcodebuild \
-          -project forexgame/MyiOSApp/MyiOSApp.xcodeproj \
+          -project MyiOSApp.xcodeproj \
           -scheme MyiOSApp \
           -sdk iphoneos \
           -configuration Release \
           -archivePath $PWD/build/MyiOSApp.xcarchive archive
 
-    # 5. IPAエクスポート
     - name: Export IPA
       run: |
+        cd forexgame/MyiOSApp
         xcodebuild -exportArchive \
           -archivePath $PWD/build/MyiOSApp.xcarchive \
-          -exportOptionsPlist forexgame/ExportOptions.plist \
+          -exportOptionsPlist ExportOptions.plist \
           -exportPath $PWD/build
 
-    # 6. IPAをArtifactsにアップロード
     - name: Upload IPA artifact
       uses: actions/upload-artifact@v4
       with:
         name: MyiOSApp-ipa
-        path: build/*.ipa
+        path: forexgame/MyiOSApp/build/*.ipa
