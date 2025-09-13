@@ -1,0 +1,43 @@
+name: iOS Build
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Install dependencies
+      run: |
+        # CocoaPods を使っている場合
+        if [ -f "Podfile" ]; then
+          pod install
+        fi
+
+    - name: Build app (archive)
+      run: |
+        xcodebuild \
+          -project MyiOSApp.xcodeproj \   # プロジェクト名に修正
+          -scheme MyiOSApp \              # スキーム名に修正
+          -sdk iphoneos \
+          -configuration Release \
+          -archivePath $PWD/build/MyiOSApp.xcarchive archive
+
+    - name: Export IPA
+      run: |
+        xcodebuild -exportArchive \
+          -archivePath $PWD/build/MyiOSApp.xcarchive \
+          -exportOptionsPlist ExportOptions.plist \
+          -exportPath $PWD/build
+
+    - name: Upload IPA artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: MyiOSApp-ipa
+        path: build/*.ipa
