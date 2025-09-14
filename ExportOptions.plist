@@ -5,10 +5,8 @@
     <key>method</key>
     <string>development</string>
     <key>signingStyle</key>
-    <string>manual</string>
-    <key>compileBitcode</key>
-    <false/>
-    <key>destination</key>
-    <string>export</string>
+    <string>automatic</string>
+    <key>teamID</key>
+    <string>4VAR6U574L</string> <!-- Apple IDのTeam ID -->
 </dict>
 </plist>
