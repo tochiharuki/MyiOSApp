@@ -30,7 +30,8 @@ jobs:
           -scheme MyiOSApp \
           -sdk iphoneos \
           -configuration Release \
-          -archivePath $PWD/build/MyiOSApp.xcarchive archive
+          -archivePath $PWD/build/MyiOSApp.xcarchive \
+          -allowProvisioningUpdates archive
       working-directory: MyiOSApp
 
     # 4. .ipaにエクスポート
@@ -39,7 +40,8 @@ jobs:
         xcodebuild -exportArchive \
           -archivePath $PWD/build/MyiOSApp.xcarchive \
           -exportOptionsPlist ExportOptions.plist \
-          -exportPath $PWD/build
+          -exportPath $PWD/build \
+          -allowProvisioningUpdates
       working-directory: MyiOSApp
 
     # 5. .ipaをArtifactとしてアップロード
