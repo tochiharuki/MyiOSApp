@@ -7,13 +7,13 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		883971022E79CDA100ABDD2D /* MyiOSAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88577AD92E734E1500078321 /* MyiOSAppUITestsLaunchTests.swift */; };
 		88577ABC2E734E1300078321 /* MyiOSAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88577ABB2E734E1300078321 /* MyiOSAppApp.swift */; };
 		88577ABE2E734E1300078321 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88577ABD2E734E1300078321 /* ContentView.swift */; };
 		88577AC02E734E1500078321 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 88577ABF2E734E1500078321 /* Assets.xcassets */; };
 		88577AC42E734E1500078321 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 88577AC32E734E1500078321 /* Preview Assets.xcassets */; };
 		88577ACE2E734E1500078321 /* MyiOSAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88577ACD2E734E1500078321 /* MyiOSAppTests.swift */; };
-		88577AD82E734E1500078321 /* MyiOSAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88577AD72E734E1500078321 /* MyiOSAppUITests.swift */; };
-		88577ADA2E734E1500078321 /* MyiOSAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88577AD92E734E1500078321 /* MyiOSAppUITestsLaunchTests.swift */; };
+		88E015D82E79D90300522D98 /* MyiOSAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88577AD72E734E1500078321 /* MyiOSAppUITests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -276,8 +276,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				88577ADA2E734E1500078321 /* MyiOSAppUITestsLaunchTests.swift in Sources */,
-				88577AD82E734E1500078321 /* MyiOSAppUITests.swift in Sources */,
+				883971022E79CDA100ABDD2D /* MyiOSAppUITestsLaunchTests.swift in Sources */,
+				88E015D82E79D90300522D98 /* MyiOSAppUITests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

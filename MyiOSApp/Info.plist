@@ -4,12 +4,12 @@
 <plist version="1.0">
 <dict>
     <key>CFBundleName</key>
-    <string>MyiOSApp</string>            <!-- アプリ名 -->
+    <string>MyiOSApp</string>
     <key>CFBundleIdentifier</key>
-    <string>com.example.MyiOSApp</string> <!-- ユニークID -->
+    <string>com.example.MyiOSApp</string>
     <key>CFBundleVersion</key>
-    <string>1.0</string>                  <!-- ビルド番号 -->
+    <string>1</string>                  <!-- ビルド番号を整数に変更 -->
     <key>CFBundleShortVersionString</key>
-    <string>1.0</string>                  <!-- バージョン -->
+    <string>1.0</string>                <!-- ユーザー向けバージョンはそのまま -->
 </dict>
 </plist>
