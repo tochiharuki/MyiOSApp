@@ -9,7 +9,7 @@
     <key>provisioningProfiles</key>
     <dict>
         <key>tochi.MyiOSApp</key>
-        <string>MyiOSApp AdHoc Profile Name</string>
+        <string>MyiOSApp_AdHoc_Profile</string>
     </dict>
     <key>compileBitcode</key>
     <false/>
