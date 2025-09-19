@@ -1,5 +1,9 @@
 name: iOS Build
 
+# NOTE: push で Info.plist のコミットを行うため contents: write が必要
+permissions:
+  contents: write
+
 on:
   push:
     branches: [ main ]
@@ -12,21 +16,22 @@ jobs:
       INFO_PLIST_PATH: MyiOSApp/Info.plist
 
     steps:
-    # 1. リポジトリをチェックアウト
+    # 1. リポジトリをチェックアウト（fetch-depth:0 にして履歴も取得）
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
+        persist-credentials: true
 
-    # 2. (オプション) CocoaPods があればインストール
+    # 2. CocoaPods があればインストール（MyiOSApp 配下で実行）
     - name: Install dependencies
       run: |
-        if [ -f "Podfile" ]; then
+        if [ -f "MyiOSApp/Podfile" ]; then
           cd MyiOSApp
           pod install
         fi
 
-    # 3. ビルド番号を自動インクリメント
+    # 3. ビルド番号を自動インクリメント（Info.plist の CFBundleVersion を GITHUB_RUN_NUMBER に設定してコミット）
     - name: Bump build number
       run: |
         plist="${{ env.INFO_PLIST_PATH }}"
@@ -35,12 +40,15 @@ jobs:
           echo "Error: Info.plist not found at $plist"
           exit 1
         fi
+        # Set CFBundleVersion to GITHUB_RUN_NUMBER
         /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $GITHUB_RUN_NUMBER" "$plist"
         echo "Set CFBundleVersion to $GITHUB_RUN_NUMBER"
+        # commit change so Render will serve the updated ipa metadata (skip ci to avoid loop)
         git config user.name "github-actions"
         git config user.email "github-actions@github.com"
         git add "$plist"
         git commit -m "Bump CFBundleVersion to $GITHUB_RUN_NUMBER [skip ci]" || echo "No changes to commit"
+        git push origin main || echo "Push Info.plist change failed (maybe no permission)"
 
     # 4. Provisioning Profile を復元
     - name: Decode and install provisioning profile
@@ -54,22 +62,22 @@ jobs:
     - name: Import certificate to keychain
       run: |
         echo "$CERTIFICATE" | base64 --decode > /tmp/certificate.p12
-        security create-keychain -p "" build.keychain
+        security create-keychain -p "$CERTIFICATE_PASSWORD" build.keychain
         security import /tmp/certificate.p12 -k ~/Library/Keychains/build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
         security list-keychains -s ~/Library/Keychains/build.keychain
         security default-keychain -s ~/Library/Keychains/build.keychain
-        security unlock-keychain -p "" ~/Library/Keychains/build.keychain
-        security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
+        security unlock-keychain -p "$CERTIFICATE_PASSWORD" ~/Library/Keychains/build.keychain
+        security set-key-partition-list -S apple-tool:,apple: -s -k "$CERTIFICATE_PASSWORD" ~/Library/Keychains/build.keychain
         security find-identity -v -p codesigning || true
       env:
         CERTIFICATE: ${{ secrets.CERTIFICATE }}
         CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
 
-    # 6. Xcode でクリーンしてアーカイブ作成
+    # 6. Xcode でクリーンしてアーカイブ作成（MyiOSApp ディレクトリ内に .xcodeproj がある構成に合わせる）
     - name: Clean and build archive
+      working-directory: MyiOSApp
       run: |
         set -e
-        cd MyiOSApp
         xcodebuild clean -project MyiOSApp.xcodeproj -scheme MyiOSApp -configuration Release
         xcodebuild \
           -project MyiOSApp.xcodeproj \
@@ -82,19 +90,18 @@ jobs:
           CODE_SIGN_IDENTITY="iPhone Distribution" \
           PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AdHoc_Profile" \
           DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}"
-      working-directory: MyiOSApp
 
     # 7. .ipa にエクスポート
     - name: Export IPA
+      working-directory: MyiOSApp
       run: |
         set -e
-        cd MyiOSApp
         xcodebuild -exportArchive \
           -archivePath $PWD/build/MyiOSApp.xcarchive \
           -exportOptionsPlist ExportOptions.plist \
           -exportPath $PWD/build
-        ls -l build | sed -n '1,200p'
-      working-directory: MyiOSApp
+        echo "Contents of build directory:"
+        ls -al build || true
 
     # 8. .ipa を Artifact としてアップロード
     - name: Upload IPA artifact
@@ -109,7 +116,6 @@ jobs:
         set -e
         mkdir -p MyiOSApp/static
         cp MyiOSApp/build/*.ipa MyiOSApp/static/ || echo "No ipa to copy"
-        # 既に static にあるためManifest.plist / index.html はコピー不要
         if [ -f MyiOSApp/Manifest.plist ]; then
           cp MyiOSApp/Manifest.plist MyiOSApp/static/
         fi
@@ -117,7 +123,7 @@ jobs:
           cp MyiOSApp/index.html MyiOSApp/static/
         fi
 
-    # 10. static/ をコミット & Push
+    # 10. static/ をコミット & Push（Render 自動デプロイ用）
     - name: Commit and push static files
       env:
         GIT_AUTHOR_NAME: github-actions
@@ -128,4 +134,4 @@ jobs:
         git config user.email "${GIT_AUTHOR_EMAIL}"
         git add MyiOSApp/static MyiOSApp/Info.plist || true
         git commit -m "Deploy ipa and plist to static for Render (build $GITHUB_RUN_NUMBER) [skip ci]" || echo "No changes to commit"
-        git push origin main || echo "Push failed"
+        git push origin main || echo "Push failed (maybe permissions)"
