@@ -26,7 +26,6 @@ jobs:
     - name: Decode and install provisioning profile
       run: |
         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-        # GitHub Secrets から復号して正しい場所に配置
         echo "$MOBILEPROVISION" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/MyiOSApp.mobileprovision
       env:
         MOBILEPROVISION: ${{ secrets.MOBILEPROVISION }}
@@ -41,13 +40,12 @@ jobs:
         security default-keychain -s ~/Library/Keychains/build.keychain
         security unlock-keychain -p "" ~/Library/Keychains/build.keychain
         security set-key-partition-list -S apple-tool:,apple: -s -k "" ~/Library/Keychains/build.keychain
-        # 確認用（ログ出力）
         security find-identity -v -p codesigning
       env:
         CERTIFICATE: ${{ secrets.CERTIFICATE }}
         CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
 
-    # 5. Xcode でアーカイブ作成（署名済み）
+    # 5. Xcode でアーカイブ作成
     - name: Build app (archive)
       run: |
         xcodebuild \
@@ -78,3 +76,21 @@ jobs:
       with:
         name: MyiOSApp-ipa
         path: MyiOSApp/build/*.ipa
+
+    # 8. Render 配布用 static/ にコピー
+    - name: Prepare static directory
+      run: |
+        mkdir -p MyiOSApp/static
+        cp build/MyiOSApp.ipa MyiOSApp/static/
+        cp Manifest.plist MyiOSApp/static/
+        cp index.html MyiOSApp/static/
+      working-directory: MyiOSApp
+
+    # 9. static/ をコミット & Push（Render 自動デプロイ用）
+    - name: Commit and push static files
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com"
+        git add MyiOSApp/static
+        git commit -m "Deploy ipa and plist to static for Render" || echo "No changes to commit"
+        git push origin main
