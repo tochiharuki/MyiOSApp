@@ -131,5 +131,8 @@ marimo/_static/
 marimo/_lsp/
 __marimo__/
 
-
+# Xcode
+*.xcuserstate
+*.xcworkspace/xcuserdata/
+.DS_Store
 
