@@ -1,22 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" 
-"http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-    <!-- アプリ名 -->
-    <key>CFBundleName</key>
-    <string>MyiOSApp</string>
-
-    <!-- バンドルID（ユニークにする必要あり） -->
-    <key>CFBundleIdentifier</key>
-    <string>tochi.MyiOSApp</string>
-
-    <!-- ビルド番号（毎回 +1 する必要あり） -->
-    <key>CFBundleVersion</key>
-    <string>1</string>
-
-    <!-- ユーザー向けバージョン -->
-    <key>CFBundleShortVersionString</key>
-    <string>1.0</string>
+	<key>CFBundleIdentifier</key>
+	<string>tochi.MyiOSApp</string>
+	<key>CFBundleName</key>
+	<string>MyiOSApp</string>
+	<key>CFBundleShortVersionString</key>
+	<string>1.0</string>
+	<key>CFBundleVersion</key>
+	<string>31</string>
 </dict>
 </plist>
