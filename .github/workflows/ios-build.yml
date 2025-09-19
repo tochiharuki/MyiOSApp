@@ -124,7 +124,7 @@ jobs:
         fi
 
     # 10. static/ をコミット & Push（Render 自動デプロイ用）
-    - name: Commit and push static files
+    - name: Commit and push static files  
       env:
         GIT_AUTHOR_NAME: github-actions
         GIT_AUTHOR_EMAIL: github-actions@github.com
