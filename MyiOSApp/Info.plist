@@ -3,13 +3,20 @@
 "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+    <!-- アプリ名 -->
     <key>CFBundleName</key>
     <string>MyiOSApp</string>
+
+    <!-- バンドルID（ユニークにする必要あり） -->
     <key>CFBundleIdentifier</key>
-    <string>com.example.MyiOSApp</string>
+    <string>tochi.MyiOSApp</string>
+
+    <!-- ビルド番号（毎回 +1 する必要あり） -->
     <key>CFBundleVersion</key>
-    <string>1</string>                  <!-- ビルド番号を整数に変更 -->
+    <string>1</string>
+
+    <!-- ユーザー向けバージョン -->
     <key>CFBundleShortVersionString</key>
-    <string>1.0</string>                <!-- ユーザー向けバージョンはそのまま -->
+    <string>1.0</string>
 </dict>
 </plist>
