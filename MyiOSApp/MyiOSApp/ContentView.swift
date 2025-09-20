@@ -97,6 +97,18 @@ struct ReceiptView: View {
     }
 }
 
+// テンプレート作成画面
+struct TemplateView: View {
+    var body: some View {
+        ZStack {
+            Color.white.ignoresSafeArea()
+            Text("テンプレートから作成画面")
+        }
+    }
+}
+
+
+
 // 履歴画面
 struct HistoryView: View {
     var body: some View {
