@@ -65,7 +65,7 @@ jobs:
           -project MyiOSApp.xcodeproj \
           -scheme MyiOSApp \
           -configuration Release
-        # Archive with verbose logging
+        # Archive with verbose loggingg
         xcodebuild archive \
         -project MyiOSApp.xcodeproj \
         -scheme MyiOSApp \
