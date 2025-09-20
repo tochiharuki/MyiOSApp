@@ -98,13 +98,116 @@ struct ReceiptView: View {
 }
 
 // テンプレート作成画面
-struct TemplateView: View {
+struct ReceiptView: View {
+    @State private var issueDate = Date()
+    @State private var recipient = ""
+    @State private var amount = ""
+    @State private var taxRate = "10%" // デフォルト10%
+    @State private var remarks = ""
+    @State private var companyName = ""
+    
+    let taxOptions = ["8%", "10%", "非課税"]
+    
     var body: some View {
-        ZStack {
-            Color.white.ignoresSafeArea()
-            Text("テンプレートから作成画面")
+        ScrollView {
+            VStack(alignment: .leading, spacing: 20) {
+                
+                Text("領収書作成")
+                    .font(.title2)
+                    .fontWeight(.semibold)
+                    .padding(.bottom, 10)
+                
+                // 発行日
+                Group {
+                    Text("発行日")
+                        .fontWeight(.medium)
+                    DatePicker("日付を選択", selection: $issueDate, displayedComponents: .date)
+                        .datePickerStyle(.compact)
+                        .labelsHidden()
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                }
+                
+                // 宛名
+                Group {
+                    Text("宛名")
+                        .fontWeight(.medium)
+                    TextField("例：山田太郎 様", text: $recipient)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                }
+                
+                // 金額
+                Group {
+                    Text("金額（税抜）")
+                        .fontWeight(.medium)
+                    TextField("例：10000", text: $amount)
+                        .keyboardType(.numberPad)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                    
+                    // 消費税選択
+                    Picker("消費税", selection: $taxRate) {
+                        ForEach(taxOptions, id: \.self) { rate in
+                            Text(rate)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
+                }
+                
+                // 但し書き
+                Group {
+                    Text("但し書き")
+                        .fontWeight(.medium)
+                    TextEditor(text: $remarks)
+                        .frame(height: 100)
+                        .padding(4)
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                }
+                
+                // 会社名／担当者名
+                Group {
+                    Text("会社名／担当者名")
+                        .fontWeight(.medium)
+                    TextField("例：株式会社ABC 田中", text: $companyName)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                }
+                
+                // 保存ボタン
+                Button(action: {
+                    // 保存処理
+                    print("保存")
+                }) {
+                    Text("保存")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .foregroundColor(.white)
+                        .background(Color.blue)
+                        .cornerRadius(10)
+                }
+                .padding(.top, 20)
+            }
+            .padding()
         }
+        .background(Color.white.ignoresSafeArea())
+        .navigationTitle("領収書作成")
+        .navigationBarTitleDisplayMode(.inline)
     }
+}
+
+#Preview {
+    ReceiptView()
 }
 
 
