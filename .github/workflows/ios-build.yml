@@ -51,16 +51,21 @@ jobs:
         CERTIFICATE: ${{ secrets.CERTIFICATE }}
         CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
 
-    # 5. DerivedData をクリア
+    # 5. DerivedData をクリアしてクリーン
     - name: Clean DerivedData
       run: rm -rf ~/Library/Developer/Xcode/DerivedData/*
 
-    # 6. Xcode でクリーン & アーカイブ（自動生成 Info.plist を使用）
+    # 6. Xcode でクリーン & アーカイブ（テストターゲットを完全無視）
     - name: Clean and build archive
       working-directory: MyiOSApp
       run: |
-        set -ex
+        set -e
         # Clean
+        xcodebuild clean \
+          -project MyiOSApp.xcodeproj \
+          -scheme MyiOSApp \
+          -configuration Release
+        # Archive
         xcodebuild archive \
           -project MyiOSApp.xcodeproj \
           -scheme MyiOSApp \
@@ -72,20 +77,19 @@ jobs:
           PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AdHoc_Profile" \
           DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}" \
           GENERATE_INFOPLIST_FILE=YES \
-          SKIP_INSTALL=NO
-
+          SKIP_INSTALL=NO \
+          -destination "generic/platform=iOS" \
+          ONLY_ACTIVE_ARCH=NO
 
     # 7. .ipa にエクスポート
     - name: Export IPA
       working-directory: MyiOSApp
       run: |
-        set -ex
+        set -e
         xcodebuild -exportArchive \
           -archivePath $PWD/build/MyiOSApp.xcarchive \
           -exportOptionsPlist ExportOptions.plist \
-          -exportPath $PWD/build \
-          | xcpretty --color
-        echo "Contents of build directory:"
+          -exportPath $PWD/build
         ls -al build || true
 
     # 8. .ipa を Artifact としてアップロード
@@ -98,7 +102,7 @@ jobs:
     # 9. Render 配布用 static/ にコピー
     - name: Prepare static directory
       run: |
-        set -ex
+        set -e
         mkdir -p MyiOSApp/static
         cp MyiOSApp/build/*.ipa MyiOSApp/static/ || echo "No ipa to copy"
         if [ -f MyiOSApp/Manifest.plist ]; then
@@ -109,12 +113,12 @@ jobs:
         fi
 
     # 10. static/ をコミット & Push（Render 自動デプロイ用）
-    - name: Commit and push static files  
+    - name: Commit and push static files
       env:
         GIT_AUTHOR_NAME: github-actions
         GIT_AUTHOR_EMAIL: github-actions@github.com
       run: |
-        set -ex
+        set -e
         git config user.name "${GIT_AUTHOR_NAME}"
         git config user.email "${GIT_AUTHOR_EMAIL}"
         git add MyiOSApp/static || true
