@@ -8,7 +8,7 @@ struct ContentView: View {
                 .edgesIgnoringSafeArea(.all)
             
             // 文字を中央に配置
-            Text("領収書さん")
+            Text("領収書ーン")
                 .font(.system(size: 48, weight: .bold)) // 大きめの太字
                 .multilineTextAlignment(.center)
                 .foregroundColor(.accentColor)
