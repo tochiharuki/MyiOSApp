@@ -15,7 +15,6 @@
 		884FF4302E7E6CAA00C1C682 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 884FF4232E7E6CAA00C1C682 /* index.html */; };
 		884FF4312E7E6CAA00C1C682 /* MyiOSApp.ipa in Resources */ = {isa = PBXBuildFile; fileRef = 884FF4242E7E6CAA00C1C682 /* MyiOSApp.ipa */; };
 		884FF4382E7E6DE600C1C682 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884FF4372E7E6DE600C1C682 /* ContentView.swift */; };
-		884FF43C2E7E6E7100C1C682 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884FF43B2E7E6E7100C1C682 /* SwiftUIView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -49,7 +48,6 @@
 		884FF4232E7E6CAA00C1C682 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
 		884FF4242E7E6CAA00C1C682 /* MyiOSApp.ipa */ = {isa = PBXFileReference; lastKnownFileType = file; path = MyiOSApp.ipa; sourceTree = "<group>"; };
 		884FF4372E7E6DE600C1C682 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
-		884FF43B2E7E6E7100C1C682 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SwiftUIView.swift; path = MyiOSApp/SwiftUIView.swift; sourceTree = "<group>"; };
 		88577AB82E734E1300078321 /* MyiOSApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyiOSApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88577AC92E734E1500078321 /* MyiOSAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyiOSAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		88577ACD2E734E1500078321 /* MyiOSAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyiOSAppTests.swift; sourceTree = "<group>"; };
@@ -151,7 +149,6 @@
 		88577AAF2E734E1300078321 = {
 			isa = PBXGroup;
 			children = (
-				884FF43B2E7E6E7100C1C682 /* SwiftUIView.swift */,
 				884FF40F2E7E6CAA00C1C682 /* MyiOSApp */,
 				88577ACC2E734E1500078321 /* MyiOSAppTests */,
 				88577AD62E734E1500078321 /* MyiOSAppUITests */,
@@ -327,7 +324,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				884FF4382E7E6DE600C1C682 /* ContentView.swift in Sources */,
-				884FF43C2E7E6E7100C1C682 /* SwiftUIView.swift in Sources */,
 				884FF4282E7E6CAA00C1C682 /* MyiOSAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
