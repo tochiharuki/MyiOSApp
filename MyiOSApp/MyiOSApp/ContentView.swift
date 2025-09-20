@@ -4,18 +4,22 @@ struct ContentView: View {
     @State private var showMainView = false
     
     var body: some View {
-        Group {
-            if showMainView {
-                MainView()
-            } else {
-                SplashView()
-                    .onAppear {
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
-                            withAnimation {
-                                showMainView = true
+        ZStack {
+            Color.white.ignoresSafeArea() // ← 背景を常に白に固定
+            
+            Group {
+                if showMainView {
+                    MainView() // メイン画面
+                } else {
+                    SplashView() // スプラッシュ画面
+                        .onAppear {
+                            DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+                                withAnimation {
+                                    showMainView = true
+                                }
                             }
                         }
-                    }
+                }
             }
         }
     }
@@ -24,12 +28,16 @@ struct ContentView: View {
 // スプラッシュ画面
 struct SplashView: View {
     var body: some View {
-        ZStack {
-            Color(.systemBackground).ignoresSafeArea()
+        VStack {
             Text("領収書くん")
-                .font(.title2)
-                .fontWeight(.medium)
+                .font(.largeTitle)
+                .fontWeight(.bold)
                 .foregroundColor(.blue)
+                .padding()
+                .background(
+                    RoundedRectangle(cornerRadius: 12)
+                        .stroke(Color.gray.opacity(0.5), lineWidth: 2)
+                )
         }
     }
 }
@@ -39,36 +47,16 @@ struct MainView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 20) {
-                MenuCard(title: "領収書を作成", color: .blue, destination: ReceiptView())
-                MenuCard(title: "履歴を見る", color: .gray, destination: HistoryView())
+                Text("メイン画面")
+                    .font(.title)
+                    .foregroundColor(.black)
+                
+                NavigationLink("領収書を作成", destination: ReceiptView())
+                NavigationLink("履歴を見る", destination: HistoryView())
             }
             .padding()
+            .background(Color.white) // ← 明示的に白背景
             .navigationTitle("領収書くん")
-        }
-    }
-}
-
-// 共通カード風メニュー
-struct MenuCard<Destination: View>: View {
-    let title: String
-    let color: Color
-    let destination: Destination
-    
-    var body: some View {
-        NavigationLink(destination: destination) {
-            HStack {
-                Text(title)
-                    .font(.headline)
-                    .foregroundColor(.primary)
-                Spacer()
-                Image(systemName: "chevron.right")
-                    .foregroundColor(color)
-            }
-            .padding()
-            .background(
-                RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color(.systemGray4), lineWidth: 1) // グレー枠
-            )
         }
     }
 }
@@ -76,35 +64,22 @@ struct MenuCard<Destination: View>: View {
 // 領収書作成画面
 struct ReceiptView: View {
     var body: some View {
-        VStack(spacing: 16) {
-            Text("領収書作成画面")
-                .font(.title3)
-            RoundedRectangle(cornerRadius: 8)
-                .fill(Color(.systemGray6))
-                .frame(height: 120)
-                .overlay(Text("入力フォームエリア").foregroundColor(.gray))
-        }
-        .padding()
-        .background(Color(.systemBackground))
+        Text("領収書作成画面")
+            .foregroundColor(.black)
+            .background(Color.white.ignoresSafeArea())
     }
 }
 
 // 履歴画面
 struct HistoryView: View {
     var body: some View {
-        List {
-            ForEach(0..<5) { i in
-                HStack {
-                    Text("領収書 #\(i+1)")
-                    Spacer()
-                    Text("¥1,000").foregroundColor(.blue)
-                }
-            }
-        }
-        .navigationTitle("履歴")
+        Text("履歴画面")
+            .foregroundColor(.black)
+            .background(Color.white.ignoresSafeArea())
     }
 }
 
 #Preview {
     ContentView()
+        .preferredColorScheme(.light) // プレビューでもライト固定
 }
