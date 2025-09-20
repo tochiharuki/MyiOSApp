@@ -53,6 +53,21 @@ struct MainView: View {
                         )
                 }
                 
+                NavigationLink(destination: TemplateView()) {
+                    Text("テンプレートから作成")
+                        .frame(maxWidth: .infinity)
+                        .padding()
+                        .foregroundColor(.gray)
+                        .background(Color.white)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray, lineWidth: 1.5)
+                        )
+                        .cornerRadius(10)
+                }
+                
+                
+                
                 NavigationLink(destination: HistoryView()) {
                     Text("履歴を見る")
                         .frame(maxWidth: .infinity)
