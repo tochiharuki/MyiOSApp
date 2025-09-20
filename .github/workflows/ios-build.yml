@@ -78,8 +78,7 @@ jobs:
         DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}" \
         GENERATE_INFOPLIST_FILE=YES \
         SKIP_INSTALL=NO \
-        BUILD_LIBRARY_FOR_DISTRIBUTION=YES \
-        | xcpretty --color --report junit --output build/test_results.xml
+        BUILD_LIBRARY_FOR_DISTRIBUTION=YES
 
 
     # 7. .ipa にエクスポート
