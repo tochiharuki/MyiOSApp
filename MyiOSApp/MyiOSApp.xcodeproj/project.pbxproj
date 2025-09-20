@@ -11,9 +11,6 @@
 		884FF4262E7E6CAA00C1C682 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 884FF4142E7E6CAA00C1C682 /* Assets.xcassets */; };
 		884FF4272E7E6CAA00C1C682 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 884FF4162E7E6CAA00C1C682 /* Preview Assets.xcassets */; };
 		884FF4282E7E6CAA00C1C682 /* MyiOSAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884FF4172E7E6CAA00C1C682 /* MyiOSAppApp.swift */; };
-		884FF42B2E7E6CAA00C1C682 /* MyiOSAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884FF41C2E7E6CAA00C1C682 /* MyiOSAppUITestsLaunchTests.swift */; };
-		884FF42C2E7E6CAA00C1C682 /* MyiOSAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884FF41D2E7E6CAA00C1C682 /* MyiOSAppUITests.swift */; };
-		884FF42D2E7E6CAA00C1C682 /* MyiOSAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884FF41F2E7E6CAA00C1C682 /* MyiOSAppTests.swift */; };
 		884FF42E2E7E6CAA00C1C682 /* ExportOptions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 884FF4202E7E6CAA00C1C682 /* ExportOptions.plist */; };
 		884FF42F2E7E6CAA00C1C682 /* Manifest.plist in Resources */ = {isa = PBXBuildFile; fileRef = 884FF4222E7E6CAA00C1C682 /* Manifest.plist */; };
 		884FF4302E7E6CAA00C1C682 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 884FF4232E7E6CAA00C1C682 /* index.html */; };
@@ -332,11 +329,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				884FF42B2E7E6CAA00C1C682 /* MyiOSAppUITestsLaunchTests.swift in Sources */,
 				884FF4382E7E6DE600C1C682 /* ContentView.swift in Sources */,
 				884FF43C2E7E6E7100C1C682 /* SwiftUIView.swift in Sources */,
-				884FF42C2E7E6CAA00C1C682 /* MyiOSAppUITests.swift in Sources */,
-				884FF42D2E7E6CAA00C1C682 /* MyiOSAppTests.swift in Sources */,
 				884FF4282E7E6CAA00C1C682 /* MyiOSAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
