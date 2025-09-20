@@ -61,23 +61,19 @@ jobs:
       run: |
         set -ex
         # Clean
-        xcodebuild clean \
+        xcodebuild archive \
           -project MyiOSApp.xcodeproj \
           -scheme MyiOSApp \
-          -configuration Release
-        # Archive with verbose loggingg
-        xcodebuild archive \
-        -project MyiOSApp.xcodeproj \
-        -scheme MyiOSApp \
-        -sdk iphoneos \
-        -configuration Release \
-        -archivePath $PWD/build/MyiOSApp.xcarchive \
-        CODE_SIGN_STYLE=Manual \
-        CODE_SIGN_IDENTITY="iPhone Distribution" \
-        PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AdHoc_Profile" \
-        DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}" \
-        SKIP_INSTALL=YES \
-        BUILD_LIBRARY_FOR_DISTRIBUTION=NO
+          -sdk iphoneos \
+          -configuration Release \
+          -archivePath $PWD/build/MyiOSApp.xcarchive \
+          CODE_SIGN_STYLE=Manual \
+          CODE_SIGN_IDENTITY="iPhone Distribution" \
+          PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AdHoc_Profile" \
+          DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}" \
+          GENERATE_INFOPLIST_FILE=YES \
+          SKIP_INSTALL=YES \
+          BUILD_LIBRARY_FOR_DISTRIBUTION=NO
 
 
     # 7. .ipa にエクスポート
