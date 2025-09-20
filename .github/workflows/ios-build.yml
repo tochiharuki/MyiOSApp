@@ -1,6 +1,5 @@
 name: iOS Build
 
-# NOTE: push で Info.plist のコミットを行うため contents: write が必要
 permissions:
   contents: write
 
@@ -16,14 +15,14 @@ jobs:
       INFO_PLIST_PATH: MyiOSApp/Info.plist
 
     steps:
-    # 1. リポジトリをチェックアウト（fetch-depth:0 にして履歴も取得）
+    # 1. リポジトリをチェックアウト
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
         persist-credentials: true
 
-    # 2. CocoaPods があればインストール（MyiOSApp 配下で実行）
+    # 2. CocoaPods があればインストール
     - name: Install dependencies
       run: |
         if [ -f "MyiOSApp/Podfile" ]; then
@@ -31,24 +30,16 @@ jobs:
           pod install
         fi
 
-    # 3. ビルド番号を自動インクリメント（Info.plist の CFBundleVersion を GITHUB_RUN_NUMBER に設定してコミット）
-    - name: Bump build number
+    # 3. Build number を一時変更（コミットなし）
+    - name: Set temporary build number
       run: |
         plist="${{ env.INFO_PLIST_PATH }}"
-        echo "Info.plist = $plist"
         if [ ! -f "$plist" ]; then
           echo "Error: Info.plist not found at $plist"
           exit 1
         fi
-        # Set CFBundleVersion to GITHUB_RUN_NUMBER
         /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $GITHUB_RUN_NUMBER" "$plist"
-        echo "Set CFBundleVersion to $GITHUB_RUN_NUMBER"
-        # commit change so Render will serve the updated ipa metadata (skip ci to avoid loop)
-        git config user.name "github-actions"
-        git config user.email "github-actions@github.com"
-        git add "$plist"
-        git commit -m "Bump CFBundleVersion to $GITHUB_RUN_NUMBER [skip ci]" || echo "No changes to commit"
-        git push origin main || echo "Push Info.plist change failed (maybe no permission)"
+        echo "Temporarily set CFBundleVersion to $GITHUB_RUN_NUMBER"
 
     # 4. Provisioning Profile を復元
     - name: Decode and install provisioning profile
@@ -72,12 +63,12 @@ jobs:
       env:
         CERTIFICATE: ${{ secrets.CERTIFICATE }}
         CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
-        
-    
-    # 6. Xcode でクリーンしてアーカイブ作成（MyiOSApp ディレクトリ内に .xcodeproj がある構成に合わせる）
+
+    # 6. DerivedData をクリア
     - name: Clean DerivedData
       run: rm -rf ~/Library/Developer/Xcode/DerivedData/*
-      
+
+    # 7. アーカイブ作成
     - name: Clean and build archive
       working-directory: MyiOSApp
       run: |
@@ -95,7 +86,7 @@ jobs:
           PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AdHoc_Profile" \
           DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}"
 
-    # 7. .ipa にエクスポート
+    # 8. .ipa にエクスポート
     - name: Export IPA
       working-directory: MyiOSApp
       run: |
@@ -107,14 +98,14 @@ jobs:
         echo "Contents of build directory:"
         ls -al build || true
 
-    # 8. .ipa を Artifact としてアップロード
+    # 9. .ipa を Artifact としてアップロード
     - name: Upload IPA artifact
       uses: actions/upload-artifact@v4
       with:
         name: MyiOSApp-ipa
         path: MyiOSApp/build/*.ipa
 
-    # 9. Render 配布用 static/ にコピー
+    # 10. Render 配布用 static/ にコピー
     - name: Prepare static directory
       run: |
         set -e
@@ -126,16 +117,3 @@ jobs:
         if [ -f MyiOSApp/index.html ]; then
           cp MyiOSApp/index.html MyiOSApp/static/
         fi
-
-    # 10. static/ をコミット & Push（Render 自動デプロイ用）
-    - name: Commit and push static files  
-      env:
-        GIT_AUTHOR_NAME: github-actions
-        GIT_AUTHOR_EMAIL: github-actions@github.com
-      run: |
-        set -e
-        git config user.name "${GIT_AUTHOR_NAME}"
-        git config user.email "${GIT_AUTHOR_EMAIL}"
-        git add MyiOSApp/static MyiOSApp/Info.plist || true
-        git commit -m "Deploy ipa and plist to static for Render (build $GITHUB_RUN_NUMBER) [skip ci]" || echo "No changes to commit"
-        git push origin main || echo "Push failed (maybe permissions)"
