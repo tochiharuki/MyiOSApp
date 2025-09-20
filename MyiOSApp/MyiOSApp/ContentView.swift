@@ -6,9 +6,9 @@ struct ContentView: View {
     var body: some View {
         Group {
             if showMainView {
-                MainView() // ← メイン画面
+                MainView() // メイン画面へ
             } else {
-                SplashView() // ← スプラッシュ画面
+                SplashView() // スプラッシュ画面
                     .onAppear {
                         // 1秒後にメイン画面へ遷移
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
@@ -26,14 +26,11 @@ struct ContentView: View {
 struct SplashView: View {
     var body: some View {
         ZStack {
-            Color(red: 0.85, green: 0.95, blue: 1.0)
-                .edgesIgnoringSafeArea(.all)
-            
+            Color.blue.opacity(0.2).ignoresSafeArea()
             Text("領収書くん")
-                .font(.system(size: 48, weight: .bold))
-                .multilineTextAlignment(.center)
-                .foregroundColor(.accentColor)
-                .padding()
+                .font(.largeTitle)
+                .fontWeight(.bold)
+                .foregroundColor(.blue)
         }
     }
 }
@@ -44,14 +41,27 @@ struct MainView: View {
         NavigationStack {
             VStack(spacing: 20) {
                 Text("メイン画面")
-                    .font(.largeTitle)
-                    .padding()
+                    .font(.title)
                 
-                NavigationLink("領収書を作成", destination: Text("作成画面"))
-                NavigationLink("履歴を見る", destination: Text("履歴画面"))
+                NavigationLink("領収書を作成", destination: ReceiptView())
+                NavigationLink("履歴を見る", destination: HistoryView())
             }
             .navigationTitle("領収書くん")
         }
+    }
+}
+
+// 領収書作成画面
+struct ReceiptView: View {
+    var body: some View {
+        Text("領収書作成画面")
+    }
+}
+
+// 履歴画面
+struct HistoryView: View {
+    var body: some View {
+        Text("履歴画面")
     }
 }
 
