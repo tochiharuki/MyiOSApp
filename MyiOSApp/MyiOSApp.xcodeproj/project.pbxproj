@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		883971022E79CDA100ABDD2D /* MyiOSAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88577AD92E734E1500078321 /* MyiOSAppUITestsLaunchTests.swift */; };
+		884FF40E2E7E6A4300C1C682 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884FF40D2E7E6A4300C1C682 /* SwiftUIView.swift */; };
 		88577ABC2E734E1300078321 /* MyiOSAppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88577ABB2E734E1300078321 /* MyiOSAppApp.swift */; };
 		88577ABE2E734E1300078321 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88577ABD2E734E1300078321 /* ContentView.swift */; };
 		88577AC02E734E1500078321 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 88577ABF2E734E1500078321 /* Assets.xcassets */; };
@@ -34,6 +35,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		884FF40D2E7E6A4300C1C682 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwiftUIView.swift; sourceTree = "<group>"; };
 		88577AB82E734E1300078321 /* MyiOSApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyiOSApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88577ABB2E734E1300078321 /* MyiOSAppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyiOSAppApp.swift; sourceTree = "<group>"; };
 		88577ABD2E734E1300078321 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -75,6 +77,7 @@
 		88577AAF2E734E1300078321 = {
 			isa = PBXGroup;
 			children = (
+				884FF40D2E7E6A4300C1C682 /* SwiftUIView.swift */,
 				88577ABA2E734E1300078321 /* MyiOSApp */,
 				88577ACC2E734E1500078321 /* MyiOSAppTests */,
 				88577AD62E734E1500078321 /* MyiOSAppUITests */,
@@ -261,6 +264,7 @@
 			files = (
 				88577ABE2E734E1300078321 /* ContentView.swift in Sources */,
 				88577ABC2E734E1300078321 /* MyiOSAppApp.swift in Sources */,
+				884FF40E2E7E6A4300C1C682 /* SwiftUIView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
