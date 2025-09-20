@@ -76,9 +76,8 @@ jobs:
         CODE_SIGN_IDENTITY="iPhone Distribution" \
         PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AdHoc_Profile" \
         DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}" \
-        GENERATE_INFOPLIST_FILE=YES \
-        SKIP_INSTALL=NO \
-        BUILD_LIBRARY_FOR_DISTRIBUTION=YES
+        SKIP_INSTALL=YES \
+        BUILD_LIBRARY_FOR_DISTRIBUTION=NO
 
 
     # 7. .ipa にエクスポート
