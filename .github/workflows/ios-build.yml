@@ -72,8 +72,12 @@ jobs:
       env:
         CERTIFICATE: ${{ secrets.CERTIFICATE }}
         CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
-
+        
+    
     # 6. Xcode でクリーンしてアーカイブ作成（MyiOSApp ディレクトリ内に .xcodeproj がある構成に合わせる）
+    - name: Clean DerivedData
+      run: rm -rf ~/Library/Developer/Xcode/DerivedData/*
+      
     - name: Clean and build archive
       working-directory: MyiOSApp
       run: |
