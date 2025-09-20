@@ -40,11 +40,6 @@ struct MainView: View {
     var body: some View {
         NavigationStack {
             VStack(spacing: 24) {
-                Text("メイン画面")
-                    .font(.title)
-                    .fontWeight(.semibold)
-                    .foregroundColor(.primary)
-                
                 NavigationLink(destination: ReceiptView()) {
                     Text("領収書を作成")
                         .frame(maxWidth: .infinity)
@@ -72,8 +67,6 @@ struct MainView: View {
                 }
             }
             .padding()
-            .navigationTitle("領収書さん")
-            .navigationBarTitleDisplayMode(.inline)
             .background(Color.white) // 白ベース
         }
     }
