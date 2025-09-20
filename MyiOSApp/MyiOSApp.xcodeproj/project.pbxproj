@@ -20,7 +20,6 @@
 		884FF4312E7E6CAA00C1C682 /* MyiOSApp.ipa in Resources */ = {isa = PBXBuildFile; fileRef = 884FF4242E7E6CAA00C1C682 /* MyiOSApp.ipa */; };
 		884FF4382E7E6DE600C1C682 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884FF4372E7E6DE600C1C682 /* ContentView.swift */; };
 		884FF43C2E7E6E7100C1C682 /* SwiftUIView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884FF43B2E7E6E7100C1C682 /* SwiftUIView.swift */; };
-		884FF43E2E7E745000C1C682 /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 884FF43D2E7E745000C1C682 /* Info.plist */; };
 		88577ACE2E734E1500078321 /* MyiOSAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88577ACD2E734E1500078321 /* MyiOSAppTests.swift */; };
 		88E015D82E79D90300522D98 /* MyiOSAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 88577AD72E734E1500078321 /* MyiOSAppUITests.swift */; };
 /* End PBXBuildFile section */
@@ -57,7 +56,6 @@
 		884FF4242E7E6CAA00C1C682 /* MyiOSApp.ipa */ = {isa = PBXFileReference; lastKnownFileType = file; path = MyiOSApp.ipa; sourceTree = "<group>"; };
 		884FF4372E7E6DE600C1C682 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		884FF43B2E7E6E7100C1C682 /* SwiftUIView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SwiftUIView.swift; path = MyiOSApp/SwiftUIView.swift; sourceTree = "<group>"; };
-		884FF43D2E7E745000C1C682 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = SOURCE_ROOT; };
 		88577AB82E734E1300078321 /* MyiOSApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyiOSApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88577AC92E734E1500078321 /* MyiOSAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyiOSAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		88577ACD2E734E1500078321 /* MyiOSAppTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyiOSAppTests.swift; sourceTree = "<group>"; };
@@ -149,7 +147,6 @@
 		884FF4212E7E6CAA00C1C682 /* static */ = {
 			isa = PBXGroup;
 			children = (
-				884FF43D2E7E745000C1C682 /* Info.plist */,
 				884FF4222E7E6CAA00C1C682 /* Manifest.plist */,
 				884FF4232E7E6CAA00C1C682 /* index.html */,
 				884FF4242E7E6CAA00C1C682 /* MyiOSApp.ipa */,
@@ -311,7 +308,6 @@
 				884FF42E2E7E6CAA00C1C682 /* ExportOptions.plist in Resources */,
 				884FF4262E7E6CAA00C1C682 /* Assets.xcassets in Resources */,
 				884FF4312E7E6CAA00C1C682 /* MyiOSApp.ipa in Resources */,
-				884FF43E2E7E745000C1C682 /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -502,7 +498,6 @@
 				DEVELOPMENT_TEAM = 8UT7U3MV6X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_FILE[sdk=*]" = "";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -541,7 +536,6 @@
 				DEVELOPMENT_TEAM = 8UT7U3MV6X;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
-				"INFOPLIST_FILE[sdk=*]" = "";
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
