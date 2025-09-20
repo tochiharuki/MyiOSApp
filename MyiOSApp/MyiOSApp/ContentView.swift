@@ -25,10 +25,10 @@ struct ContentView: View {
 struct SplashView: View {
     var body: some View {
         ZStack {
-            Color(.systemGray6).ignoresSafeArea() // 薄いグレー背景
+            Color(.systemBackground).ignoresSafeArea()
             Text("領収書くん")
-                .font(.title)
-                .fontWeight(.semibold)
+                .font(.title2)
+                .fontWeight(.medium)
                 .foregroundColor(.blue)
         }
     }
@@ -38,48 +38,51 @@ struct SplashView: View {
 struct MainView: View {
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
-                Text("領収書くん")
-                    .font(.title2)
-                    .foregroundColor(.primary)
-                
-                NavigationLink(destination: ReceiptView()) {
-                    MenuButton(title: "領収書を作成", color: .blue)
-                }
-                
-                NavigationLink(destination: HistoryView()) {
-                    MenuButton(title: "履歴を見る", color: .gray)
-                }
+            VStack(spacing: 20) {
+                MenuCard(title: "領収書を作成", color: .blue, destination: ReceiptView())
+                MenuCard(title: "履歴を見る", color: .gray, destination: HistoryView())
             }
             .padding()
-            .navigationTitle("ホーム")
+            .navigationTitle("領収書くん")
         }
     }
 }
 
-// 共通ボタンスタイル
-struct MenuButton: View {
+// 共通カード風メニュー
+struct MenuCard<Destination: View>: View {
     let title: String
     let color: Color
+    let destination: Destination
     
     var body: some View {
-        Text(title)
-            .font(.headline)
-            .foregroundColor(.white)
-            .frame(maxWidth: .infinity)
+        NavigationLink(destination: destination) {
+            HStack {
+                Text(title)
+                    .font(.headline)
+                    .foregroundColor(.primary)
+                Spacer()
+                Image(systemName: "chevron.right")
+                    .foregroundColor(color)
+            }
             .padding()
-            .background(color)
-            .cornerRadius(8)
-            .shadow(color: color.opacity(0.3), radius: 4, x: 0, y: 2)
+            .background(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color(.systemGray4), lineWidth: 1) // グレー枠
+            )
+        }
     }
 }
 
 // 領収書作成画面
 struct ReceiptView: View {
     var body: some View {
-        VStack {
+        VStack(spacing: 16) {
             Text("領収書作成画面")
                 .font(.title3)
+            RoundedRectangle(cornerRadius: 8)
+                .fill(Color(.systemGray6))
+                .frame(height: 120)
+                .overlay(Text("入力フォームエリア").foregroundColor(.gray))
         }
         .padding()
         .background(Color(.systemBackground))
@@ -89,12 +92,16 @@ struct ReceiptView: View {
 // 履歴画面
 struct HistoryView: View {
     var body: some View {
-        VStack {
-            Text("履歴画面")
-                .font(.title3)
+        List {
+            ForEach(0..<5) { i in
+                HStack {
+                    Text("領収書 #\(i+1)")
+                    Spacer()
+                    Text("¥1,000").foregroundColor(.blue)
+                }
+            }
         }
-        .padding()
-        .background(Color(.systemBackground))
+        .navigationTitle("履歴")
     }
 }
 
