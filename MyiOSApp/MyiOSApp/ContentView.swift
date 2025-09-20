@@ -6,11 +6,10 @@ struct ContentView: View {
     var body: some View {
         Group {
             if showMainView {
-                MainView() // メイン画面へ
+                MainView()
             } else {
-                SplashView() // スプラッシュ画面
+                SplashView()
                     .onAppear {
-                        // 1秒後にメイン画面へ遷移
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                             withAnimation {
                                 showMainView = true
@@ -26,10 +25,10 @@ struct ContentView: View {
 struct SplashView: View {
     var body: some View {
         ZStack {
-            Color.blue.opacity(0.2).ignoresSafeArea()
+            Color(.systemGray6).ignoresSafeArea() // 薄いグレー背景
             Text("領収書くん")
-                .font(.largeTitle)
-                .fontWeight(.bold)
+                .font(.title)
+                .fontWeight(.semibold)
                 .foregroundColor(.blue)
         }
     }
@@ -39,29 +38,63 @@ struct SplashView: View {
 struct MainView: View {
     var body: some View {
         NavigationStack {
-            VStack(spacing: 20) {
-                Text("メイン画面")
-                    .font(.title)
+            VStack(spacing: 24) {
+                Text("領収書くん")
+                    .font(.title2)
+                    .foregroundColor(.primary)
                 
-                NavigationLink("領収書を作成", destination: ReceiptView())
-                NavigationLink("履歴を見る", destination: HistoryView())
+                NavigationLink(destination: ReceiptView()) {
+                    MenuButton(title: "領収書を作成", color: .blue)
+                }
+                
+                NavigationLink(destination: HistoryView()) {
+                    MenuButton(title: "履歴を見る", color: .gray)
+                }
             }
-            .navigationTitle("領収書くん")
+            .padding()
+            .navigationTitle("ホーム")
         }
+    }
+}
+
+// 共通ボタンスタイル
+struct MenuButton: View {
+    let title: String
+    let color: Color
+    
+    var body: some View {
+        Text(title)
+            .font(.headline)
+            .foregroundColor(.white)
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(color)
+            .cornerRadius(8)
+            .shadow(color: color.opacity(0.3), radius: 4, x: 0, y: 2)
     }
 }
 
 // 領収書作成画面
 struct ReceiptView: View {
     var body: some View {
-        Text("領収書作成画面")
+        VStack {
+            Text("領収書作成画面")
+                .font(.title3)
+        }
+        .padding()
+        .background(Color(.systemBackground))
     }
 }
 
 // 履歴画面
 struct HistoryView: View {
     var body: some View {
-        Text("履歴画面")
+        VStack {
+            Text("履歴画面")
+                .font(.title3)
+        }
+        .padding()
+        .background(Color(.systemBackground))
     }
 }
 
