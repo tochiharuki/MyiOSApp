@@ -67,17 +67,20 @@ jobs:
           -configuration Release
         # Archive with verbose logging
         xcodebuild archive \
-          -project MyiOSApp.xcodeproj \
-          -scheme MyiOSApp \
-          -sdk iphoneos \
-          -configuration Release \
-          -archivePath $PWD/build/MyiOSApp.xcarchive \
-          CODE_SIGN_STYLE=Manual \
-          CODE_SIGN_IDENTITY="iPhone Distribution" \
-          PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AdHoc_Profile" \
-          DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}" \
-          GENERATE_INFOPLIST_FILE=YES \
-          | xcpretty --color --report junit --output build/test_results.xml
+        -project MyiOSApp.xcodeproj \
+        -scheme MyiOSApp \
+        -sdk iphoneos \
+        -configuration Release \
+        -archivePath $PWD/build/MyiOSApp.xcarchive \
+        CODE_SIGN_STYLE=Manual \
+        CODE_SIGN_IDENTITY="iPhone Distribution" \
+        PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AdHoc_Profile" \
+        DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}" \
+        GENERATE_INFOPLIST_FILE=YES \
+        SKIP_INSTALL=NO \
+        BUILD_LIBRARY_FOR_DISTRIBUTION=YES \
+        | xcpretty --color --report junit --output build/test_results.xml
+
 
     # 7. .ipa にエクスポート
     - name: Export IPA
