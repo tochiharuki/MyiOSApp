@@ -1,24 +1,27 @@
 import SwiftUI
 
-struct SwiftUIView: View {
+struct ContentView: View {
     var body: some View {
-        VStack(spacing: 20) {
-            Text("SwiftUIViewの例")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .padding()
+        VStack(spacing: 20) { // 縦に並べる
+            Text("領収書アプリ")
+                .font(.largeTitle)   // フォントサイズ大
+                .fontWeight(.bold)   // 太字
+                .padding()           // 内側余白
+                .background(Color.blue.opacity(0.2)) // 背景色
+                .cornerRadius(10)    // 角丸
 
-            Text("ここはテスト用のSwiftUI画面です。")
-                .font(.title2)
-                .foregroundColor(.secondary)
+            Text("ここにメインの画面を作っていきます")
+                .font(.body)
+                .foregroundColor(.gray)
 
             Button(action: {
                 print("ボタンが押されました")
             }) {
-                Text("アクションボタン")
+                Text("開始する")
+                    .font(.headline)
                     .padding()
-                    .frame(maxWidth: .infinity)
-                    .background(Color.accentColor)
+                    .frame(maxWidth: .infinity) // 横いっぱい
+                    .background(Color.blue)
                     .foregroundColor(.white)
                     .cornerRadius(8)
             }
@@ -29,5 +32,5 @@ struct SwiftUIView: View {
 }
 
 #Preview {
-    SwiftUIView()
+    ContentView()
 }
