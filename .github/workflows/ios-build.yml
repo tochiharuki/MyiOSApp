@@ -13,14 +13,14 @@ jobs:
     runs-on: macos-latest
 
     steps:
-    # 1. リポジトリをチェックアウト（fetch-depth:0 にして履歴も取得）
+    # 1. リポジトリをチェックアウト
     - name: Checkout repository
       uses: actions/checkout@v4
       with:
         fetch-depth: 0
         persist-credentials: true
 
-    # 2. CocoaPods があればインストール（MyiOSApp 配下で実行）
+    # 2. CocoaPods があればインストール
     - name: Install dependencies
       run: |
         if [ -f "MyiOSApp/Podfile" ]; then
@@ -51,7 +51,7 @@ jobs:
         CERTIFICATE: ${{ secrets.CERTIFICATE }}
         CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
 
-    # 5. DerivedData をクリアしてクリーン
+    # 5. DerivedData をクリア
     - name: Clean DerivedData
       run: rm -rf ~/Library/Developer/Xcode/DerivedData/*
 
@@ -59,13 +59,13 @@ jobs:
     - name: Clean and build archive
       working-directory: MyiOSApp
       run: |
-        set -e
+        set -ex
         # Clean
         xcodebuild clean \
           -project MyiOSApp.xcodeproj \
           -scheme MyiOSApp \
           -configuration Release
-        # Archive
+        # Archive with verbose logging
         xcodebuild archive \
           -project MyiOSApp.xcodeproj \
           -scheme MyiOSApp \
@@ -76,17 +76,19 @@ jobs:
           CODE_SIGN_IDENTITY="iPhone Distribution" \
           PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AdHoc_Profile" \
           DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}" \
-          GENERATE_INFOPLIST_FILE=YES
+          GENERATE_INFOPLIST_FILE=YES \
+          | xcpretty --color --report junit --output build/test_results.xml
 
     # 7. .ipa にエクスポート
     - name: Export IPA
       working-directory: MyiOSApp
       run: |
-        set -e
+        set -ex
         xcodebuild -exportArchive \
           -archivePath $PWD/build/MyiOSApp.xcarchive \
           -exportOptionsPlist ExportOptions.plist \
-          -exportPath $PWD/build
+          -exportPath $PWD/build \
+          | xcpretty --color
         echo "Contents of build directory:"
         ls -al build || true
 
@@ -100,7 +102,7 @@ jobs:
     # 9. Render 配布用 static/ にコピー
     - name: Prepare static directory
       run: |
-        set -e
+        set -ex
         mkdir -p MyiOSApp/static
         cp MyiOSApp/build/*.ipa MyiOSApp/static/ || echo "No ipa to copy"
         if [ -f MyiOSApp/Manifest.plist ]; then
@@ -116,7 +118,7 @@ jobs:
         GIT_AUTHOR_NAME: github-actions
         GIT_AUTHOR_EMAIL: github-actions@github.com
       run: |
-        set -e
+        set -ex
         git config user.name "${GIT_AUTHOR_NAME}"
         git config user.email "${GIT_AUTHOR_EMAIL}"
         git add MyiOSApp/static || true
