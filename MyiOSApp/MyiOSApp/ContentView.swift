@@ -89,16 +89,6 @@ struct MainView: View {
 
 // 領収書作成画面
 struct ReceiptView: View {
-    var body: some View {
-        ZStack {
-            Color.white.ignoresSafeArea()
-            Text("領収書作成画面")
-        }
-    }
-}
-
-// テンプレート作成画面
-struct ReceiptView: View {
     @State private var issueDate = Date()
     @State private var recipient = ""
     @State private var amount = ""
@@ -208,6 +198,16 @@ struct ReceiptView: View {
 
 #Preview {
     ReceiptView()
+}
+
+// テンプレート作成画面
+struct TemplateView: View {
+    var body: some View {
+        ZStack {
+            Color.white.ignoresSafeArea()
+            Text("テンプレートから作成画面")
+        }
+    }
 }
 
 
