@@ -140,6 +140,7 @@ struct ReceiptView: View {
                     .fontWeight(.semibold)
                     .padding(.bottom, 10)
                 
+
                 Group {
                     Text("発行日")
                         .fontWeight(.medium)
@@ -149,7 +150,7 @@ struct ReceiptView: View {
                         Button(action: {
                             showDatePicker = true
                         }) {
-                            Text(issueDate, style: .date) // 選択した日付を表示
+                            Text(issueDate, style: .date)
                                 .foregroundColor(.blue)
                         }
                     }
@@ -157,23 +158,25 @@ struct ReceiptView: View {
                 .sheet(isPresented: $showDatePicker) {
                     VStack {
                         DatePicker(
-                            "発行日を選択",
-                            selection: $issueDate,
+                            "",
+                            selection: Binding(
+                                get: { issueDate },
+                                set: { newDate in
+                                    issueDate = newDate
+                                    showDatePicker = false // ✅ 選択したら即閉じる
+                                }
+                            ),
                             displayedComponents: .date
                         )
                         .datePickerStyle(.graphical)
                         .labelsHidden()
-                        .padding()
-                
-                        Button("決定") {
-                            showDatePicker = false // ✅ 閉じる
-                        }
-                        .buttonStyle(.borderedProminent)
+                        .environment(\.locale, Locale(identifier: "ja_JP"))
+                        .environment(\.calendar, Calendar(identifier: .japanese))
+                        .frame(maxHeight: 500) // ✅ 縦幅を余裕持って確保
                         .padding()
                     }
-                    .presentationDetents([.medium]) // シートの高さ調整（任意）
+                    .presentationDetents([.medium, .large]) // ✅ 画面の大きさに応じて広げられる
                 }
-                
                 // 宛名
                 Group {
                     Text("宛名")
