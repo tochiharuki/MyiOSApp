@@ -257,11 +257,11 @@ struct ReceiptView: View {
                         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
                 }
                 
-                // 会社名／担当者名
+                // 発行元
                 Group {
-                    Text("会社名／担当者名")
+                    Text("発行元")
                         .fontWeight(.medium)
-                    TextField("例：株式会社ABC 田中", text: $companyName)
+                    TextField("例：株式会社ABC", text: $companyName)
                         .padding()
                         .background(Color.white)
                         .cornerRadius(8)
