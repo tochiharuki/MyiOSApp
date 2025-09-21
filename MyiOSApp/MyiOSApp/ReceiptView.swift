@@ -10,6 +10,7 @@ import SwiftUI
 struct ReceiptView: View {
     @State private var receiptData = ReceiptData()
     @State private var showPreview = false
+    @State private var showDatePicker = false
     
     var body: some View {
         ScrollView {
@@ -20,14 +21,43 @@ struct ReceiptView: View {
                     .fontWeight(.semibold)
                     .padding(.bottom, 10)
                 
-                // 発行日
-                DatePicker("発行日", selection: $receiptData.issueDate, displayedComponents: .date)
-                    .datePickerStyle(.compact)
-                    .labelsHidden()
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(8)
-                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                // 発行日（ボタン式）
+                VStack(alignment: .leading, spacing: 5) {
+                    Text("発行日")
+                        .fontWeight(.medium)
+                    
+                    Button(action: {
+                        showDatePicker = true
+                    }) {
+                        HStack {
+                            Text(dateFormatter.string(from: receiptData.issueDate))
+                                .foregroundColor(.black)
+                                .frame(maxWidth: .infinity, alignment: .leading)
+                        }
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 8)
+                                .stroke(Color.gray.opacity(0.5))
+                        )
+                    }
+                    .sheet(isPresented: $showDatePicker) {
+                        VStack {
+                            DatePicker(
+                                "",
+                                selection: $receiptData.issueDate,
+                                displayedComponents: .date
+                            )
+                            .datePickerStyle(.graphical)
+                            .environment(\.locale, Locale(identifier: "ja_JP"))
+                            .onChange(of: receiptData.issueDate) { _ in
+                                showDatePicker = false
+                            }
+                        }
+                        .padding()
+                    }
+                }
                 
                 // 宛名
                 TextField("宛名", text: $receiptData.recipient)
@@ -58,8 +88,6 @@ struct ReceiptView: View {
                 
                 // 内税・外税
                 VStack(alignment: .leading) {
-                    Text("税込方式")
-                        .fontWeight(.medium)
                     Picker("内税・外税", selection: $receiptData.taxType) {
                         Text("内税").tag("内税")
                         Text("外税").tag("外税")
@@ -75,8 +103,8 @@ struct ReceiptView: View {
                     .cornerRadius(8)
                     .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
                 
-                // 会社名／担当者名
-                TextField("会社名／担当者名", text: $receiptData.companyName)
+                // 発行元
+                TextField("発行元", text: $receiptData.companyName)
                     .padding()
                     .background(Color.white)
                     .cornerRadius(8)
@@ -105,3 +133,11 @@ struct ReceiptView: View {
         .navigationBarTitleDisplayMode(.inline)
     }
 }
+
+// 日付表示用フォーマッター
+private let dateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .long
+    formatter.locale = Locale(identifier: "ja_JP")
+    return formatter
+}()

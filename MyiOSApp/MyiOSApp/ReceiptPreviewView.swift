@@ -21,7 +21,7 @@ struct ReceiptPreviewView: View {
                 Text("宛名: \(receiptData.recipient)")
                 Text("金額: \(receiptData.amount)円 (\(receiptData.taxType)・税率 \(receiptData.taxRate))")
                 Text("但し書き: \(receiptData.remarks)")
-                Text("会社名／担当者名: \(receiptData.companyName)")
+                Text("発行元: \(receiptData.companyName)")
             }
             .padding(.vertical, 2)
             
