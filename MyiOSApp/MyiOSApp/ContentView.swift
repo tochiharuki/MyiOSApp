@@ -118,6 +118,59 @@ struct AutoClosingDatePicker: UIViewRepresentable {
     }
 }
 
+struct DatePickerField: View {
+    @Binding var date: Date
+    @State private var showPicker = false
+
+    var body: some View {
+        VStack(alignment: .leading, spacing: 5) {
+            Text("発行日")
+                .fontWeight(.medium)
+
+            Button(action: {
+                showPicker = true
+            }) {
+                HStack {
+                    Text(dateFormatter.string(from: date))
+                        .foregroundColor(.black)
+                        .frame(maxWidth: .infinity, alignment: .leading)
+                }
+                .padding()
+                .background(Color.white)
+                .cornerRadius(8)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.gray.opacity(0.5))
+                )
+            }
+            .sheet(isPresented: $showPicker) {
+                VStack {
+                    DatePicker(
+                        "",
+                        selection: $date,
+                        displayedComponents: .date
+                    )
+                    .datePickerStyle(.graphical)
+                    .environment(\.locale, Locale(identifier: "ja_JP"))
+                    .onChange(of: date) { _ in
+                        showPicker = false
+                    }
+                }
+                .padding()
+            }
+        }
+    }
+}
+
+// 日付表示用フォーマッター
+private let dateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.dateStyle = .long
+    formatter.locale = Locale(identifier: "ja_JP")
+    return formatter
+}()
+
+
 struct ReceiptView: View {
     @State private var issueDate = Date()
     @State private var recipient = ""
@@ -142,41 +195,8 @@ struct ReceiptView: View {
                 
 
                 // 発行日
-                Group {
-                    Text("発行日")
-                        .fontWeight(.medium)
+                DatePickerField(date: $issueDate)
                 
-                    Button(action: { showDatePicker = true }) {
-                        HStack {
-                            Text(dateFormatter.string(from: issueDate)) // ← 日本語表記
-                                .foregroundColor(.black)
-                            Spacer()
-                            Image(systemName: "calendar")
-                                .foregroundColor(.blue)
-                        }
-                        .padding()
-                        .background(Color.white)
-                        .cornerRadius(8)
-                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
-                    }
-                    .sheet(isPresented: $showDatePicker) {
-                        VStack {
-                            DatePicker(
-                                "",
-                                selection: $issueDate,
-                                displayedComponents: .date
-                            )
-                            .datePickerStyle(.graphical)
-                            .environment(\.locale, Locale(identifier: "ja_JP")) // ← 日本語カレンダー強制
-                
-                            // ✅ 決定ボタンなし、日付が変わったら自動で閉じる
-                            .onChange(of: issueDate) { _ in
-                                showDatePicker = false
-                            }
-                        }
-                        .padding()
-                    }
-                }
                 // 宛名
                 Group {
                     Text("宛名")
