@@ -141,41 +141,41 @@ struct ReceiptView: View {
                     .padding(.bottom, 10)
                 
 
+                // 発行日
                 Group {
                     Text("発行日")
                         .fontWeight(.medium)
                 
-                    HStack {
-                        Spacer()
-                        Button(action: {
-                            showDatePicker = true
-                        }) {
-                            Text(issueDate, style: .date)
+                    Button(action: { showDatePicker = true }) {
+                        HStack {
+                            Text(dateFormatter.string(from: issueDate)) // ← 日本語表記
+                                .foregroundColor(.black)
+                            Spacer()
+                            Image(systemName: "calendar")
                                 .foregroundColor(.blue)
                         }
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
                     }
-                }
-                .sheet(isPresented: $showDatePicker) {
-                    VStack {
-                        DatePicker(
-                            "",
-                            selection: Binding(
-                                get: { issueDate },
-                                set: { newDate in
-                                    issueDate = newDate
-                                    showDatePicker = false // ✅ 選択したら即閉じる
-                                }
-                            ),
-                            displayedComponents: .date
-                        )
-                        .datePickerStyle(.graphical)
-                        .labelsHidden()
-                        .environment(\.locale, Locale(identifier: "ja_JP"))
-                        .environment(\.calendar, Calendar(identifier: .japanese))
-                        .frame(maxHeight: 500) // ✅ 縦幅を余裕持って確保
+                    .sheet(isPresented: $showDatePicker) {
+                        VStack {
+                            DatePicker(
+                                "",
+                                selection: $issueDate,
+                                displayedComponents: .date
+                            )
+                            .datePickerStyle(.graphical)
+                            .environment(\.locale, Locale(identifier: "ja_JP")) // ← 日本語カレンダー強制
+                
+                            // ✅ 決定ボタンなし、日付が変わったら自動で閉じる
+                            .onChange(of: issueDate) { _ in
+                                showDatePicker = false
+                            }
+                        }
                         .padding()
                     }
-                    .presentationDetents([.medium, .large]) // ✅ 画面の大きさに応じて広げられる
                 }
                 // 宛名
                 Group {
