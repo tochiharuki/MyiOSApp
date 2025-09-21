@@ -34,15 +34,6 @@ jobs:
     # 3. ビルド番号を自動インクリメント（Info.plist の CFBundleVersion を GITHUB_RUN_NUMBER に設定してコミット）
     - name: Bump build number
       run: |
-        plist="${{ env.INFO_PLIST_PATH }}"
-        echo "Info.plist = $plist"
-        if [ ! -f "$plist" ]; then
-          echo "Error: Info.plist not found at $plist"
-          exit 1
-        fi
-        # Set CFBundleVersion to GITHUB_RUN_NUMBER
-        /usr/libexec/PlistBuddy -c "Set :CFBundleVersion $GITHUB_RUN_NUMBER" "$plist"
-        echo "Set CFBundleVersion to $GITHUB_RUN_NUMBER"
         # commit change so Render will serve the updated ipa metadata (skip ci to avoid loop)
         git config user.name "github-actions"
         git config user.email "github-actions@github.com"
@@ -87,16 +78,18 @@ jobs:
         xcodebuild clean -project MyiOSApp.xcodeproj -scheme MyiOSApp -configuration Release
         # フルアーカイブ（Manual signing: Ad-Hoc を想定）
         xcodebuild \
-          -project MyiOSApp.xcodeproj \
-          -scheme MyiOSApp \
-          -sdk iphoneos \
-          -configuration Release \
-          -archivePath $PWD/build/MyiOSApp.xcarchive \
-          archive \
-          CODE_SIGN_STYLE=Manual \
-          CODE_SIGN_IDENTITY="iPhone Distribution" \
-          PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AdHoc_Profile" \
-          DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}"
+        -project MyiOSApp.xcodeproj \
+        -scheme MyiOSApp \
+        -sdk iphoneos \
+        -configuration Release \
+        -archivePath $PWD/build/MyiOSApp.xcarchive \
+        archive \
+        CODE_SIGN_STYLE=Manual \
+        CODE_SIGN_IDENTITY="iPhone Distribution" \
+        PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AdHoc_Profile" \
+        DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}" \
+        CURRENT_PROJECT_VERSION=$GITHUB_RUN_NUMBER
+
 
     # 7. .ipa にエクスポート
     - name: Export IPA
