@@ -68,7 +68,7 @@ jobs:
         xcodebuild clean -project MyiOSApp.xcodeproj -scheme MyiOSApp -configuration Release
         # フルアーカイブ（Manual signing: Ad-Hoc を想定）
         xcodebuild \
-        -project MyiOSApp.xcodeproj \
+        -workspace MyiOSApp.xcworkspace \
         -scheme MyiOSApp \
         -sdk iphoneos \
         -configuration Release \
@@ -79,6 +79,7 @@ jobs:
         PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AdHoc_Profile" \
         DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}" \
         CURRENT_PROJECT_VERSION=$GITHUB_RUN_NUMBER
+
 
 
     # 7. .ipa にエクスポート
