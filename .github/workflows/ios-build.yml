@@ -31,16 +31,6 @@ jobs:
           pod install
         fi
 
-    # 3. ビルド番号を自動インクリメント（Info.plist の CFBundleVersion を GITHUB_RUN_NUMBER に設定してコミット）
-    - name: Bump build number
-      run: |
-        # commit change so Render will serve the updated ipa metadata (skip ci to avoid loop)
-        git config user.name "github-actions"
-        git config user.email "github-actions@github.com"
-        git add "$plist"
-        git commit -m "Bump CFBundleVersion to $GITHUB_RUN_NUMBER [skip ci]" || echo "No changes to commit"
-        # push so remote has updated Info.plist (skip failure to avoid hard error)
-        git push origin main || echo "Push Info.plist change failed (maybe no permission)"
 
     # 4. Provisioning Profile を復元
     - name: Decode and install provisioning profile
