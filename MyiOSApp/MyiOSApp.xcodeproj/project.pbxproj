@@ -15,12 +15,12 @@
 		884FF4302E7E6CAA00C1C682 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 884FF4232E7E6CAA00C1C682 /* index.html */; };
 		884FF4312E7E6CAA00C1C682 /* MyiOSApp.ipa in Resources */ = {isa = PBXBuildFile; fileRef = 884FF4242E7E6CAA00C1C682 /* MyiOSApp.ipa */; };
 		884FF4382E7E6DE600C1C682 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884FF4372E7E6DE600C1C682 /* ContentView.swift */; };
-		888609472E8025E3006948EE /* ReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609462E8025E3006948EE /* ReceiptView.swift */; };
-		888609492E8025FA006948EE /* ReceiptPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609482E8025FA006948EE /* ReceiptPreviewView.swift */; };
-		8886094B2E80263C006948EE /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8886094A2E80263C006948EE /* HistoryView.swift */; };
-		8886094D2E802655006948EE /* TemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8886094C2E802655006948EE /* TemplateView.swift */; };
-		8886094F2E802667006948EE /* ReceiptData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8886094E2E802667006948EE /* ReceiptData.swift */; };
-		888609512E80267B006948EE /* PDFGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609502E80267B006948EE /* PDFGenerator.swift */; };
+		888609A52E80386F006948EE /* ReceiptData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609A42E80386F006948EE /* ReceiptData.swift */; };
+		888609A72E80397C006948EE /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609A62E80397C006948EE /* HistoryView.swift */; };
+		888609A92E803A9D006948EE /* PDFGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609A82E803A9D006948EE /* PDFGenerator.swift */; };
+		888609AB2E803ABE006948EE /* ReceiptPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609AA2E803ABE006948EE /* ReceiptPreviewView.swift */; };
+		888609AD2E803AEA006948EE /* ReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609AC2E803AEA006948EE /* ReceiptView.swift */; };
+		888609AF2E803B1D006948EE /* TemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609AE2E803B1D006948EE /* TemplateView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,12 +60,12 @@
 		88577AD32E734E1500078321 /* MyiOSAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyiOSAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		88577AD72E734E1500078321 /* MyiOSAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyiOSAppUITests.swift; sourceTree = "<group>"; };
 		88577AD92E734E1500078321 /* MyiOSAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MyiOSAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
-		888609462E8025E3006948EE /* ReceiptView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReceiptView.swift; sourceTree = "<group>"; };
-		888609482E8025FA006948EE /* ReceiptPreviewView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReceiptPreviewView.swift; sourceTree = "<group>"; };
-		8886094A2E80263C006948EE /* HistoryView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
-		8886094C2E802655006948EE /* TemplateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemplateView.swift; sourceTree = "<group>"; };
-		8886094E2E802667006948EE /* ReceiptData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReceiptData.swift; sourceTree = "<group>"; };
-		888609502E80267B006948EE /* PDFGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFGenerator.swift; sourceTree = "<group>"; };
+		888609A42E80386F006948EE /* ReceiptData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptData.swift; sourceTree = "<group>"; };
+		888609A62E80397C006948EE /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
+		888609A82E803A9D006948EE /* PDFGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFGenerator.swift; sourceTree = "<group>"; };
+		888609AA2E803ABE006948EE /* ReceiptPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptPreviewView.swift; sourceTree = "<group>"; };
+		888609AC2E803AEA006948EE /* ReceiptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptView.swift; sourceTree = "<group>"; };
+		888609AE2E803B1D006948EE /* TemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -116,15 +116,15 @@
 			children = (
 				884FF4142E7E6CAA00C1C682 /* Assets.xcassets */,
 				884FF4372E7E6DE600C1C682 /* ContentView.swift */,
-				888609462E8025E3006948EE /* ReceiptView.swift */,
-				888609482E8025FA006948EE /* ReceiptPreviewView.swift */,
-				8886094A2E80263C006948EE /* HistoryView.swift */,
-				8886094C2E802655006948EE /* TemplateView.swift */,
-				8886094E2E802667006948EE /* ReceiptData.swift */,
-				888609502E80267B006948EE /* PDFGenerator.swift */,
 				884FF4152E7E6CAA00C1C682 /* Preview Content */,
 				884FF4172E7E6CAA00C1C682 /* MyiOSAppApp.swift */,
 				884FF4182E7E6CAA00C1C682 /* MyiOSApp.entitlements */,
+				888609A42E80386F006948EE /* ReceiptData.swift */,
+				888609A62E80397C006948EE /* HistoryView.swift */,
+				888609A82E803A9D006948EE /* PDFGenerator.swift */,
+				888609AA2E803ABE006948EE /* ReceiptPreviewView.swift */,
+				888609AC2E803AEA006948EE /* ReceiptView.swift */,
+				888609AE2E803B1D006948EE /* TemplateView.swift */,
 			);
 			path = MyiOSApp;
 			sourceTree = "<group>";
@@ -341,13 +341,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				888609492E8025FA006948EE /* ReceiptPreviewView.swift in Sources */,
-				8886094F2E802667006948EE /* ReceiptData.swift in Sources */,
-				888609472E8025E3006948EE /* ReceiptView.swift in Sources */,
-				8886094D2E802655006948EE /* TemplateView.swift in Sources */,
-				8886094B2E80263C006948EE /* HistoryView.swift in Sources */,
 				884FF4382E7E6DE600C1C682 /* ContentView.swift in Sources */,
-				888609512E80267B006948EE /* PDFGenerator.swift in Sources */,
+				888609A92E803A9D006948EE /* PDFGenerator.swift in Sources */,
+				888609A72E80397C006948EE /* HistoryView.swift in Sources */,
+				888609A52E80386F006948EE /* ReceiptData.swift in Sources */,
+				888609AF2E803B1D006948EE /* TemplateView.swift in Sources */,
+				888609AD2E803AEA006948EE /* ReceiptView.swift in Sources */,
+				888609AB2E803ABE006948EE /* ReceiptPreviewView.swift in Sources */,
 				884FF4282E7E6CAA00C1C682 /* MyiOSAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

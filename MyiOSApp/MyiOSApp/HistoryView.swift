@@ -1,3 +1,10 @@
+//
+//  HistoryView.swift
+//  MyiOSApp
+//
+//  Created by Tochishita Haruki on 2025/09/21.
+//
+
 import SwiftUI
 
 struct HistoryView: View {
