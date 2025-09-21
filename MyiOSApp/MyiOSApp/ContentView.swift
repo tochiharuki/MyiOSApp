@@ -126,6 +126,7 @@ struct ReceiptView: View {
     @State private var taxType = "外税" // ✅ 内税／外税を追加
     @State private var remarks = ""
     @State private var companyName = ""
+    @State private var showDatePicker = false
     
     let taxOptions = ["8%", "10%", "非課税"]
     let taxTypeOptions = ["内税", "外税"] // ✅ 新しい選択肢
@@ -143,12 +144,34 @@ struct ReceiptView: View {
                     Text("発行日")
                         .fontWeight(.medium)
                 
-                    DatePicker("",
-                               selection: $issueDate,
-                               displayedComponents: .date)
-                        .datePickerStyle(GraphicalDatePickerStyle()) // ← カレンダー全表示
-                        .labelsHidden()                              // ← ラベル非表示（横の "" と重複するため）
-                        .frame(maxHeight: 400)                       // ← 切れ防止
+                    HStack {
+                        Spacer()
+                        Button(action: {
+                            showDatePicker = true
+                        }) {
+                            Text(issueDate, style: .date) // 選択した日付を表示
+                                .foregroundColor(.blue)
+                        }
+                    }
+                }
+                .sheet(isPresented: $showDatePicker) {
+                    VStack {
+                        DatePicker(
+                            "発行日を選択",
+                            selection: $issueDate,
+                            displayedComponents: .date
+                        )
+                        .datePickerStyle(.graphical)
+                        .labelsHidden()
+                        .padding()
+                
+                        Button("決定") {
+                            showDatePicker = false // ✅ 閉じる
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .padding()
+                    }
+                    .presentationDetents([.medium]) // シートの高さ調整（任意）
                 }
                 
                 // 宛名
