@@ -60,17 +60,15 @@ jobs:
       run: |
         set -e
         xcodebuild clean -project MyiOSApp.xcodeproj -scheme MyiOSApp -configuration Release
-        xcodebuild \
-          -project MyiOSApp.xcodeproj \
-          -scheme MyiOSApp \
-          -sdk iphoneos \
-          -configuration Release \
-          -archivePath $PWD/build/MyiOSApp.xcarchive \
-          archive \
-          CODE_SIGN_STYLE=Manual \
-          CODE_SIGN_IDENTITY="iPhone Distribution" \
-          PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AdHoc_Profile" \
-          DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}"
+        xcodebuild -workspace MyiOSApp.xcworkspace \
+           -scheme MyiOSApp \
+           -configuration Release \
+           -archivePath build/MyiOSApp.xcarchive \
+           archive \
+           CODE_SIGN_STYLE=Manual \
+           PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AdHoc_Profile" \
+           DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}" \
+           CURRENT_PROJECT_VERSION=$GITHUB_RUN_NUMBER
 
     # 7. .ipa にエクスポート
     - name: Export IPA
