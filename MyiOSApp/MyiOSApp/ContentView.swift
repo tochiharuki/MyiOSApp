@@ -10,7 +10,6 @@ struct ContentView: View {
             } else {
                 SplashView() // スプラッシュ画面
                     .onAppear {
-                        // 1秒後にメイン画面へ遷移
                         DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
                             withAnimation {
                                 showMainView = true
@@ -66,8 +65,6 @@ struct MainView: View {
                         .cornerRadius(10)
                 }
                 
-                
-                
                 NavigationLink(destination: HistoryView()) {
                     Text("履歴を見る")
                         .frame(maxWidth: .infinity)
@@ -82,7 +79,7 @@ struct MainView: View {
                 }
             }
             .padding()
-            .background(Color.white) // 白ベース
+            .background(Color.white)
         }
     }
 }
@@ -93,10 +90,12 @@ struct ReceiptView: View {
     @State private var recipient = ""
     @State private var amount = ""
     @State private var taxRate = "10%" // デフォルト10%
+    @State private var taxMode = "税抜" // デフォルト税抜
     @State private var remarks = ""
     @State private var companyName = ""
     
     let taxOptions = ["8%", "10%", "非課税"]
+    let taxModeOptions = ["税抜", "税込"]
     
     var body: some View {
         ScrollView {
@@ -114,6 +113,7 @@ struct ReceiptView: View {
                     DatePicker("日付を選択", selection: $issueDate, displayedComponents: .date)
                         .datePickerStyle(.compact)
                         .labelsHidden()
+                        .environment(\.locale, Locale(identifier: "ja_JP")) // 日本形式
                         .padding()
                         .background(Color.white)
                         .cornerRadius(8)
@@ -133,7 +133,7 @@ struct ReceiptView: View {
                 
                 // 金額
                 Group {
-                    Text("金額（税抜）")
+                    Text("金額")
                         .fontWeight(.medium)
                     TextField("例：10000", text: $amount)
                         .keyboardType(.numberPad)
@@ -141,6 +141,14 @@ struct ReceiptView: View {
                         .background(Color.white)
                         .cornerRadius(8)
                         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                    
+                    // 税抜/税込 選択
+                    Picker("税区分", selection: $taxMode) {
+                        ForEach(taxModeOptions, id: \.self) { mode in
+                            Text(mode)
+                        }
+                    }
+                    .pickerStyle(SegmentedPickerStyle())
                     
                     // 消費税選択
                     Picker("消費税", selection: $taxRate) {
@@ -176,8 +184,7 @@ struct ReceiptView: View {
                 
                 // 保存ボタン
                 Button(action: {
-                    // 保存処理
-                    print("保存")
+                    print("保存: \(recipient), \(amount), \(taxMode), \(taxRate)")
                 }) {
                     Text("保存")
                         .frame(maxWidth: .infinity)
@@ -209,8 +216,6 @@ struct TemplateView: View {
         }
     }
 }
-
-
 
 // 履歴画面
 struct HistoryView: View {
