@@ -13,7 +13,6 @@
 		884FF42E2E7E6CAA00C1C682 /* ExportOptions.plist in Resources */ = {isa = PBXBuildFile; fileRef = 884FF4202E7E6CAA00C1C682 /* ExportOptions.plist */; };
 		884FF42F2E7E6CAA00C1C682 /* Manifest.plist in Resources */ = {isa = PBXBuildFile; fileRef = 884FF4222E7E6CAA00C1C682 /* Manifest.plist */; };
 		884FF4302E7E6CAA00C1C682 /* index.html in Resources */ = {isa = PBXBuildFile; fileRef = 884FF4232E7E6CAA00C1C682 /* index.html */; };
-		884FF4312E7E6CAA00C1C682 /* MyiOSApp.ipa in Resources */ = {isa = PBXBuildFile; fileRef = 884FF4242E7E6CAA00C1C682 /* MyiOSApp.ipa */; };
 		884FF4382E7E6DE600C1C682 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 884FF4372E7E6DE600C1C682 /* ContentView.swift */; };
 		888609A52E80386F006948EE /* ReceiptData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609A42E80386F006948EE /* ReceiptData.swift */; };
 		888609A72E80397C006948EE /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609A62E80397C006948EE /* HistoryView.swift */; };
@@ -52,7 +51,6 @@
 		884FF4202E7E6CAA00C1C682 /* ExportOptions.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = ExportOptions.plist; sourceTree = "<group>"; };
 		884FF4222E7E6CAA00C1C682 /* Manifest.plist */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.plist.xml; path = Manifest.plist; sourceTree = "<group>"; };
 		884FF4232E7E6CAA00C1C682 /* index.html */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text.html; path = index.html; sourceTree = "<group>"; };
-		884FF4242E7E6CAA00C1C682 /* MyiOSApp.ipa */ = {isa = PBXFileReference; lastKnownFileType = file; path = MyiOSApp.ipa; sourceTree = "<group>"; };
 		884FF4372E7E6DE600C1C682 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
 		88577AB82E734E1300078321 /* MyiOSApp.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = MyiOSApp.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		88577AC92E734E1500078321 /* MyiOSAppTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = MyiOSAppTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -159,7 +157,6 @@
 			children = (
 				884FF4222E7E6CAA00C1C682 /* Manifest.plist */,
 				884FF4232E7E6CAA00C1C682 /* index.html */,
-				884FF4242E7E6CAA00C1C682 /* MyiOSApp.ipa */,
 			);
 			path = static;
 			sourceTree = "<group>";
@@ -316,7 +313,6 @@
 				884FF42F2E7E6CAA00C1C682 /* Manifest.plist in Resources */,
 				884FF42E2E7E6CAA00C1C682 /* ExportOptions.plist in Resources */,
 				884FF4262E7E6CAA00C1C682 /* Assets.xcassets in Resources */,
-				884FF4312E7E6CAA00C1C682 /* MyiOSApp.ipa in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
