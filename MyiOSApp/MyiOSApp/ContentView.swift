@@ -210,11 +210,17 @@ struct ReceiptView: View {
                             .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
                     }
                     
-                    // 消費税率
-                    Picker("消費税", selection: $taxRate) {
-                        ForEach(taxOptions, id: \.self) { rate in
-                            Text(rate)
+                    // 消費税選択
+                    Group {
+                        Text("税率")
+                            .fontWeight(.medium)
+                    
+                        Picker("", selection: $taxRate) {
+                            ForEach(taxOptions, id: \.self) { rate in
+                                Text(rate)
+                            }
                         }
+                        .pickerStyle(.segmented)
                     }
                     .pickerStyle(SegmentedPickerStyle())
                 }
