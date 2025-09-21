@@ -1,4 +1,4 @@
-name: iOS Build
+name: iOS Build (Ad-Hoc)
 
 permissions:
   contents: write
@@ -31,7 +31,7 @@ jobs:
     - name: Decode and install provisioning profile
       run: |
         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
-        echo "$MOBILEPROVISION" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/MyiOSApp.mobileprovision
+        echo "$MOBILEPROVISION" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/MyiOSApp_AdHoc.mobileprovision
       env:
         MOBILEPROVISION: ${{ secrets.MOBILEPROVISION }}
 
@@ -50,15 +50,16 @@ jobs:
         CERTIFICATE: ${{ secrets.CERTIFICATE }}
         CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
 
-    # 5. Xcode クリーン & アーカイブ（CURRENT_PROJECT_VERSION で自動インクリメント）
-    - name: Clean and build archive
+    # 5. DerivedData をクリーン
+    - name: Clean DerivedData
+      run: rm -rf ~/Library/Developer/Xcode/DerivedData
+
+    # 6. アーカイブ作成（Ad-Hoc）
+    - name: Build archive
       working-directory: MyiOSApp
       run: |
         set -e
-        rm -rf ~/Library/Developer/Xcode/DerivedData
-        # Xcode でのクリーン
         xcodebuild clean -project MyiOSApp.xcodeproj -scheme MyiOSApp -configuration Release
-        # アーカイブ作成
         xcodebuild \
           -project MyiOSApp.xcodeproj \
           -scheme MyiOSApp \
@@ -66,12 +67,12 @@ jobs:
           -configuration Release \
           -archivePath $PWD/build/MyiOSApp.xcarchive \
           archive \
-          CODE_SIGN_STYLE=Automatic \
-          DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}" \
-          CURRENT_PROJECT_VERSION=$GITHUB_RUN_NUMBER
-          -allowProvisioningUpdates
+          CODE_SIGN_STYLE=Manual \
+          CODE_SIGN_IDENTITY="iPhone Distribution" \
+          PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AdHoc_Profile" \
+          DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}"
 
-    # 6. .ipa にエクスポート
+    # 7. .ipa にエクスポート
     - name: Export IPA
       working-directory: MyiOSApp
       run: |
@@ -80,24 +81,29 @@ jobs:
           -archivePath $PWD/build/MyiOSApp.xcarchive \
           -exportOptionsPlist ExportOptions.plist \
           -exportPath $PWD/build
+        echo "Contents of build directory:"
         ls -al build || true
 
-    # 7. Artifact としてアップロード
+    # 8. .ipa を Artifact としてアップロード
     - name: Upload IPA artifact
       uses: actions/upload-artifact@v4
       with:
         name: MyiOSApp-ipa
         path: MyiOSApp/build/*.ipa
 
-    # 8. Render 配布用 static/ にコピー
+    # 9. Render 配布用 static/ にコピー
     - name: Prepare static directory
       run: |
         mkdir -p MyiOSApp/static
         cp MyiOSApp/build/*.ipa MyiOSApp/static/ || echo "No ipa to copy"
-        cp -f MyiOSApp/Manifest.plist MyiOSApp/static/ 2>/dev/null || true
-        cp -f MyiOSApp/index.html MyiOSApp/static/ 2>/dev/null || true
+        if [ -f MyiOSApp/Manifest.plist ]; then
+          cp MyiOSApp/Manifest.plist MyiOSApp/static/
+        fi
+        if [ -f MyiOSApp/index.html ]; then
+          cp MyiOSApp/index.html MyiOSApp/static/
+        fi
 
-    # 9. static/ をコミット & Push
+    # 10. static/ をコミット & Push
     - name: Commit and push static files
       env:
         GIT_AUTHOR_NAME: github-actions
@@ -107,5 +113,5 @@ jobs:
         git config user.name "${GIT_AUTHOR_NAME}"
         git config user.email "${GIT_AUTHOR_EMAIL}"
         git add MyiOSApp/static || true
-        git commit -m "Deploy ipa to static for Render (build $GITHUB_RUN_NUMBER) [skip ci]" || echo "No changes to commit"
+        git commit -m "Deploy ipa to static for Render (Ad-Hoc build) [skip ci]" || echo "No changes to commit"
         git push origin main || echo "Push failed (maybe permissions)"
