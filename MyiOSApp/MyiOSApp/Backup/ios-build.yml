@@ -1,0 +1,179 @@
+name: iOS Build
+
+permissions:
+  contents: write
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: macos-latest
+
+    env:
+      PROJECT_DIR: MyiOSApp
+      SCHEME: MyiOSApp
+      ARCHIVE_PATH: ${{ github.workspace }}/MyiOSApp/build/MyiOSApp.xcarchive
+      EXPORT_PATH: ${{ github.workspace }}/MyiOSApp/build
+      BUILD_LOG: ${{ github.workspace }}/MyiOSApp/xcodebuild.log
+
+    steps:
+      # 1. Checkout
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          persist-credentials: true
+
+      # 2. CocoaPods (optional)
+      - name: Install dependencies (CocoaPods)
+        run: |
+          if [ -f "${{ env.PROJECT_DIR }}/Podfile" ]; then
+            cd "${{ env.PROJECT_DIR }}"
+            pod install --repo-update
+          fi
+
+      # 3. Install provisioning profile (base64 in secrets)
+      - name: Decode and install provisioning profile
+        env:
+          MOBILEPROVISION: ${{ secrets.MOBILEPROVISION }}
+        run: |
+          if [ -n "$MOBILEPROVISION" ]; then
+            mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
+            echo "$MOBILEPROVISION" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/MyiOSApp.mobileprovision
+            echo "Installed provisioning profile"
+          else
+            echo "No MOBILEPROVISION secret provided, skipping"
+          fi
+
+      # 4. Import certificate to keychain (base64 .p12 in secrets)
+      - name: Import certificate to keychain
+        env:
+          CERTIFICATE: ${{ secrets.CERTIFICATE }}
+          CERTIFICATE_PASSWORD: ${{ secrets.CERTIFICATE_PASSWORD }}
+        run: |
+          if [ -n "$CERTIFICATE" ]; then
+            echo "$CERTIFICATE" | base64 --decode > /tmp/certificate.p12
+            security create-keychain -p "$CERTIFICATE_PASSWORD" build.keychain
+            security import /tmp/certificate.p12 -k ~/Library/Keychains/build.keychain -P "$CERTIFICATE_PASSWORD" -T /usr/bin/codesign
+            security list-keychains -s ~/Library/Keychains/build.keychain
+            security default-keychain -s ~/Library/Keychains/build.keychain
+            security unlock-keychain -p "$CERTIFICATE_PASSWORD" ~/Library/Keychains/build.keychain
+            security set-key-partition-list -S apple-tool:,apple: -s -k "$CERTIFICATE_PASSWORD" ~/Library/Keychains/build.keychain
+            security find-identity -v -p codesigning || true
+            echo "Imported certificate"
+          else
+            echo "No CERTIFICATE secret provided, skipping"
+          fi
+
+      # 5. Clean DerivedData
+      - name: Clean DerivedData
+        run: |
+          rm -rf ~/Library/Developer/Xcode/DerivedData/* || true
+          mkdir -p "${{ env.PROJECT_DIR }}/build"
+
+      # 6. Build & Archive with full logs (tests fully ignored by project configuration)
+      - name: Clean and build archive (capture full logs)
+        working-directory: ${{ env.PROJECT_DIR }}
+        shell: bash
+        env:
+          TEAM_ID: ${{ secrets.TEAM_ID }}
+        run: |
+          set -o pipefail
+          set -e
+
+          # ensure old log removed
+          rm -f "${{ env.BUILD_LOG }}" || true
+
+          echo "=== xcodebuild clean ==="
+          xcodebuild clean \
+            -project "${{ env.PROJECT_DIR }}.xcodeproj" \
+            -scheme "${{ env.SCHEME }}" \
+            -configuration Release
+
+          echo "=== xcodebuild archive (start) ==="
+          # run xcodebuild, tee to build log, pipe to xcpretty for readability
+          # capture xcodebuild exit code via PIPESTATUS[0]
+          xcodebuild archive \
+            -project "${{ env.PROJECT_DIR }}.xcodeproj" \
+            -scheme "${{ env.SCHEME }}" \
+            -sdk iphoneos \
+            -configuration Release \
+            -archivePath "${{ env.ARCHIVE_PATH }}" \
+            CODE_SIGN_STYLE=Manual \
+            CODE_SIGN_IDENTITY="iPhone Distribution" \
+            PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AdHoc_Profile" \
+            DEVELOPMENT_TEAM="${TEAM_ID}" \
+            GENERATE_INFOPLIST_FILE=YES \
+            SKIP_INSTALL=NO \
+            -destination "generic/platform=iOS" \
+            ONLY_ACTIVE_ARCH=NO \
+            BUILD_LIBRARY_FOR_DISTRIBUTION=YES \
+            2>&1 | tee "${{ env.BUILD_LOG }}" | xcpretty --color || true
+
+          # get exit code of xcodebuild (first element of PIPESTATUS)
+          xb_rc=${PIPESTATUS[0]:-1}
+          echo "xcodebuild exit code: $xb_rc"
+          if [ "$xb_rc" -ne 0 ]; then
+            echo "xcodebuild failed (exit $xb_rc). See ${{ env.BUILD_LOG }}"
+            exit $xb_rc
+          fi
+          echo "Archive finished successfully"
+
+      # 7. Export IPA
+      - name: Export IPA
+        working-directory: ${{ env.PROJECT_DIR }}
+        shell: bash
+        run: |
+          set -e
+          if [ ! -d "${{ env.ARCHIVE_PATH }}" ]; then
+            echo "Archive not found at ${{ env.ARCHIVE_PATH }} — skipping export"
+            exit 1
+          fi
+          xcodebuild -exportArchive \
+            -archivePath "${{ env.ARCHIVE_PATH }}" \
+            -exportOptionsPlist ExportOptions.plist \
+            -exportPath "${{ env.EXPORT_PATH }}" \
+            2>&1 | tee -a "${{ env.BUILD_LOG }}" | xcpretty --color
+
+      # 8. Upload IPA artifact
+      - name: Upload IPA artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: MyiOSApp-ipa
+          path: MyiOSApp/build/*.ipa
+
+      # 9. Upload build log if failure (and also keep it on success for inspection)
+      - name: Upload xcodebuild.log (always)
+        uses: actions/upload-artifact@v4
+        with:
+          name: xcodebuild-log
+          path: MyiOSApp/xcodebuild.log
+
+      # 10. Prepare static directory (for Render)
+      - name: Prepare static directory
+        run: |
+          set -e
+          mkdir -p MyiOSApp/static
+          cp MyiOSApp/build/*.ipa MyiOSApp/static/ || echo "No ipa to copy"
+          if [ -f MyiOSApp/Manifest.plist ]; then
+            cp MyiOSApp/Manifest.plist MyiOSApp/static/
+          fi
+          if [ -f MyiOSApp/index.html ]; then
+            cp MyiOSApp/index.html MyiOSApp/static/
+          fi
+
+      # 11. Commit & push static files (best-effort)
+      - name: Commit and push static files
+        env:
+          GIT_AUTHOR_NAME: github-actions
+          GIT_AUTHOR_EMAIL: github-actions@github.com
+        run: |
+          set -e
+          git config user.name "${GIT_AUTHOR_NAME}"
+          git config user.email "${GIT_AUTHOR_EMAIL}"
+          git add MyiOSApp/static || true
+          git commit -m "Deploy ipa to static for Render (build $GITHUB_RUN_NUMBER) [skip ci]" || echo "No changes to commit"
+          git push origin main || echo "Push failed (maybe permissions)"
