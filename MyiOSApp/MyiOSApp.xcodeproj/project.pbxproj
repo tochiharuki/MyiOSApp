@@ -21,7 +21,6 @@
 		8886094D2E802655006948EE /* TemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8886094C2E802655006948EE /* TemplateView.swift */; };
 		8886094F2E802667006948EE /* ReceiptData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8886094E2E802667006948EE /* ReceiptData.swift */; };
 		888609512E80267B006948EE /* PDFGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609502E80267B006948EE /* PDFGenerator.swift */; };
-		888609A12E803271006948EE /* Info.plist in Resources */ = {isa = PBXBuildFile; fileRef = 888609A02E803271006948EE /* Info.plist */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -67,7 +66,6 @@
 		8886094C2E802655006948EE /* TemplateView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TemplateView.swift; sourceTree = "<group>"; };
 		8886094E2E802667006948EE /* ReceiptData.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ReceiptData.swift; sourceTree = "<group>"; };
 		888609502E80267B006948EE /* PDFGenerator.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PDFGenerator.swift; sourceTree = "<group>"; };
-		888609A02E803271006948EE /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,7 +97,6 @@
 			isa = PBXGroup;
 			children = (
 				884FF4102E7E6CAA00C1C682 /* MyiOSApp.xcodeproj */,
-				888609A02E803271006948EE /* Info.plist */,
 				884FF4132E7E6CAA00C1C682 /* MyiOSApp */,
 				884FF41B2E7E6CAA00C1C682 /* MyiOSAppUITests */,
 				884FF41E2E7E6CAA00C1C682 /* MyiOSAppTests */,
@@ -320,7 +317,6 @@
 				884FF42E2E7E6CAA00C1C682 /* ExportOptions.plist in Resources */,
 				884FF4262E7E6CAA00C1C682 /* Assets.xcassets in Resources */,
 				884FF4312E7E6CAA00C1C682 /* MyiOSApp.ipa in Resources */,
-				888609A12E803271006948EE /* Info.plist in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
