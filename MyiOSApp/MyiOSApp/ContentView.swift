@@ -139,11 +139,17 @@ struct ReceiptView: View {
                     .fontWeight(.semibold)
                     .padding(.bottom, 10)
                 
-                // ✅ 発行日（新しい DatePicker）
                 Group {
-                    Text("発行日")
-                        .fontWeight(.medium)
-                    AutoClosingDatePicker(selection: $issueDate) // ←ここを変更
+                     Text("発行日")
+                         .fontWeight(.medium)
+                 
+                     DatePicker("",
+                                selection: $issueDate,
+                                displayedComponents: .date)
+                         .datePickerStyle(GraphicalDatePickerStyle()) // ← カレンダー全表示
+                         .labelsHidden()                              // ← ラベル非表示（横の "" と重複するため）
+                         .frame(maxHeight: 400)                       // ← 切れ防止
+                 }
                         .padding()
                         .background(Color.white)
                         .cornerRadius(8)
