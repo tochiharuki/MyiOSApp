@@ -131,29 +131,26 @@ struct ReceiptView: View {
                         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
                 }
                 
-                // 金額（内税／外税 選択付き）
+                // 金額
                 Group {
                     Text("金額")
                         .fontWeight(.medium)
+                    TextField("例：10000", text: $amount)
+                        .keyboardType(.numberPad)
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
                     
-                    HStack {
-                        Picker("税種別", selection: $taxType) {
-                            ForEach(taxTypeOptions, id: \.self) { type in
-                                Text(type)
-                            }
+                    // 税抜/税込 選択
+                    Picker("税区分", selection: $taxMode) {
+                        ForEach(taxModeOptions, id: \.self) { mode in
+                            Text(mode)
                         }
-                        .pickerStyle(SegmentedPickerStyle())
-                        .frame(width: 160)
-                        
-                        TextField("例：10000", text: $amount)
-                            .keyboardType(.numberPad)
-                            .padding()
-                            .background(Color.white)
-                            .cornerRadius(8)
-                            .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
                     }
+                    .pickerStyle(SegmentedPickerStyle())
                     
-                    // 消費税率
+                    // 消費税選択
                     Picker("消費税", selection: $taxRate) {
                         ForEach(taxOptions, id: \.self) { rate in
                             Text(rate)
@@ -162,7 +159,7 @@ struct ReceiptView: View {
                     .pickerStyle(SegmentedPickerStyle())
                 }
                 
-                // 但し書き
+                // 但し書き-
                 Group {
                     Text("但し書き")
                         .fontWeight(.medium)
