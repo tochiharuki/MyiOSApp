@@ -131,7 +131,7 @@ struct ReceiptView: View {
                         .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
                 }
                 
-                // 保存ボタン
+                // 保存ボタンテスト
                 Button(action: {
                     print("保存")
                 }) {
