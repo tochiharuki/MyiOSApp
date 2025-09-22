@@ -60,6 +60,8 @@ struct ReceiptView: View {
                 }
                 
                 // 宛名
+                Text("宛名")
+                    .fontWeight(.medium)
                 TextField("宛名", text: $receiptData.recipient)
                     .padding()
                     .background(Color.white)
@@ -68,7 +70,7 @@ struct ReceiptView: View {
                 
                 // 税率
                 VStack(alignment: .leading) {
-                    Text("税率")
+                    Text("税率・税区分")
                         .fontWeight(.medium)
                     Picker("税率", selection: $receiptData.taxRate) {
                         Text("8%").tag("8%")
@@ -110,6 +112,8 @@ struct ReceiptView: View {
                     .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
                 
                 // 発行元
+                Text("発行元")
+                    .fontWeight(.medium)
                 TextField("発行元", text: $receiptData.companyName)
                     .padding()
                     .background(Color.white)
