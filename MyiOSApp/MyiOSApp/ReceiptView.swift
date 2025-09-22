@@ -90,6 +90,8 @@ struct ReceiptView: View {
                 }
                 
                 // 金額
+                Text("金額")
+                        .fontWeight(.medium)
                 TextField("金額（数字のみ）", text: $receiptData.amount)
                     .keyboardType(.numberPad)
                     .padding()
