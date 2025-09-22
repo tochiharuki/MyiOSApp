@@ -99,10 +99,7 @@ struct ReceiptView: View {
                     .cornerRadius(8)
                     .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
                 
-                
-                
                 // 但し書き
-                
                 Text("但し書き")
                     .fontWeight(.medium)
                 
@@ -124,6 +121,7 @@ struct ReceiptView: View {
                 
                 // 作成ボタン
                 Button(action: {
+                    hideKeyboard()  // ← ボタン押下でもキーボードを閉じる
                     showPreview = true
                 }) {
                     Text("作成")
@@ -141,6 +139,9 @@ struct ReceiptView: View {
             .padding()
         }
         .background(Color.white.ignoresSafeArea())
+        .onTapGesture {
+            hideKeyboard() // ← 背景タップでキーボード閉じる
+        }
         .navigationTitle("領収書作成")
         .navigationBarTitleDisplayMode(.inline)
     }
@@ -153,3 +154,11 @@ private let dateFormatter: DateFormatter = {
     formatter.locale = Locale(identifier: "ja_JP")
     return formatter
 }()
+
+// キーボードを閉じる拡張
+extension View {
+    func hideKeyboard() {
+        UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder),
+                                        to: nil, from: nil, for: nil)
+    }
+}
