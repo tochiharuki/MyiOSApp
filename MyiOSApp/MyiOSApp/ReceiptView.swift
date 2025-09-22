@@ -66,14 +66,6 @@ struct ReceiptView: View {
                     .cornerRadius(8)
                     .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
                 
-                // 金額
-                TextField("金額（数字のみ）", text: $receiptData.amount)
-                    .keyboardType(.numberPad)
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(8)
-                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
-                
                 // 税率
                 VStack(alignment: .leading) {
                     Text("税率")
@@ -95,7 +87,21 @@ struct ReceiptView: View {
                     .pickerStyle(SegmentedPickerStyle())
                 }
                 
+                // 金額
+                TextField("金額（数字のみ）", text: $receiptData.amount)
+                    .keyboardType(.numberPad)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(8)
+                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                
+                
+                
                 // 但し書き
+                
+                Text("但し書き")
+                    .fontWeight(.medium)
+                
                 TextEditor(text: $receiptData.remarks)
                     .frame(height: 100)
                     .padding(4)
