@@ -17,7 +17,7 @@ struct ReceiptPreviewView: View {
                 .fontWeight(.bold)
             
             Group {
-                Text("発行日: \(receiptData.issueDate.formatted(date: .abbreviated, time: .omitted))")
+                Text("発行日: \(previewDateFormatter.string(from: receiptData.issueDate))")
                 Text("宛名: \(receiptData.recipient)")
                 Text("金額: \(receiptData.amount)円 (\(receiptData.taxType)・税率 \(receiptData.taxRate))")
                 Text("但し書き: \(receiptData.remarks)")
@@ -42,3 +42,11 @@ struct ReceiptPreviewView: View {
         .padding()
     }
 }
+
+// 日本語日付用フォーマッター
+private let previewDateFormatter: DateFormatter = {
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "ja_JP")
+    formatter.dateStyle = .long
+    return formatter
+}()
