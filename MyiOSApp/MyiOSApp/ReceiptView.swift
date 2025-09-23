@@ -121,12 +121,15 @@ struct ReceiptView: View {
                     .cornerRadius(8)
                     .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
 
-                // 作成ボタン
                 Button(action: {
                     hideKeyboard()
-                    if let pdfData = PDFGenerator.generate(from: receiptData) {
-                        self.pdfData = pdfData
-                        self.showPreview = true
+                    if let data = PDFGenerator.generate(from: receiptData) {
+                        self.pdfData = data          // 先にセット
+                        DispatchQueue.main.async {   // 次の runloop でシート表示
+                            self.showPreview = true
+                        }
+                    } else {
+                        print("PDF生成に失敗")
                     }
                 }) {
                     Text("作成")
