@@ -14,7 +14,8 @@ struct ReceiptView: View {
     @State private var showDatePicker = false
     @State private var pdfData: Data? = nil
     @State private var errorMessage: String? = nil
-    
+    @State private var isGenerating = false   // ← 追加（生成中フラグ）
+
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
@@ -122,27 +123,48 @@ struct ReceiptView: View {
                     .cornerRadius(8)
                     .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
 
+                // PDF生成ボタン
                 Button(action: {
                     hideKeyboard()
-                    do {
-                        let data = try PDFGenerator.generate(from: receiptData)
-                        self.pdfData = data
-                        DispatchQueue.main.async {
-                            self.showPreview = true
+                    errorMessage = nil
+                    isGenerating = true  // ← 追加
+                    DispatchQueue.global(qos: .userInitiated).async {
+                        do {
+                            let data = try PDFGenerator.generate(from: receiptData)
+                            DispatchQueue.main.async {
+                                self.pdfData = data
+                                self.showPreview = true
+                                self.isGenerating = false
+                            }
+                        } catch {
+                            DispatchQueue.main.async {
+                                self.errorMessage = error.localizedDescription
+                                self.showPreview = true
+                                self.pdfData = nil
+                                self.isGenerating = false
+                            }
                         }
-                    } catch {
-                        self.errorMessage = error.localizedDescription
-                        self.showPreview = true
-                        self.pdfData = nil
                     }
                 }) {
-                    Text("作成")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .foregroundColor(.white)
-                        .background(Color.blue)
-                        .cornerRadius(10)
+                    if isGenerating {
+                        ProgressView()
+                            .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.gray)
+                            .cornerRadius(10)
+                    } else {
+                        Text("作成")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .foregroundColor(.white)
+                            .background(Color.blue)
+                            .cornerRadius(10)
+                    }
                 }
+                .disabled(isGenerating)
+
+                // プレビュー
                 .sheet(isPresented: $showPreview) {
                     if let data = pdfData {
                         NavigationView {

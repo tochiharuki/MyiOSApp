@@ -66,10 +66,10 @@ struct PDFGenerator {
                 formatter.dateStyle = .long
                 
                 drawLine("発行日", formatter.string(from: receipt.issueDate))
-                drawLine("宛名", receipt.recipient)
-                drawLine("金額", "\(receipt.amount) 円 (\(receipt.taxType)・税率 \(receipt.taxRate))")
-                drawLine("但し書き", receipt.remarks)
-                drawLine("発行元", receipt.companyName)
+                drawLine("宛名", receipt.recipient.isEmpty ? "（未入力）" : receipt.recipient)
+                drawLine("金額", receipt.amount.isEmpty ? "（未入力）" : "\(receipt.amount) 円 (\(receipt.taxType)・税率 \(receipt.taxRate))")
+                drawLine("但し書き", receipt.remarks.isEmpty ? "（未入力）" : receipt.remarks)
+                drawLine("発行元", receipt.companyName.isEmpty ? "（未入力）" : receipt.companyName)
                 
                 // 下部に署名欄
                 textTop += 60
