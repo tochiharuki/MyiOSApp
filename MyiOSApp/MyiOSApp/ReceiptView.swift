@@ -123,13 +123,16 @@ struct ReceiptView: View {
 
                 Button(action: {
                     hideKeyboard()
-                    if let data = PDFGenerator.generate(from: receiptData) {
-                        self.pdfData = data          // 先にセット
-                        DispatchQueue.main.async {   // 次の runloop でシート表示
+                    do {
+                        let data = try PDFGenerator.generate(from: receiptData)
+                        self.pdfData = data
+                        DispatchQueue.main.async {
                             self.showPreview = true
                         }
-                    } else {
-                        print("PDF生成に失敗")
+                    } catch {
+                        self.errorMessage = error.localizedDescription
+                        self.showPreview = true
+                        self.pdfData = nil
                     }
                 }) {
                     Text("作成")
@@ -139,9 +142,7 @@ struct ReceiptView: View {
                         .background(Color.blue)
                         .cornerRadius(10)
                 }
-                .padding(.top, 20)
                 .sheet(isPresented: $showPreview) {
-                    // sheet の中では ViewBuilder を使うため if let を使って分岐できます
                     if let data = pdfData {
                         NavigationView {
                             PDFPreviewWrapper(data: data)
@@ -149,9 +150,18 @@ struct ReceiptView: View {
                                 .navigationBarTitleDisplayMode(.inline)
                         }
                     } else {
-                        // 万一 pdfData が nil のときのフォールバック（必須ではないが安全）
-                        Text("PDF生成に失敗しました")
-                            .padding()
+                        // エラー時
+                        VStack {
+                            Text("PDF生成に失敗しました")
+                                .font(.headline)
+                                .padding(.bottom, 8)
+                            if let message = errorMessage {
+                                Text("エラー内容: \(message)")
+                                    .foregroundColor(.red)
+                                    .multilineTextAlignment(.center)
+                            }
+                        }
+                        .padding()
                     }
                 }
 
