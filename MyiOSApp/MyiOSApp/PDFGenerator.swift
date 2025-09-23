@@ -13,10 +13,13 @@ enum PDFGeneratorError: Error {
 
 struct PDFGenerator {
 
-    // ランダム領収書No生成
-    private static func generateReceiptNo() -> String {
-        let number = Int.random(in: 1000...9999)
-        return "RC\(number)"
+    // 日付ベース領収書No生成
+    private static func generateReceiptNo(from date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        let dateStr = formatter.string(from: date)
+        let random = Int.random(in: 1000...9999)
+        return "\(dateStr)-\(random)"
     }
 
     static func generate(from receipt: ReceiptData) throws -> Data {
@@ -29,8 +32,9 @@ struct PDFGenerator {
         let format = UIGraphicsPDFRendererFormat()
         format.documentInfo = pdfMetaData as [String: Any]
         
-        let pageWidth: CGFloat = 595.2   // A4横幅 (pt)
-        let pageHeight: CGFloat = 841.8  // A4縦 (pt)
+        // 横向き A4
+        let pageWidth: CGFloat = 841.8
+        let pageHeight: CGFloat = 595.2
         let pageRect = CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight)
         
         let renderer = UIGraphicsPDFRenderer(bounds: pageRect, format: format)
@@ -46,18 +50,18 @@ struct PDFGenerator {
                 let titleSize = title.size(withAttributes: titleAttributes)
                 let titleRect = CGRect(
                     x: (pageWidth - titleSize.width)/2,
-                    y: 40,
+                    y: 20,
                     width: titleSize.width,
                     height: titleSize.height
                 )
                 title.draw(in: titleRect, withAttributes: titleAttributes)
                 
-                var textTop: CGFloat = 100
+                var textTop: CGFloat = 80
                 let leftMargin: CGFloat = 40
                 let lineSpacing: CGFloat = 28
                 let font = UIFont.systemFont(ofSize: 16)
                 
-                // 項目を描画する小関数
+                // 項目描画関数
                 func drawLine(_ label: String, _ value: String) {
                     let text = "\(label): \(value)"
                     let attributes: [NSAttributedString.Key: Any] = [.font: font]
@@ -66,7 +70,7 @@ struct PDFGenerator {
                 }
                 
                 // 領収書No
-                let receiptNo = generateReceiptNo()
+                let receiptNo = generateReceiptNo(from: receipt.issueDate)
                 drawLine("領収書No", receiptNo)
                 
                 // 日付フォーマット
@@ -104,7 +108,7 @@ struct PDFGenerator {
                 drawLine("発行元", receipt.companyName)
                 
                 // 下部に署名欄
-                textTop += 60
+                textTop += 40
                 let signText = "印"
                 let signAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 18)]
                 signText.draw(at: CGPoint(x: pageWidth - 100, y: textTop), withAttributes: signAttributes)
