@@ -20,6 +20,8 @@
 		888609AB2E803ABE006948EE /* ReceiptPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609AA2E803ABE006948EE /* ReceiptPreviewView.swift */; };
 		888609AD2E803AEA006948EE /* ReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609AC2E803AEA006948EE /* ReceiptView.swift */; };
 		888609AF2E803B1D006948EE /* TemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609AE2E803B1D006948EE /* TemplateView.swift */; };
+		888609B22E82CACD006948EE /* PDFKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609B12E82CACD006948EE /* PDFKitView.swift */; };
+		888609B42E82CBA3006948EE /* PDFPreviewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609B32E82CBA3006948EE /* PDFPreviewWrapper.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -64,6 +66,8 @@
 		888609AA2E803ABE006948EE /* ReceiptPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptPreviewView.swift; sourceTree = "<group>"; };
 		888609AC2E803AEA006948EE /* ReceiptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptView.swift; sourceTree = "<group>"; };
 		888609AE2E803B1D006948EE /* TemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateView.swift; sourceTree = "<group>"; };
+		888609B12E82CACD006948EE /* PDFKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFKitView.swift; sourceTree = "<group>"; };
+		888609B32E82CBA3006948EE /* PDFPreviewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFPreviewWrapper.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -123,6 +127,8 @@
 				888609AA2E803ABE006948EE /* ReceiptPreviewView.swift */,
 				888609AC2E803AEA006948EE /* ReceiptView.swift */,
 				888609AE2E803B1D006948EE /* TemplateView.swift */,
+				888609B12E82CACD006948EE /* PDFKitView.swift */,
+				888609B32E82CBA3006948EE /* PDFPreviewWrapper.swift */,
 			);
 			path = MyiOSApp;
 			sourceTree = "<group>";
@@ -340,6 +346,8 @@
 				884FF4382E7E6DE600C1C682 /* ContentView.swift in Sources */,
 				888609A92E803A9D006948EE /* PDFGenerator.swift in Sources */,
 				888609A72E80397C006948EE /* HistoryView.swift in Sources */,
+				888609B42E82CBA3006948EE /* PDFPreviewWrapper.swift in Sources */,
+				888609B22E82CACD006948EE /* PDFKitView.swift in Sources */,
 				888609A52E80386F006948EE /* ReceiptData.swift in Sources */,
 				888609AF2E803B1D006948EE /* TemplateView.swift in Sources */,
 				888609AD2E803AEA006948EE /* ReceiptView.swift in Sources */,

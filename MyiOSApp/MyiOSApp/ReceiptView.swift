@@ -11,6 +11,7 @@ struct ReceiptView: View {
     @State private var receiptData = ReceiptData()
     @State private var showPreview = false
     @State private var showDatePicker = false
+    @State private var pdfData: Data? = nil
     
     var body: some View {
         ScrollView {
@@ -121,8 +122,11 @@ struct ReceiptView: View {
                 
                 // 作成ボタン
                 Button(action: {
-                    hideKeyboard()  // ← ボタン押下でもキーボードを閉じる
-                    showPreview = true
+                    hideKeyboard()
+                    if let pdfData = PDFGenerator.generate(from: receiptData) {
+                        self.showPreview = true
+                        self.pdfData = pdfData
+                    }
                 }) {
                     Text("作成")
                         .frame(maxWidth: .infinity)
@@ -133,19 +137,14 @@ struct ReceiptView: View {
                 }
                 .padding(.top, 20)
                 .sheet(isPresented: $showPreview) {
-                    ReceiptPreviewView(receiptData: receiptData)
+                    if let data = pdfData {
+                        NavigationView {
+                            PDFPreviewWrapper(data: data)
+                                .navigationTitle("PDFプレビュー")
+                                .navigationBarTitleDisplayMode(.inline)
+                        }
+                    }
                 }
-            }
-            .padding()
-        }
-        .background(Color.white.ignoresSafeArea())
-        .onTapGesture {
-            hideKeyboard() // ← 背景タップでキーボード閉じる
-        }
-        .navigationTitle("領収書作成")
-        .navigationBarTitleDisplayMode(.inline)
-    }
-}
 
 // 日付表示用フォーマッター
 private let dateFormatter: DateFormatter = {
