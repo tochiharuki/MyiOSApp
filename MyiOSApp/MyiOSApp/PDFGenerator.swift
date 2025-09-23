@@ -9,8 +9,12 @@ import Foundation
 import PDFKit
 import UIKit
 
+enum PDFGeneratorError: Error {
+    case generationFailed(String)
+}
+
 struct PDFGenerator {
-    static func generate(from receipt: ReceiptData) -> Data? {
+    static func generate(from receipt: ReceiptData) throws -> Data {
         let pdfMetaData = [
             kCGPDFContextCreator: "MyiOSApp",
             kCGPDFContextAuthor: "MyiOSApp User",
@@ -33,9 +37,7 @@ struct PDFGenerator {
                 // タイトル
                 let title = "領収書"
                 let titleFont = UIFont.boldSystemFont(ofSize: 24)
-                let titleAttributes: [NSAttributedString.Key: Any] = [
-                    .font: titleFont
-                ]
+                let titleAttributes: [NSAttributedString.Key: Any] = [.font: titleFont]
                 let titleSize = title.size(withAttributes: titleAttributes)
                 let titleRect = CGRect(
                     x: (pageWidth - titleSize.width)/2,
@@ -72,15 +74,12 @@ struct PDFGenerator {
                 // 下部に署名欄
                 textTop += 60
                 let signText = "印"
-                let signAttributes: [NSAttributedString.Key: Any] = [
-                    .font: UIFont.systemFont(ofSize: 18)
-                ]
+                let signAttributes: [NSAttributedString.Key: Any] = [.font: UIFont.systemFont(ofSize: 18)]
                 signText.draw(at: CGPoint(x: pageWidth - 100, y: textTop), withAttributes: signAttributes)
             }
             return pdfData
         } catch {
-            print("PDF生成中にエラー: \(error.localizedDescription)")
-            return nil
+            throw PDFGeneratorError.generationFailed(error.localizedDescription)
         }
     }
 }
