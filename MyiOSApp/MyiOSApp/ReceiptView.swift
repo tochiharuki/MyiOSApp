@@ -79,7 +79,6 @@ struct ReceiptView: View {
                     Picker("税率", selection: $receiptData.taxRate) {
                         Text("8%").tag("8%")
                         Text("10%").tag("10%")
-                        Text("非課税").tag("非課税")
                     }
                     .pickerStyle(SegmentedPickerStyle())
                 }
