@@ -1,8 +1,6 @@
 //
-//  PDFGenerator.swift
-//  MyiOSApp
-//
-//  Created by Tochishita Haruki on 2025/09/21.
+// PDFGenerator.swift
+// MyiOSApp
 //
 
 import Foundation
@@ -14,6 +12,13 @@ enum PDFGeneratorError: Error {
 }
 
 struct PDFGenerator {
+
+    // ランダム領収書No生成
+    private static func generateReceiptNo() -> String {
+        let number = Int.random(in: 1000...9999)
+        return "RC\(number)"
+    }
+
     static func generate(from receipt: ReceiptData) throws -> Data {
         let pdfMetaData = [
             kCGPDFContextCreator: "MyiOSApp",
@@ -29,30 +34,6 @@ struct PDFGenerator {
         let pageRect = CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight)
         
         let renderer = UIGraphicsPDFRenderer(bounds: pageRect, format: format)
-        
-        // 領収書番号（日時ベースで自動生成）
-        let formatterForNo = DateFormatter()
-        formatterForNo.dateFormat = "yyyyMMddHHmmss"
-        let receiptNo = "R-" + formatterForNo.string(from: Date())
-        
-        // 金額計算
-        let total = Int(receipt.amount) ?? 0
-        var taxExcluded = total
-        var taxAmount = 0
-        
-        if receipt.taxRate != "非課税" {
-            let rate = receipt.taxRate == "8%" ? 0.08 : 0.10
-            if receipt.taxType == "内税" {
-                taxExcluded = Int(floor(Double(total) / (1.0 + rate)))
-                taxAmount = total - taxExcluded
-            } else { // 外税
-                taxExcluded = total
-                taxAmount = Int(floor(Double(total) * rate))
-            }
-        } else {
-            taxExcluded = total
-            taxAmount = 0
-        }
         
         do {
             let pdfData = try renderer.pdfData { context in
@@ -84,19 +65,43 @@ struct PDFGenerator {
                     textTop += lineSpacing
                 }
                 
-                // 内容
-                let dateFormatter = DateFormatter()
-                dateFormatter.locale = Locale(identifier: "ja_JP")
-                dateFormatter.dateStyle = .long
-                
+                // 領収書No
+                let receiptNo = generateReceiptNo()
                 drawLine("領収書No", receiptNo)
-                drawLine("発行日", dateFormatter.string(from: receipt.issueDate))
-                drawLine("宛名", receipt.recipient.isEmpty ? "（未入力）" : receipt.recipient)
-                drawLine("金額（税込）", "\(total) 円 (\(receipt.taxType)・税率 \(receipt.taxRate))")
+                
+                // 日付フォーマット
+                let formatter = DateFormatter()
+                formatter.locale = Locale(identifier: "ja_JP")
+                formatter.dateStyle = .long
+                
+                drawLine("発行日", formatter.string(from: receipt.issueDate))
+                drawLine("宛名", receipt.recipient)
+                
+                // 金額計算
+                let total = Int(receipt.amount) ?? 0
+                var taxExcluded = total
+                var taxAmount = 0
+                var totalAmount = total
+                
+                if receipt.taxRate != "非課税" {
+                    let rate = receipt.taxRate == "8%" ? 0.08 : 0.10
+                    if receipt.taxType == "内税" {
+                        taxExcluded = Int(floor(Double(total) / (1.0 + rate)))
+                        taxAmount = total - taxExcluded
+                        totalAmount = total
+                    } else { // 外税
+                        taxExcluded = total
+                        taxAmount = Int(floor(Double(total) * rate))
+                        totalAmount = total + taxAmount
+                    }
+                }
+                
+                drawLine("金額（税込）", "\(totalAmount) 円 (\(receipt.taxType)・税率 \(receipt.taxRate))")
                 drawLine("税抜金額", "\(taxExcluded) 円")
                 drawLine("消費税", "\(taxAmount) 円")
-                drawLine("但し書き", receipt.remarks.isEmpty ? "（未入力）" : receipt.remarks)
-                drawLine("発行元", receipt.companyName.isEmpty ? "（未入力）" : receipt.companyName)
+                
+                drawLine("但し書き", receipt.remarks)
+                drawLine("発行元", receipt.companyName)
                 
                 // 下部に署名欄
                 textTop += 60
