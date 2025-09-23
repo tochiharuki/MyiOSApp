@@ -30,6 +30,30 @@ struct PDFGenerator {
         
         let renderer = UIGraphicsPDFRenderer(bounds: pageRect, format: format)
         
+        // 領収書番号（日時ベースで自動生成）
+        let formatterForNo = DateFormatter()
+        formatterForNo.dateFormat = "yyyyMMddHHmmss"
+        let receiptNo = "R-" + formatterForNo.string(from: Date())
+        
+        // 金額計算
+        let total = Int(receipt.amount) ?? 0
+        var taxExcluded = total
+        var taxAmount = 0
+        
+        if receipt.taxRate != "非課税" {
+            let rate = receipt.taxRate == "8%" ? 0.08 : 0.10
+            if receipt.taxType == "内税" {
+                taxExcluded = Int(floor(Double(total) / (1.0 + rate)))
+                taxAmount = total - taxExcluded
+            } else { // 外税
+                taxExcluded = total
+                taxAmount = Int(floor(Double(total) * rate))
+            }
+        } else {
+            taxExcluded = total
+            taxAmount = 0
+        }
+        
         do {
             let pdfData = try renderer.pdfData { context in
                 context.beginPage()
@@ -61,13 +85,16 @@ struct PDFGenerator {
                 }
                 
                 // 内容
-                let formatter = DateFormatter()
-                formatter.locale = Locale(identifier: "ja_JP")
-                formatter.dateStyle = .long
+                let dateFormatter = DateFormatter()
+                dateFormatter.locale = Locale(identifier: "ja_JP")
+                dateFormatter.dateStyle = .long
                 
-                drawLine("発行日", formatter.string(from: receipt.issueDate))
+                drawLine("領収書No", receiptNo)
+                drawLine("発行日", dateFormatter.string(from: receipt.issueDate))
                 drawLine("宛名", receipt.recipient.isEmpty ? "（未入力）" : receipt.recipient)
-                drawLine("金額", receipt.amount.isEmpty ? "（未入力）" : "\(receipt.amount) 円 (\(receipt.taxType)・税率 \(receipt.taxRate))")
+                drawLine("金額（税込）", "\(total) 円 (\(receipt.taxType)・税率 \(receipt.taxRate))")
+                drawLine("税抜金額", "\(taxExcluded) 円")
+                drawLine("消費税", "\(taxAmount) 円")
                 drawLine("但し書き", receipt.remarks.isEmpty ? "（未入力）" : receipt.remarks)
                 drawLine("発行元", receipt.companyName.isEmpty ? "（未入力）" : receipt.companyName)
                 
