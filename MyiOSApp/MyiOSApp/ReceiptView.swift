@@ -13,7 +13,8 @@ struct ReceiptView: View {
     @State private var showPreview = false
     @State private var showDatePicker = false
     @State private var pdfData: Data? = nil
-
+    @State private var errorMessage: String? = nil
+    
     var body: some View {
         ScrollView {
             VStack(alignment: .leading, spacing: 20) {
