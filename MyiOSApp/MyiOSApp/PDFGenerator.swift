@@ -134,18 +134,6 @@ struct PDFGenerator {
                 drawRow(label: "10% 税額", value: "¥\(formatNumber(receipt.tax))")
             }
             
-            // 税率別内訳
-            if receipt.taxRate == "8%" {
-                let subtotal = total / 1.08
-                let tax = total - subtotal
-                drawRow(label: "8%税率 対象小計", value: "¥\(formatNumber(subtotal))")
-                drawRow(label: "8% 税額", value: "¥\(formatNumber(tax))")
-            } else if receipt.taxRate == "10%" {
-                let subtotal = total / 1.10
-                let tax = total - subtotal
-                drawRow(label: "10%税率 対象小計", value: "¥\(formatNumber(subtotal))")
-                drawRow(label: "10% 税額", value: "¥\(formatNumber(tax))")
-            }
             
             // 左側 収入印紙枠
             let stampRect = CGRect(x: 50, y: tableTop + 40, width: 100, height: 100)
