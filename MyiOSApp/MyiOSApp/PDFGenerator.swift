@@ -107,10 +107,10 @@ struct PDFGenerator {
                 tableTop += 28
             }
             
-            drawRow("10%税率 対象小計", "¥170,000")
-            drawRow("8%税率 対象小計", "¥380,000")
-            drawRow("10% 税額", "¥17,000")
-            drawRow("8% 税額", "¥30,400")
+            drawRow(label: "10%税率 対象小計", value: "¥170,000")
+            drawRow(label: "8%税率 対象小計", value: "¥380,000")
+            drawRow(label: "10% 税額", value: "¥17,000")
+            drawRow(label: "8% 税額", value: "¥30,400")
             
             // 左側 収入印紙枠
             let stampRect = CGRect(x: 50, y: 430, width: 100, height: 100)
