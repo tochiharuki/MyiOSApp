@@ -95,12 +95,7 @@ struct ReceiptView: View {
                 // 金額
                 Text("金額")
                     .fontWeight(.medium)
-                TextField("金額（数字のみ）", 
-                              text: Binding(
-                                  get: { String(receiptData.amount) },
-                                  set: { receiptData.amount = Int($0) ?? 0 }
-                              )
-                    )
+                TextField("金額（数字のみ）", text: $receiptData.amount)
                     .keyboardType(.numberPad)
                     .padding()
                     .background(Color.white)
