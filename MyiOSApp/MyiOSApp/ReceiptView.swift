@@ -95,12 +95,17 @@ struct ReceiptView: View {
                 // 金額
                 Text("金額")
                     .fontWeight(.medium)
-                TextField("金額（数字のみ）", text: $receiptData.amount)
-                    .keyboardType(.numberPad)
-                    .padding()
-                    .background(Color.white)
-                    .cornerRadius(8)
-                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                // 金額入力（数値のみ）
+                HStack {
+                    Text("金額: ")
+                    TextField("0", value: $receiptData.amount, format: .number)
+                        .keyboardType(.decimalPad)
+                        .textFieldStyle(RoundedBorderTextFieldStyle())
+                
+                        .padding()
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
 
                 // 但し書き
                 Text("但し書き")
