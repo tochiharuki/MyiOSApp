@@ -5,10 +5,10 @@ import UIKit
 // 共通フォント管理
 private enum ReceiptFont {
     static func regular(size: CGFloat) -> UIFont {
-        return UIFont(name: "HiraMinProN-W3", size: size) ?? ReceiptFont.regular(size: size))
+        return UIFont(name: "RyuminL-KL", size: size) ?? ReceiptFont.regular(size: size))
     }
     static func bold(size: CGFloat) -> UIFont {
-        return UIFont(name: "HiraMinProN-W6", size: size) ?? ReceiptFont.bold(size: size)
+        return UIFont(name: "RyuminB-KL", size: size) ?? ReceiptFont.bold(size: size)
     }
 }
 
