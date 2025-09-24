@@ -94,9 +94,9 @@ struct PDFGenerator {
             
             // 金額計算（四捨五入）
             let total = receipt.amount
-            var taxExcluded: Double = total ?? 0
+            let taxExcluded: Double = totalAmount / (1 + taxRate)  // 例: 税率10%なら 0.1
             var taxAmount: Double = 0
-            var totalAmount: Double = total
+            let totalAmount: Double = total ?? 0.0
             
             if receipt.taxRate != "非課税" {
                 let rate = receipt.taxRate == "8%" ? 0.08 : 0.10
