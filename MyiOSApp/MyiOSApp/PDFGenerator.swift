@@ -71,11 +71,18 @@ struct PDFGenerator {
             let recipientPoint = CGPoint(x: 50, y: titleRect.maxY + 40)
             recipient.draw(at: recipientPoint, withAttributes: [.font: nameFont])
             
-            // 宛名下線（右端まで）
+            // 宛名文字列の幅を計算
+            let recipientSize = recipient.size(withAttributes: [.font: nameFont])
+            
+            // 宛名下線（宛名の長さ＋余白で止める）
+            let underlineStartX = recipientPoint.x
+            let underlineEndX = recipientPoint.x + recipientSize.width + 20  // ← 余白20ptくらい
+            let underlineY = recipientPoint.y + recipientSize.height + 2
+            
             ctx.setStrokeColor(UIColor.black.cgColor)
             ctx.setLineWidth(1)
-            ctx.move(to: CGPoint(x: 40, y: recipientPoint.y + 22))
-            ctx.addLine(to: CGPoint(x: pageWidth - 40, y: recipientPoint.y + 22))
+            ctx.move(to: CGPoint(x: underlineStartX, y: underlineY))
+            ctx.addLine(to: CGPoint(x: underlineEndX, y: underlineY))
             ctx.strokePath()
             
             // 領収番号と発行日（右上）
