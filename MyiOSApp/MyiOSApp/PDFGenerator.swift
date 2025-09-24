@@ -1,6 +1,6 @@
 //
-// PDFGenerator.swift
-// MyiOSApp
+//  PDFGenerator.swift
+//  MyiOSApp
 //
 
 import Foundation
@@ -12,7 +12,7 @@ enum PDFGeneratorError: Error {
 }
 
 struct PDFGenerator {
-
+    
     // 日付ベース領収書No生成
     private static func generateReceiptNo(from date: Date) -> String {
         let formatter = DateFormatter()
@@ -21,7 +21,7 @@ struct PDFGenerator {
         let random = Int.random(in: 1000...9999)
         return "\(dateStr)-\(random)"
     }
-
+    
     static func generate(from receipt: ReceiptData) throws -> Data {
         let pdfMetaData = [
             kCGPDFContextCreator: "MyiOSApp",
@@ -82,27 +82,32 @@ struct PDFGenerator {
                 drawLine("宛名", receipt.recipient)
                 
                 // 金額計算
-                let total = Int(receipt.amount) ?? 0
-                var taxExcluded = total
+                let inputAmount = Int(receipt.amount) ?? 0
+                var taxExcluded = inputAmount
                 var taxAmount = 0
-                var totalAmount = total
+                var totalAmount = inputAmount
                 
                 if receipt.taxRate != "非課税" {
                     let rate = receipt.taxRate == "8%" ? 0.08 : 0.10
                     if receipt.taxType == "内税" {
-                        taxExcluded = Int(floor(Double(total) / (1.0 + rate)))
-                        taxAmount = total - taxExcluded
-                        totalAmount = total
+                        taxExcluded = Int(floor(Double(inputAmount) / (1.0 + rate)))
+                        taxAmount = inputAmount - taxExcluded
+                        totalAmount = inputAmount
                     } else { // 外税
-                        taxExcluded = total
-                        taxAmount = Int(floor(Double(total) * rate))
-                        totalAmount = total + taxAmount
+                        taxExcluded = inputAmount
+                        taxAmount = Int(floor(Double(inputAmount) * rate))
+                        totalAmount = inputAmount + taxAmount
                     }
                 }
                 
-                drawLine("金額（税込）", "\(totalAmount) 円 (\(receipt.taxType)・税率 \(receipt.taxRate))")
+                // 金額表示
+                drawLine("金額（税込）", "\(totalAmount) 円")
+                if receipt.taxRate != "非課税" {
+                    drawLine("消費税（\(receipt.taxRate)）", "\(taxAmount) 円")
+                } else {
+                    drawLine("消費税", "非課税")
+                }
                 drawLine("税抜金額", "\(taxExcluded) 円")
-                drawLine("消費税", "\(taxAmount) 円")
                 
                 drawLine("但し書き", receipt.remarks)
                 drawLine("発行元", receipt.companyName)
