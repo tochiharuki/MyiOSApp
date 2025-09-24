@@ -71,7 +71,7 @@ struct PDFGenerator {
             let recipientPoint = CGPoint(x: 50, y: titleRect.maxY + 40)
             recipient.draw(at: recipientPoint, withAttributes: [.font: nameFont])
             
-            // 宛名下線
+            // 宛名下線（右端まで）
             ctx.setStrokeColor(UIColor.black.cgColor)
             ctx.setLineWidth(1)
             ctx.move(to: CGPoint(x: 40, y: recipientPoint.y + 22))
