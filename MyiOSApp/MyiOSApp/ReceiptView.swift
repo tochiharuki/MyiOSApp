@@ -143,22 +143,12 @@ struct ReceiptView: View {
 
             HStack {
                 Text("金額:")
-                TextField(
-                    "金額を入力",
-                    value: Binding(
-                        get: { receiptData.amount ?? 0 },
-                        set: { receiptData.amount = $0 }
-                    ),
-                    format: .number
-                )
-                .keyboardType(.decimalPad)
-                .padding(8)
-                .background(Color.white)
-                .cornerRadius(8)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray.opacity(0.5))
-                )
+                        TextField("金額を入力", value: $receiptData.amount, format: .number)
+                        .keyboardType(.decimalPad)
+                        .padding(8)
+                        .background(Color.white)
+                        .cornerRadius(8)
+                        .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
             }
         }
     }
