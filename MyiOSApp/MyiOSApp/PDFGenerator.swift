@@ -133,25 +133,25 @@ struct PDFGenerator {
                 drawRow(label: "10%税率 対象小計", value: "¥\(formatNumber(receipt.subtotal))")
                 drawRow(label: "10% 税額", value: "¥\(formatNumber(receipt.tax))")
             }
-            
-            
             // 左側 収入印紙枠
-            let stampRect = CGRect(x: 50, y: tableTop + 40, width: 100, height: 100)
-            let dash: [CGFloat] = [4, 4]
-            let path = UIBezierPath(rect: stampRect)
-            UIColor.lightGray.setStroke()
-            path.setLineDash(dash, count: dash.count, phase: 0)
-            path.stroke()
-            
-            let stampText = "収 入\n印 紙"
-            let paragraph = NSMutableParagraphStyle()
-            paragraph.alignment = .center
-            (stampText as NSString).draw(in: stampRect,
-                                         withAttributes: [
-                                            .font: UIFont.systemFont(ofSize: 16),
-                                            .paragraphStyle: paragraph
-                                         ])
-            
+            if receipt.showStampBox {
+                let stampRect = CGRect(x: 50, y: tableTop + 40, width: 100, height: 100)
+                let dash: [CGFloat] = [4, 4]
+                let path = UIBezierPath(rect: stampRect)
+                UIColor.lightGray.setStroke()
+                path.setLineDash(dash, count: dash.count, phase: 0)
+                path.stroke()
+                
+                let stampText = "収 入\n印 紙"
+                let paragraph = NSMutableParagraphStyle()
+                paragraph.alignment = .center
+                (stampText as NSString).draw(in: stampRect,
+                                             withAttributes: [
+                                                .font: UIFont.systemFont(ofSize: 16),
+                                                .paragraphStyle: paragraph
+                                             ])
+            }
+                
             // 発行元情報（右下）
             let issuerY: CGFloat = tableTop + 40
             let issuer = """

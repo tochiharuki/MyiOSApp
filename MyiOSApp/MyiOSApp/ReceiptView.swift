@@ -176,8 +176,11 @@ struct ReceiptView: View {
                 .background(Color.white)
                 .cornerRadius(8)
                 .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                Toggle("収入印紙欄を表示", isOn: $receiptData.showStampBox)
+            .padding(.top, 8)
         }
     }
+    
 
     private var createButtonSection: some View {
         VStack {

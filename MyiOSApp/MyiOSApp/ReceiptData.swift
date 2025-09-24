@@ -17,6 +17,7 @@ struct ReceiptData: Identifiable, Codable {
     var taxType: String = "外税"  // 内税 or 外税
     var remarks: String = ""
     var companyName: String = ""
+    var showStampBox: Bool = false
 
     // MARK: - 計算プロパティ
     private var rateValue: Double {
