@@ -61,6 +61,7 @@ jobs:
         set -e
         xcodebuild clean -project MyiOSApp.xcodeproj -scheme MyiOSApp -configuration Release
         xcodebuild \
+          -quiet
           -project MyiOSApp.xcodeproj \
           -scheme MyiOSApp \
           -sdk iphoneos \
