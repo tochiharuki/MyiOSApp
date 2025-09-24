@@ -93,13 +93,14 @@ struct PDFGenerator {
             drawLine("宛名", receipt.recipient)
             
             // 金額計算（四捨五入）
-            let total = receipt.amount
-            let taxExcluded: Double = totalAmount / (1 + taxRate)  // 例: 税率10%なら 0.1
-            var taxAmount: Double = 0
-            let totalAmount: Double = total ?? 0.0
+            let total = receipt.amount ?? 0.0  // nil の場合 0 に置換
+            var taxExcluded: Double = 0.0
+            var taxAmount: Double = 0.0
+            var totalAmount: Double = total
             
             if receipt.taxRate != "非課税" {
-                let rate = receipt.taxRate == "8%" ? 0.08 : 0.10
+                let rate: Double = receipt.taxRate == "8%" ? 0.08 : 0.10
+            
                 if receipt.taxType == "内税" {
                     taxExcluded = (total / (1.0 + rate)).rounded()
                     taxAmount = (total - taxExcluded).rounded()
