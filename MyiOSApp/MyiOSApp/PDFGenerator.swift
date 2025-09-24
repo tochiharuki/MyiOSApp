@@ -2,6 +2,16 @@ import Foundation
 import PDFKit
 import UIKit
 
+// 共通フォント管理
+private enum ReceiptFont {
+    static func regular(size: CGFloat) -> UIFont {
+        return UIFont(name: "HiraMinProN-W3", size: size) ?? ReceiptFont.regular(size: size))
+    }
+    static func bold(size: CGFloat) -> UIFont {
+        return UIFont(name: "HiraMinProN-W6", size: size) ?? ReceiptFont.bold(size: size)
+    }
+}
+
 enum PDFGeneratorError: Error {
     case generationFailed(String)
 }
@@ -49,7 +59,7 @@ struct PDFGenerator {
             
             // タイトル
             let title = "領収書"
-            let titleFont = UIFont.boldSystemFont(ofSize: 24)
+            let titleFont = ReceiptFont.bold(size: 24)
             let titleAttributes: [NSAttributedString.Key: Any] = [.font: titleFont]
             let titleSize = title.size(withAttributes: titleAttributes)
             let titleRect = CGRect(x: (pageWidth - titleSize.width)/2,
@@ -66,7 +76,7 @@ struct PDFGenerator {
             ctx.strokePath()
             
             // 宛名
-            let nameFont = UIFont.systemFont(ofSize: 16)
+            let nameFont = ReceiptFont.regular(size: 16)
             let recipient = "\(receipt.recipient) 御中"
             let recipientPoint = CGPoint(x: 50, y: titleRect.maxY + 40)
             recipient.draw(at: recipientPoint, withAttributes: [.font: nameFont])
@@ -97,7 +107,7 @@ struct PDFGenerator {
             // 金額中央表示（背景グレー）
             let total = receipt.totalAmount   // ← 修正ポイント
             let amountText = "¥ \(formatNumber(total)) -"
-            let amountFont = UIFont.boldSystemFont(ofSize: 28)
+            let amountFont = ReceiptFont.bold(size: 28)
             let amountSize = amountText.size(withAttributes: [.font: amountFont])
             let amountRect = CGRect(x: (pageWidth - amountSize.width)/2,
                                     y: recipientPoint.y + 80,
@@ -114,7 +124,7 @@ struct PDFGenerator {
                             withAttributes: [.font: amountFont])
             
             "(税込)".draw(at: CGPoint(x: amountRect.maxX + 10, y: amountRect.minY + 8),
-                         withAttributes: [.font: UIFont.systemFont(ofSize: 14)])
+                         withAttributes: [.font: ReceiptFont.regular(size: 14)])
             
             // 但し書き
             let remarks = receipt.remarks.isEmpty ? "上記正に領収いたしました。" : receipt.remarks
@@ -154,7 +164,7 @@ struct PDFGenerator {
                 paragraph.alignment = .center
                 (stampText as NSString).draw(in: stampRect,
                                              withAttributes: [
-                                                .font: UIFont.systemFont(ofSize: 16),
+                                                .font: ReceiptFont.regular(size: 16),
                                                 .paragraphStyle: paragraph
                                              ])
             }
