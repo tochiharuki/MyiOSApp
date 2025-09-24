@@ -2,8 +2,6 @@
 //  ReceiptView.swift
 //  MyiOSApp
 //
-//  Created by Tochishita Haruki on 2025/09/21.
-//
 
 import SwiftUI
 import UIKit
@@ -12,7 +10,7 @@ struct ReceiptView: View {
     @State private var receiptData = ReceiptData()
     @State private var showPreview = false
     @State private var showDatePicker = false
-    @State private var pdfData: Data? = nil
+    @State private var pdfData: Data? = nil           // ← Optional に変更
     @State private var errorMessage: String? = nil
     @State private var isGenerating = false
 
@@ -35,6 +33,7 @@ struct ReceiptView: View {
         .navigationTitle("領収書作成")
         .navigationBarTitleDisplayMode(.inline)
         .sheet(isPresented: $showPreview) {
+            // Optional にしたので if let でアンラップ可能
             if let data = pdfData {
                 NavigationView {
                     PDFPreviewWrapper(data: data)
@@ -42,7 +41,7 @@ struct ReceiptView: View {
                         .navigationBarTitleDisplayMode(.inline)
                 }
             } else {
-                // エラー表示シート
+                // エラー表示
                 VStack(spacing: 12) {
                     Text("PDF生成に失敗しました")
                         .font(.headline)
@@ -56,15 +55,12 @@ struct ReceiptView: View {
                         Text("不明なエラーです。ログを確認してください。")
                             .foregroundColor(.secondary)
                     }
-                    Button("閉じる") {
-                        showPreview = false
-                    }
-                    .padding(.top)
+                    Button("閉じる") { showPreview = false }
+                        .padding(.top)
                 }
                 .padding()
             }
         }
-        // DatePicker を別シートで表示（Button と分離）
         .sheet(isPresented: $showDatePicker) {
             VStack {
                 DatePicker(
@@ -81,7 +77,7 @@ struct ReceiptView: View {
         }
     }
 
-    // MARK: - Sections (分割してコンパイル負荷を下げる)
+    // MARK: - Sections
     private var headerSection: some View {
         Text("領収書作成")
             .font(.title2)
@@ -145,7 +141,6 @@ struct ReceiptView: View {
 
             HStack {
                 Text("金額:")
-                // 値の型は ReceiptData.amount が Double であることを前提
                 TextField("0", value: $receiptData.amount, format: .number)
                     .keyboardType(.decimalPad)
                     .padding(8)
@@ -209,25 +204,18 @@ struct ReceiptView: View {
         errorMessage = nil
         isGenerating = true
 
-        // PDF 生成は重い処理なのでバックグラウンドで実行
         DispatchQueue.global(qos: .userInitiated).async {
-            let data = PDFGenerator.generate(from: receiptData) // return Data? を期待
+            let data = PDFGenerator.generate(from: receiptData)  // Data を返す想定
             DispatchQueue.main.async {
                 self.isGenerating = false
-                if let data = data {
-                    self.pdfData = data
-                    self.showPreview = true
-                } else {
-                    self.errorMessage = "PDF生成に失敗しました"
-                    self.pdfData = nil
-                    self.showPreview = true
-                }
+                self.pdfData = data   // Optional に代入
+                self.showPreview = true
             }
         }
     }
 }
 
-// MARK: - 日付フォーマッター（ファイルスコープ）
+// MARK: - 日付フォーマッター
 private let dateFormatter: DateFormatter = {
     let f = DateFormatter()
     f.dateStyle = .long
@@ -235,7 +223,7 @@ private let dateFormatter: DateFormatter = {
     return f
 }()
 
-// MARK: - キーボードを閉じる拡張（UIKit 用）
+// MARK: - キーボードを閉じる拡張
 #if canImport(UIKit)
 extension View {
     func hideKeyboard() {
