@@ -88,7 +88,7 @@ struct PDFGenerator {
             "発行日: \(formatter.string(from: receipt.issueDate))".draw(at: CGPoint(x: pageWidth - 250, y: recipientPoint.y + 30), withAttributes: rightAttr)
             
             // 金額中央表示（背景グレー）
-            let total = receipt.amount ?? 0.0
+            let total = receipt.totalAmount
             let amountText = "¥ \(formatNumber(total)) -"
             let amountFont = UIFont.boldSystemFont(ofSize: 28)
             let amountSize = amountText.size(withAttributes: [.font: amountFont])
@@ -126,17 +126,18 @@ struct PDFGenerator {
                 tableTop += 28
             }
             
-            // 税率別内訳
-            if receipt.taxRate == "8%" {
-                let subtotal = total / 1.08
-                let tax = total - subtotal
-                drawRow(label: "8%税率 対象小計", value: "¥\(formatNumber(subtotal))")
-                drawRow(label: "8% 税額", value: "¥\(formatNumber(tax))")
-            } else if receipt.taxRate == "10%" {
-                let subtotal = total / 1.10
-                let tax = total - subtotal
-                drawRow(label: "10%税率 対象小計", value: "¥\(formatNumber(subtotal))")
-                drawRow(label: "10% 税額", value: "¥\(formatNumber(tax))")
+            // --- 内訳 (ReceiptData を使用) ---
+            if let s8 = receipt.subtotal8, s8 > 0 {
+                drawRow(label: "8%税率 対象小計", value: "¥\(formatNumber(s8))")
+                if receipt.taxType == "外税" {
+                    drawRow(label: "8% 税額", value: "¥\(formatNumber(receipt.tax8))")
+                }
+            }
+            if let s10 = receipt.subtotal10, s10 > 0 {
+                drawRow(label: "10%税率 対象小計", value: "¥\(formatNumber(s10))")
+                if receipt.taxType == "外税" {
+                    drawRow(label: "10% 税額", value: "¥\(formatNumber(receipt.tax10))")
+                }
             }
             
             // 左側 収入印紙枠
