@@ -135,7 +135,7 @@ struct ReceiptView: View {
                     isGenerating = true  // ← 追加
                     DispatchQueue.global(qos: .userInitiated).async {
                         do {
-                            let data = try PDFGenerator.generate(from: receiptData)
+                            let data = PDFGenerator.generate(from: receiptData)
                             DispatchQueue.main.async {
                                 self.pdfData = data
                                 self.showPreview = true
