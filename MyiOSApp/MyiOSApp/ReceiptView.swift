@@ -64,18 +64,20 @@ struct ReceiptView: View {
             }
         }
         .sheet(isPresented: $showDatePicker) {
-            VStack {
-                DatePicker(
-                    "",
-                    selection: $receiptData.issueDate,
-                    displayedComponents: .date
-                )
-                .datePickerStyle(.graphical)
-                .environment(\.locale, Locale(identifier: "ja_JP"))
-                .padding()
-                Button("閉じる") { showDatePicker = false }
-                    .padding()
-            }
+            DatePicker(
+                "",
+                selection: Binding(
+                    get: { receiptData.issueDate },
+                    set: { newValue in
+                        receiptData.issueDate = newValue
+                        showDatePicker = false   // ← 選択したら即閉じる
+                    }
+                ),
+                displayedComponents: .date
+            )
+            .datePickerStyle(.graphical)
+            .environment(\.locale, Locale(identifier: "ja_JP"))
+            .padding()
         }
     }
 
@@ -138,11 +140,10 @@ struct ReceiptView: View {
 
     private var amountSection: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Text("金額")
-                .fontWeight(.medium)
 
             HStack {
                 Text("金額:")
+                    .fontWeight(.medium)
                         TextField("金額を入力", value: $receiptData.amount, format: .number)
                         .keyboardType(.decimalPad)
                         .padding(8)
