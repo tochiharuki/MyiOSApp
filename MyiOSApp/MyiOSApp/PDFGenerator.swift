@@ -1,109 +1,147 @@
-import UIKit
+//
+// PDFGenerator.swift
+// MyiOSApp
+//
+
+import Foundation
 import PDFKit
+import UIKit
 
-struct PDFGenerator {
-
-    static func generate(from receipt: ReceiptData) -> Data? {
-        let pdfMetaData = [
-            kCGPDFContextCreator: "MyiOSApp",
-            kCGPDFContextAuthor: receipt.companyName
-        ]
-        let format = UIGraphicsPDFRendererFormat()
-        format.documentInfo = pdfMetaData as [String: Any]
-
-        let pageWidth = 595.2  // A4 横幅
-        let pageHeight = 841.8
-        let pageRect = CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight)
-
-        let renderer = UIGraphicsPDFRenderer(bounds: pageRect, format: format)
-
-        let data = renderer.pdfData { ctx in
-            ctx.beginPage()
-            let context = ctx.cgContext
-
-            // フォント
-            let titleFont = UIFont.boldSystemFont(ofSize: 28)
-            let headerFont = UIFont.systemFont(ofSize: 16)
-            let bodyFont = UIFont.systemFont(ofSize: 14)
-            let amountFont = UIFont.boldSystemFont(ofSize: 20)
-
-            // MARK: - タイトル
-            let title = "領収書"
-            let titleSize = title.size(withAttributes: [.font: titleFont])
-            let titleRect = CGRect(x: (pageWidth - titleSize.width)/2, y: 40, width: titleSize.width, height: titleSize.height)
-            title.draw(in: titleRect, withAttributes: [.font: titleFont])
-
-            var yPosition = titleRect.maxY + 40
-
-            // MARK: - 日付・宛名
-            let dateText = "発行日: \(dateFormatter.string(from: receipt.issueDate))"
-            dateText.draw(at: CGPoint(x: 40, y: yPosition), withAttributes: [.font: headerFont])
-            yPosition += 24
-
-            let recipientText = "宛名: \(receipt.recipient)"
-            recipientText.draw(at: CGPoint(x: 40, y: yPosition), withAttributes: [.font: headerFont])
-            yPosition += 40
-
-            // MARK: - 金額・税
-            let total = receipt.amount ?? 0
-            let taxRate = receipt.taxRate == "8%" ? 0.08 : (receipt.taxRate == "10%" ? 0.10 : 0)
-            var taxExcluded: Double = 0
-            var taxAmount: Double = 0
-            var totalAmount: Double = total
-
-            if receipt.taxRate != "非課税" {
-                if receipt.taxType == "内税" {
-                    taxExcluded = (total / (1 + taxRate)).rounded()
-                    taxAmount = (total - taxExcluded).rounded()
-                } else { // 外税
-                    taxExcluded = total
-                    taxAmount = (total * taxRate).rounded()
-                    totalAmount = total + taxAmount
-                }
-            } else {
-                taxExcluded = total
-                taxAmount = 0
-                totalAmount = total
-            }
-
-            func formatYen(_ amount: Double) -> String {
-                String(format: "¥%.0f", amount)
-            }
-
-            let amountLines = [
-                "金額（税抜）: \(formatYen(taxExcluded))",
-                "消費税: \(formatYen(taxAmount))",
-                "合計: \(formatYen(totalAmount)) (\(receipt.taxType)・税率 \(receipt.taxRate))"
-            ]
-
-            for line in amountLines {
-                line.draw(at: CGPoint(x: 40, y: yPosition), withAttributes: [.font: amountFont])
-                yPosition += 28
-            }
-            yPosition += 20
-
-            // MARK: - 但し書き
-            let remarks = receipt.remarks.isEmpty ? "但し書き: " : "但し書き: \(receipt.remarks)"
-            let remarksRect = CGRect(x: 40, y: yPosition, width: pageWidth - 80, height: 100)
-            remarks.draw(in: remarksRect, withAttributes: [.font: bodyFont])
-            yPosition += 120
-
-            // MARK: - 発行元
-            let companyText = receipt.companyName
-            let companySize = companyText.size(withAttributes: [.font: headerFont])
-            let companyRect = CGRect(x: pageWidth - companySize.width - 40, y: pageHeight - 80, width: companySize.width, height: companySize.height)
-            companyText.draw(in: companyRect, withAttributes: [.font: headerFont])
-        }
-
-        return data
-    }
-
+enum PDFGeneratorError: Error {
+    case generationFailed(String)
 }
 
-// 日付表示用フォーマッター
-private let dateFormatter: DateFormatter = {
-    let f = DateFormatter()
-    f.dateStyle = .long
-    f.locale = Locale(identifier: "ja_JP")
-    return f
-}()
+struct PDFGenerator {
+    
+    // 領収番号生成（日付 + ランダム）
+    private static func generateReceiptNo(from date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd"
+        let dateStr = formatter.string(from: date)
+        let random = Int.random(in: 1000...9999)
+        return "\(dateStr)-\(random)"
+    }
+    
+    // 数字を3桁カンマ区切り
+    private static func formatNumber(_ value: Double) -> String {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .decimal
+        formatter.maximumFractionDigits = 0
+        return formatter.string(from: NSNumber(value: value)) ?? "\(Int(value))"
+    }
+    
+    static func generate(from receipt: ReceiptData) -> Data {
+        let pdfMetaData = [
+            kCGPDFContextCreator: "MyiOSApp",
+            kCGPDFContextAuthor: "MyiOSApp User",
+            kCGPDFContextTitle: "領収書"
+        ]
+        
+        let format = UIGraphicsPDFRendererFormat()
+        format.documentInfo = pdfMetaData as [String: Any]
+        
+        // 横向き A4
+        let pageWidth: CGFloat = 841.8
+        let pageHeight: CGFloat = 595.2
+        let pageRect = CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight)
+        
+        let renderer = UIGraphicsPDFRenderer(bounds: pageRect, format: format)
+        
+        let pdfData = renderer.pdfData { context in
+            context.beginPage()
+            
+            // タイトル
+            let title = "領収書"
+            let titleFont = UIFont.boldSystemFont(ofSize: 24)
+            let titleAttributes: [NSAttributedString.Key: Any] = [.font: titleFont]
+            let titleSize = title.size(withAttributes: titleAttributes)
+            let titleRect = CGRect(x: (pageWidth - titleSize.width)/2,
+                                   y: 30,
+                                   width: titleSize.width,
+                                   height: titleSize.height)
+            title.draw(in: titleRect, withAttributes: titleAttributes)
+            
+            // 宛名
+            let nameFont = UIFont.systemFont(ofSize: 16)
+            let recipient = "\(receipt.recipient) 御中"
+            recipient.draw(at: CGPoint(x: 50, y: 100),
+                           withAttributes: [.font: nameFont])
+            
+            // 領収番号と発行日（右上）
+            let receiptNo = generateReceiptNo(from: receipt.issueDate)
+            let formatter = DateFormatter()
+            formatter.dateFormat = "yyyy年MM月dd日"
+            
+            let rightAttr: [NSAttributedString.Key: Any] = [.font: nameFont]
+            "領収番号: \(receiptNo)".draw(at: CGPoint(x: pageWidth - 250, y: 90), withAttributes: rightAttr)
+            "発行日: \(formatter.string(from: receipt.issueDate))".draw(at: CGPoint(x: pageWidth - 250, y: 120), withAttributes: rightAttr)
+            
+            // 金額中央表示
+            let total = receipt.amount ?? 0.0
+            let amountText = "¥ \(formatNumber(total)) -"
+            let amountFont = UIFont.boldSystemFont(ofSize: 28)
+            let amountSize = amountText.size(withAttributes: [.font: amountFont])
+            let amountRect = CGRect(x: (pageWidth - amountSize.width)/2,
+                                    y: 180,
+                                    width: amountSize.width,
+                                    height: amountSize.height)
+            amountText.draw(in: amountRect, withAttributes: [.font: amountFont])
+            
+            "(税込)".draw(at: CGPoint(x: amountRect.maxX + 10, y: 190),
+                         withAttributes: [.font: UIFont.systemFont(ofSize: 14)])
+            
+            // 但し書き
+            let remarks = receipt.remarks.isEmpty ? "上記正に領収いたしました。" : receipt.remarks
+            remarks.draw(at: CGPoint(x: 50, y: 260), withAttributes: [.font: nameFont])
+            
+            // 内訳表
+            var tableTop: CGFloat = 320
+            let col1: CGFloat = 60
+            let col2: CGFloat = 400
+            
+            func drawRow(label: String, value: String) {
+                label.draw(at: CGPoint(x: col1, y: tableTop),
+                           withAttributes: [.font: nameFont])
+                value.draw(at: CGPoint(x: col2, y: tableTop),
+                           withAttributes: [.font: nameFont])
+                tableTop += 28
+            }
+            
+            drawRow("10%税率 対象小計", "¥170,000")
+            drawRow("8%税率 対象小計", "¥380,000")
+            drawRow("10% 税額", "¥17,000")
+            drawRow("8% 税額", "¥30,400")
+            
+            // 左側 収入印紙枠
+            let stampRect = CGRect(x: 50, y: 430, width: 100, height: 100)
+            let dash: [CGFloat] = [4, 4]
+            let path = UIBezierPath(rect: stampRect)
+            UIColor.lightGray.setStroke()
+            path.setLineDash(dash, count: dash.count, phase: 0)
+            path.stroke()
+            
+            let stampText = "収 入\n印 紙"
+            let paragraph = NSMutableParagraphStyle()
+            paragraph.alignment = .center
+            (stampText as NSString).draw(in: stampRect,
+                                         withAttributes: [
+                                            .font: UIFont.systemFont(ofSize: 16),
+                                            .paragraphStyle: paragraph
+                                         ])
+            
+            // 発行元情報（右下）
+            let issuerY: CGFloat = 430
+            let issuer = """
+            \(receipt.companyName)
+            〒XXX-XXXX
+            東京都千代田区〇〇1-2-3
+            TEL: 000-0000-0000
+            印：〇〇 太郎
+            """
+            issuer.draw(at: CGPoint(x: pageWidth - 300, y: issuerY),
+                        withAttributes: [.font: nameFont])
+        }
+        
+        return pdfData
+    }
+}
