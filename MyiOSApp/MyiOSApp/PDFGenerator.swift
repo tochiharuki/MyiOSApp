@@ -1,8 +1,3 @@
-//
-// PDFGenerator.swift
-// MyiOSApp
-//
-
 import Foundation
 import PDFKit
 import UIKit
@@ -50,6 +45,8 @@ struct PDFGenerator {
         let pdfData = renderer.pdfData { context in
             context.beginPage()
             
+            let ctx = UIGraphicsGetCurrentContext()!
+            
             // タイトル
             let title = "領収書"
             let titleFont = UIFont.boldSystemFont(ofSize: 24)
@@ -61,11 +58,25 @@ struct PDFGenerator {
                                    height: titleSize.height)
             title.draw(in: titleRect, withAttributes: titleAttributes)
             
+            // タイトル下線
+            ctx.setStrokeColor(UIColor.black.cgColor)
+            ctx.setLineWidth(1)
+            ctx.move(to: CGPoint(x: 40, y: titleRect.maxY + 10))
+            ctx.addLine(to: CGPoint(x: pageWidth - 40, y: titleRect.maxY + 10))
+            ctx.strokePath()
+            
             // 宛名
             let nameFont = UIFont.systemFont(ofSize: 16)
             let recipient = "\(receipt.recipient) 御中"
-            recipient.draw(at: CGPoint(x: 50, y: 100),
-                           withAttributes: [.font: nameFont])
+            let recipientPoint = CGPoint(x: 50, y: titleRect.maxY + 40)
+            recipient.draw(at: recipientPoint, withAttributes: [.font: nameFont])
+            
+            // 宛名下線
+            ctx.setStrokeColor(UIColor.black.cgColor)
+            ctx.setLineWidth(1)
+            ctx.move(to: CGPoint(x: 40, y: recipientPoint.y + 22))
+            ctx.addLine(to: CGPoint(x: pageWidth - 40, y: recipientPoint.y + 22))
+            ctx.strokePath()
             
             // 領収番号と発行日（右上）
             let receiptNo = generateReceiptNo(from: receipt.issueDate)
@@ -73,29 +84,37 @@ struct PDFGenerator {
             formatter.dateFormat = "yyyy年MM月dd日"
             
             let rightAttr: [NSAttributedString.Key: Any] = [.font: nameFont]
-            "領収番号: \(receiptNo)".draw(at: CGPoint(x: pageWidth - 250, y: 90), withAttributes: rightAttr)
-            "発行日: \(formatter.string(from: receipt.issueDate))".draw(at: CGPoint(x: pageWidth - 250, y: 120), withAttributes: rightAttr)
+            "領収番号: \(receiptNo)".draw(at: CGPoint(x: pageWidth - 250, y: recipientPoint.y), withAttributes: rightAttr)
+            "発行日: \(formatter.string(from: receipt.issueDate))".draw(at: CGPoint(x: pageWidth - 250, y: recipientPoint.y + 30), withAttributes: rightAttr)
             
-            // 金額中央表示
+            // 金額中央表示（背景グレー）
             let total = receipt.amount ?? 0.0
             let amountText = "¥ \(formatNumber(total)) -"
             let amountFont = UIFont.boldSystemFont(ofSize: 28)
             let amountSize = amountText.size(withAttributes: [.font: amountFont])
             let amountRect = CGRect(x: (pageWidth - amountSize.width)/2,
-                                    y: 180,
-                                    width: amountSize.width,
-                                    height: amountSize.height)
-            amountText.draw(in: amountRect, withAttributes: [.font: amountFont])
+                                    y: recipientPoint.y + 80,
+                                    width: amountSize.width + 40,
+                                    height: amountSize.height + 10)
             
-            "(税込)".draw(at: CGPoint(x: amountRect.maxX + 10, y: 190),
+            UIColor(white: 0.9, alpha: 1).setFill()
+            ctx.fill(amountRect)
+            
+            amountText.draw(in: CGRect(x: amountRect.origin.x + 20,
+                                       y: amountRect.origin.y + 5,
+                                       width: amountSize.width,
+                                       height: amountSize.height),
+                            withAttributes: [.font: amountFont])
+            
+            "(税込)".draw(at: CGPoint(x: amountRect.maxX + 10, y: amountRect.minY + 8),
                          withAttributes: [.font: UIFont.systemFont(ofSize: 14)])
             
             // 但し書き
             let remarks = receipt.remarks.isEmpty ? "上記正に領収いたしました。" : receipt.remarks
-            remarks.draw(at: CGPoint(x: 50, y: 260), withAttributes: [.font: nameFont])
+            remarks.draw(at: CGPoint(x: 50, y: amountRect.maxY + 40), withAttributes: [.font: nameFont])
             
             // 内訳表
-            var tableTop: CGFloat = 320
+            var tableTop: CGFloat = amountRect.maxY + 100
             let col1: CGFloat = 60
             let col2: CGFloat = 400
             
@@ -107,13 +126,21 @@ struct PDFGenerator {
                 tableTop += 28
             }
             
-            drawRow(label: "10%税率 対象小計", value: "¥170,000")
-            drawRow(label: "8%税率 対象小計", value: "¥380,000")
-            drawRow(label: "10% 税額", value: "¥17,000")
-            drawRow(label: "8% 税額", value: "¥30,400")
+            // 税率別内訳
+            if receipt.taxRate == "8%" {
+                let subtotal = total / 1.08
+                let tax = total - subtotal
+                drawRow(label: "8%税率 対象小計", value: "¥\(formatNumber(subtotal))")
+                drawRow(label: "8% 税額", value: "¥\(formatNumber(tax))")
+            } else if receipt.taxRate == "10%" {
+                let subtotal = total / 1.10
+                let tax = total - subtotal
+                drawRow(label: "10%税率 対象小計", value: "¥\(formatNumber(subtotal))")
+                drawRow(label: "10% 税額", value: "¥\(formatNumber(tax))")
+            }
             
             // 左側 収入印紙枠
-            let stampRect = CGRect(x: 50, y: 430, width: 100, height: 100)
+            let stampRect = CGRect(x: 50, y: tableTop + 40, width: 100, height: 100)
             let dash: [CGFloat] = [4, 4]
             let path = UIBezierPath(rect: stampRect)
             UIColor.lightGray.setStroke()
@@ -130,7 +157,7 @@ struct PDFGenerator {
                                          ])
             
             // 発行元情報（右下）
-            let issuerY: CGFloat = 430
+            let issuerY: CGFloat = tableTop + 40
             let issuer = """
             \(receipt.companyName)
             〒XXX-XXXX
