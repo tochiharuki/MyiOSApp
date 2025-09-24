@@ -88,7 +88,7 @@ struct PDFGenerator {
             "発行日: \(formatter.string(from: receipt.issueDate))".draw(at: CGPoint(x: pageWidth - 250, y: recipientPoint.y + 30), withAttributes: rightAttr)
             
             // 金額中央表示（背景グレー）
-            let total = receipt.amount ?? 0.0
+            let total = receipt.totalAmount   // ← 修正ポイント
             let amountText = "¥ \(formatNumber(total)) -"
             let amountFont = UIFont.boldSystemFont(ofSize: 28)
             let amountSize = amountText.size(withAttributes: [.font: amountFont])
@@ -124,6 +124,14 @@ struct PDFGenerator {
                 value.draw(at: CGPoint(x: col2, y: tableTop),
                            withAttributes: [.font: nameFont])
                 tableTop += 28
+            }
+            
+            if receipt.taxRate == "8%" {
+                drawRow(label: "8%税率 対象小計", value: "¥\(formatNumber(receipt.subtotal))")
+                drawRow(label: "8% 税額", value: "¥\(formatNumber(receipt.tax))")
+            } else if receipt.taxRate == "10%" {
+                drawRow(label: "10%税率 対象小計", value: "¥\(formatNumber(receipt.subtotal))")
+                drawRow(label: "10% 税額", value: "¥\(formatNumber(receipt.tax))")
             }
             
             // 税率別内訳
