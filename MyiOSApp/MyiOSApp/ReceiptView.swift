@@ -247,15 +247,3 @@ extension View {
     }
 }
 #endif
-
-// MARK: - ReceiptData
-struct ReceiptData {
-    var id = UUID()
-    var issueDate = Date()
-    var recipient = ""
-    var taxRate = "10%"
-    var taxType = "内税"
-    var amount: Double? = nil  // ← nil のときは空欄表示
-    var remarks = ""
-    var companyName = ""
-}
