@@ -94,7 +94,7 @@ struct PDFGenerator {
             
             // 金額計算（四捨五入）
             let total = receipt.amount
-            var taxExcluded: Double = total
+            var taxExcluded: Double = total ?? 0
             var taxAmount: Double = 0
             var totalAmount: Double = total
             

@@ -17,7 +17,6 @@
 		888609A52E80386F006948EE /* ReceiptData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609A42E80386F006948EE /* ReceiptData.swift */; };
 		888609A72E80397C006948EE /* HistoryView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609A62E80397C006948EE /* HistoryView.swift */; };
 		888609A92E803A9D006948EE /* PDFGenerator.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609A82E803A9D006948EE /* PDFGenerator.swift */; };
-		888609AB2E803ABE006948EE /* ReceiptPreviewView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609AA2E803ABE006948EE /* ReceiptPreviewView.swift */; };
 		888609AD2E803AEA006948EE /* ReceiptView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609AC2E803AEA006948EE /* ReceiptView.swift */; };
 		888609AF2E803B1D006948EE /* TemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609AE2E803B1D006948EE /* TemplateView.swift */; };
 		888609B22E82CACD006948EE /* PDFKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609B12E82CACD006948EE /* PDFKitView.swift */; };
@@ -63,7 +62,6 @@
 		888609A42E80386F006948EE /* ReceiptData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptData.swift; sourceTree = "<group>"; };
 		888609A62E80397C006948EE /* HistoryView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryView.swift; sourceTree = "<group>"; };
 		888609A82E803A9D006948EE /* PDFGenerator.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFGenerator.swift; sourceTree = "<group>"; };
-		888609AA2E803ABE006948EE /* ReceiptPreviewView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptPreviewView.swift; sourceTree = "<group>"; };
 		888609AC2E803AEA006948EE /* ReceiptView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptView.swift; sourceTree = "<group>"; };
 		888609AE2E803B1D006948EE /* TemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateView.swift; sourceTree = "<group>"; };
 		888609B12E82CACD006948EE /* PDFKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFKitView.swift; sourceTree = "<group>"; };
@@ -124,7 +122,6 @@
 				888609A42E80386F006948EE /* ReceiptData.swift */,
 				888609A62E80397C006948EE /* HistoryView.swift */,
 				888609A82E803A9D006948EE /* PDFGenerator.swift */,
-				888609AA2E803ABE006948EE /* ReceiptPreviewView.swift */,
 				888609AC2E803AEA006948EE /* ReceiptView.swift */,
 				888609AE2E803B1D006948EE /* TemplateView.swift */,
 				888609B12E82CACD006948EE /* PDFKitView.swift */,
@@ -351,7 +348,6 @@
 				888609A52E80386F006948EE /* ReceiptData.swift in Sources */,
 				888609AF2E803B1D006948EE /* TemplateView.swift in Sources */,
 				888609AD2E803AEA006948EE /* ReceiptView.swift in Sources */,
-				888609AB2E803ABE006948EE /* ReceiptPreviewView.swift in Sources */,
 				884FF4282E7E6CAA00C1C682 /* MyiOSAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
