@@ -138,19 +138,22 @@ struct ReceiptView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("金額")
                 .fontWeight(.medium)
-
+    
             HStack {
                 Text("金額:")
-                TextField("0", value: $receiptData.amount, format: .number)
+                // nil のときは空表示、入力されると数字を表示
+                TextField("金額を入力", value: $receiptData.amount, format: .number)
                     .keyboardType(.decimalPad)
                     .padding(8)
                     .background(Color.white)
                     .cornerRadius(8)
-                    .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.gray.opacity(0.5))
+                    )
             }
         }
     }
-
     private var remarksSection: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("但し書き")
