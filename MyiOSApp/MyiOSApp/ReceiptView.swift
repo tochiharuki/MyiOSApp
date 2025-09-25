@@ -111,7 +111,7 @@ struct ReceiptView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("宛名")
                 .fontWeight(.medium)
-            TextField("宛名", text: $receiptData.recipient)
+            TextField("〇〇", text: $receiptData.recipient)
                 .padding()
                 .background(Color.white)
                 .cornerRadius(8)
@@ -141,10 +141,10 @@ struct ReceiptView: View {
     private var amountSection: some View {
         VStack(alignment: .leading, spacing: 6) {
 
-            HStack {
-                Text("金額:")
+            VStack {
+                Text("金額")
                     .fontWeight(.medium)
-                        TextField("金額を入力", value: $receiptData.amount, format: .number)
+                        TextField("10,000", value: $receiptData.amount, format: .number)
                         .keyboardType(.decimalPad)
                         .padding(8)
                         .background(Color.white)
@@ -158,7 +158,7 @@ struct ReceiptView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("但し書き")
                 .fontWeight(.medium)
-            TextEditor(text: $receiptData.remarks)
+            TextEditor("〇〇代として",text: $receiptData.remarks)
                 .frame(height: 100)
                 .padding(4)
                 .background(Color.white)
@@ -171,7 +171,7 @@ struct ReceiptView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("発行元")
                 .fontWeight(.medium)
-            TextField("発行元", text: $receiptData.companyName)
+            TextField("〇〇株式会社", text: $receiptData.companyName)
                 .padding()
                 .background(Color.white)
                 .cornerRadius(8)
