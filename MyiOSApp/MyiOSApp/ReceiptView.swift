@@ -160,28 +160,19 @@ struct ReceiptView: View {
                 .fontWeight(.medium)
             
             ZStack(alignment: .topLeading) {
-                // プレースホルダー
                 if receiptData.remarks.isEmpty {
                     Text("〇〇代として")
                         .foregroundColor(.gray)
-                        .padding(.top, 12)
-                        .padding(.leading, 8)
+                        .padding(.top, 8)
+                        .padding(.leading, 5)
                 }
                 
-                // TextEditor 本体
                 TextEditor(text: $receiptData.remarks)
                     .frame(height: 80)
-                    .padding(4) // テキスト内の余白
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                            .stroke(Color.gray.opacity(0.5))
                     )
-            }
-        }
-    }
-                
-                TextEditor(text: $receiptData.remarks)
-                    .frame(height: 80)
             }
         }
     }
