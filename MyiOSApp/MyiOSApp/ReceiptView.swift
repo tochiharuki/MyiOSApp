@@ -141,7 +141,7 @@ struct ReceiptView: View {
     private var amountSection: some View {
         VStack(alignment: .leading, spacing: 6) {
 
-            VStack {
+            VStack(alignment: .leading, spacing: 6) {
                 Text("金額")
                     .fontWeight(.medium)
                         TextField("10,000", value: $receiptData.amount, format: .number)
@@ -160,12 +160,25 @@ struct ReceiptView: View {
                 .fontWeight(.medium)
             
             ZStack(alignment: .topLeading) {
+                // プレースホルダー
                 if receiptData.remarks.isEmpty {
                     Text("〇〇代として")
                         .foregroundColor(.gray)
-                        .padding(.top, 8)
-                        .padding(.leading, 5)
+                        .padding(.top, 12)
+                        .padding(.leading, 8)
                 }
+                
+                // TextEditor 本体
+                TextEditor(text: $receiptData.remarks)
+                    .frame(height: 80)
+                    .padding(4) // テキスト内の余白
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.gray.opacity(0.5), lineWidth: 1)
+                    )
+            }
+        }
+    }
                 
                 TextEditor(text: $receiptData.remarks)
                     .frame(height: 80)
