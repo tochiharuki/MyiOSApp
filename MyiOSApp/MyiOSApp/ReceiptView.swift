@@ -158,12 +158,18 @@ struct ReceiptView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("但し書き")
                 .fontWeight(.medium)
-            TextEditor("〇〇代として",text: $receiptData.remarks)
-                .frame(height: 100)
-                .padding(4)
-                .background(Color.white)
-                .cornerRadius(8)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+            
+            ZStack(alignment: .topLeading) {
+                if receiptData.remarks.isEmpty {
+                    Text("〇〇代として")
+                        .foregroundColor(.gray)
+                        .padding(.top, 8)
+                        .padding(.leading, 5)
+                }
+                
+                TextEditor(text: $receiptData.remarks)
+                    .frame(height: 80)
+            }
         }
     }
 
