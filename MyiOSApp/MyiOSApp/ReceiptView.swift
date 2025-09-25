@@ -163,12 +163,15 @@ struct ReceiptView: View {
                 if receiptData.remarks.isEmpty {
                     Text("〇〇代として")
                         .foregroundColor(.gray)
-                        .padding(.top, 8)
-                        .padding(.leading, 5)
+                        .padding(.top, 12)
+                        .padding(.leading, 8)
                 }
                 
                 TextEditor(text: $receiptData.remarks)
                     .frame(height: 80)
+                    .padding(4) // 内側に余白
+                    .background(Color.white) // 背景を白にする
+                    .cornerRadius(8)
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.gray.opacity(0.5))
