@@ -191,22 +191,26 @@ struct PDFGenerator {
                                              ])
             }
                 
-            // 発行元
+            // 発行元を右下に配置
             if !receipt.issuer.isEmpty {
                 let issuerParagraph = NSMutableParagraphStyle()
-                issuerParagraph.lineSpacing = 4  // 発行元も行間を少し広げる
-                
+                issuerParagraph.lineSpacing = 4
+                issuerParagraph.alignment = .right   // 右寄せにする
+            
                 let issuerAttributes: [NSAttributedString.Key: Any] = [
                     .font: nameFont,
                     .paragraphStyle: issuerParagraph
                 ]
                 
-                // 描画する位置（remarks の下あたりに配置）
+                // ページサイズ取得
+                let pageRect = CGRect(x: 0, y: 0, width: 595, height: 842) // A4 (72dpi)
+                
+                // 発行元の領域（右下に配置）
                 let issuerRect = CGRect(
                     x: 50,
-                    y: amountRect.maxY + 120,  // remarks の下にずらす
-                    width: 400,
-                    height: 200
+                    y: pageRect.height - 150, // 下から150ptの位置に
+                    width: pageRect.width - 100, // 左右マージン50ずつ
+                    height: 100
                 )
                 
                 let issuerText = "【発行元】\n\(receipt.issuer)"
