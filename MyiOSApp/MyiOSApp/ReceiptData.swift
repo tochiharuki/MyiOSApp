@@ -18,6 +18,9 @@ struct ReceiptData: Identifiable, Codable {
     var remarks: String = ""
     var companyName: String = ""
     var showStampBox: Bool = false
+    
+     /// 発行元（複数行対応）
+    var issuer: String = ""
 
     // MARK: - 計算プロパティ
     private var rateValue: Double {
