@@ -174,23 +174,26 @@ struct ReceiptView: View {
             Text("発行元")
                 .fontWeight(.medium)
             
-            Group {
-                TextField("郵便番号（例: 123-4567）", text: $receiptData.postalCode)
-                TextField("住所", text: $receiptData.address)
-                TextField("連絡先（電話番号やメール）", text: $receiptData.contact)
-                TextField("名称（例: 〇〇株式会社）", text: $receiptData.companyName)
-            }
-            .textFieldStyle(PlainTextFieldStyle()) // シンプルに
-            .padding(10)
-            .background(Color.white)
-            .cornerRadius(8)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray.opacity(0.5))
-            )
+            TextEditor(text: $receiptData.issuer)
+                .frame(height: 100) // 高さを確保
+                .padding(8)
+                .background(Color.white)
+                .cornerRadius(8)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.gray.opacity(0.5))
+                )
             
-            Toggle("収入印紙欄を表示", isOn: $receiptData.showStampBox)
-                .padding(.top, 8)
+            Button(action: {
+                UserDefaults.standard.set(receiptData.issuer, forKey: "savedIssuer")
+            }) {
+                Text("発行元を保存")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+            }
         }
     }
     private var createButtonSection: some View {
