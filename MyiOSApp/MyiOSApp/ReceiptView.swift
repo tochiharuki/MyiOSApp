@@ -111,11 +111,24 @@ struct ReceiptView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("宛名")
                 .fontWeight(.medium)
-            TextField("〇〇", text: $receiptData.recipient)
-                .padding()
-                .background(Color.white)
-                .cornerRadius(8)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
+    
+            HStack {
+                TextField("〇〇", text: $receiptData.recipient)
+                    .padding()
+                    .background(Color.white)
+                    .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.gray.opacity(0.5))
+                    )
+    
+                Picker("敬称", selection: $receiptData.honorific) {
+                    Text("御中").tag("御中")
+                    Text("様").tag("様")
+                }
+                .pickerStyle(MenuPickerStyle()) // プルダウン形式
+                .frame(width: 80)
+            }
         }
     }
 

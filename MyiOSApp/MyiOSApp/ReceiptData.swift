@@ -21,6 +21,8 @@ struct ReceiptData: Identifiable, Codable {
     
      /// 発行元（複数行対応）
     var issuer: String = ""
+    var recipient: String = ""
+    var honorific: String = ""
 
     // MARK: - 計算プロパティ
     private var rateValue: Double {
