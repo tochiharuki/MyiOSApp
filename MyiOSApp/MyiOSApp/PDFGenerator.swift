@@ -127,14 +127,29 @@ struct PDFGenerator {
                          withAttributes: [.font: ReceiptFont.regular(size: 14)])
             
             // 但し書き
-            var remarksText = "上記正に領収いたしました。"
+            var remarksText: String
             
-            if !receipt.remarks.isEmpty {
-                remarksText += "　但　\(receipt.remarks)"
+            if receipt.remarks.isEmpty {
+                // 入力がないときは通常どおり
+                remarksText = "上記正に領収いたしました。"
+            } else {
+                // 入力があるときは 2 行構成
+                remarksText = "但し　\(receipt.remarks)として\n上記正に領収いたしました。"
             }
             
-            remarksText.draw(at: CGPoint(x: 50, y: amountRect.maxY + 40),
-                             withAttributes: [.font: nameFont])
+            // 描画
+            let paragraph = NSMutableParagraphStyle()
+            paragraph.lineBreakMode = .byWordWrapping
+            paragraph.alignment = .left
+            
+            remarksText.draw(in: CGRect(x: 50,
+                                        y: amountRect.maxY + 40,
+                                        width: pageWidth - 100,
+                                        height: 100),
+                             withAttributes: [
+                                .font: nameFont,
+                                .paragraphStyle: paragraph
+                             ])
             
             // 内訳表
             var tableTop: CGFloat = amountRect.maxY + 100
