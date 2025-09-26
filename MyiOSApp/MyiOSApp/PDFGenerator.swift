@@ -77,7 +77,7 @@ struct PDFGenerator {
             
             // 宛名
             let nameFont = ReceiptFont.regular(size: 16)
-            let recipient = "\(receipt.recipient) \(receipt.honorific)"
+            let recipient = "\(receipt.recipient) \(receipt.recipientSuffix)"   // ← ここで連動
             let recipientPoint = CGPoint(x: 50, y: titleRect.maxY + 40)
             recipient.draw(at: recipientPoint, withAttributes: [.font: nameFont])
             
