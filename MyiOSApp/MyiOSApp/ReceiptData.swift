@@ -12,6 +12,7 @@ struct ReceiptData: Identifiable, Codable {
     var id = UUID()
     var issueDate: Date = Date()
     var recipient: String = ""
+    var honorific: String = ""
     var amount: Double? = nil
     var taxRate: String = "10%"   // デフォルト
     var taxType: String = "外税"  // 内税 or 外税
@@ -21,8 +22,7 @@ struct ReceiptData: Identifiable, Codable {
     
      /// 発行元（複数行対応）
     var issuer: String = ""
-    var recipient: String = ""
-    var honorific: String = ""
+    
 
     // MARK: - 計算プロパティ
     private var rateValue: Double {
