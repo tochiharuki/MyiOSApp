@@ -134,7 +134,7 @@ struct PDFGenerator {
                 remarksText = "上記正に領収いたしました。"
             } else {
                 // 入力があるときは 2 行構成
-                remarksText = "但し　\(receipt.remarks)として\n上記正に領収いたしました。"
+                remarksText = "但し　\(receipt.remarks)\n上記正に領収いたしました。"
             }
             
             // 描画
