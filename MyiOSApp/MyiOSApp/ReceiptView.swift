@@ -174,24 +174,19 @@ struct ReceiptView: View {
             Text("発行元")
                 .fontWeight(.medium)
     
-            ZStack(alignment: .topLeading) {
-                if receiptData.issuer.isEmpty {
-                    Text("〒123-4567\n東京都新宿区〇〇町1-2-3\n〇〇株式会社\nTEL: 03-1234-5678")
-                        .foregroundColor(.gray)
-                        .padding(.top, 8)
-                        .padding(.leading, 5)
-                }
-    
-                TextEditor(text: $receiptData.issuer)
-                    .frame(height: 100)
-                    .padding(4)
-                    .background(Color.white)
-                    .cornerRadius(8)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.gray.opacity(0.5))
-                    )
-            }
+            TextField(
+                "〒123-4567\n東京都新宿区〇〇町1-2-3\n〇〇株式会社\nTEL: 03-1234-5678",
+                text: $receiptData.issuer,
+                axis: .vertical
+            )
+            .lineLimit(4, reservesSpace: true) // 複数行対応
+            .padding(8)
+            .background(Color.white)
+            .cornerRadius(8)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.gray.opacity(0.5))
+            )
         }
     }
 
