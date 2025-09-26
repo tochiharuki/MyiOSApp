@@ -173,29 +173,29 @@ struct ReceiptView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("発行元")
                 .fontWeight(.medium)
-            
-            TextEditor(text: $receiptData.issuer)
-                .frame(height: 100) // 高さを確保
-                .padding(8)
-                .background(Color.white)
-                .cornerRadius(8)
-                .overlay(
-                    RoundedRectangle(cornerRadius: 8)
-                        .stroke(Color.gray.opacity(0.5))
-                )
-            
-            Button(action: {
-                UserDefaults.standard.set(receiptData.issuer, forKey: "savedIssuer")
-            }) {
-                Text("発行元を保存")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
+    
+            ZStack(alignment: .topLeading) {
+                if receiptData.issuer.isEmpty {
+                    Text("〒123-4567\n東京都新宿区〇〇町1-2-3\n〇〇株式会社\nTEL: 03-1234-5678")
+                        .foregroundColor(.gray)
+                        .padding(.top, 8)
+                        .padding(.leading, 5)
+                }
+    
+                TextEditor(text: $receiptData.issuer)
+                    .frame(height: 100)
+                    .padding(4)
+                    .background(Color.white)
                     .cornerRadius(8)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 8)
+                            .stroke(Color.gray.opacity(0.5))
+                    )
             }
         }
     }
+
+
     private var createButtonSection: some View {
         VStack {
             Button(action: generatePDF) {
