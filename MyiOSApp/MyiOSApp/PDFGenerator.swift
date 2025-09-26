@@ -230,7 +230,8 @@ struct PDFGenerator {
                     attributes: issuerAttributes,
                     context: nil
                 )
-}
+            }
+        }
         
         return pdfData
     }
