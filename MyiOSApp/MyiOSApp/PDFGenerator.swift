@@ -128,14 +128,28 @@ struct PDFGenerator {
             
             // 但し書き
             var remarksText: String
-            
             if receipt.remarks.isEmpty {
-                // 入力がないときは通常どおり
                 remarksText = "上記正に領収いたしました。"
             } else {
-                // 入力があるときは 2 行構成
                 remarksText = "但し　\(receipt.remarks)\n上記正に領収いたしました。"
             }
+            
+            // 行間を広げるためのスタイル
+            let paragraphStyle = NSMutableParagraphStyle()
+            paragraphStyle.lineSpacing = 6  // ← 行間を広げる値（ポイント単位）
+            
+            let attributes: [NSAttributedString.Key: Any] = [
+                .font: nameFont,
+                .paragraphStyle: paragraphStyle
+            ]
+            
+            // 描画
+            remarksText.draw(
+                with: CGRect(x: 50, y: amountRect.maxY + 40, width: 400, height: 100),
+                options: [.usesLineFragmentOrigin, .usesFontLeading],
+                attributes: attributes,
+                context: nil
+            )
             
             // 描画
             let paragraph = NSMutableParagraphStyle()
