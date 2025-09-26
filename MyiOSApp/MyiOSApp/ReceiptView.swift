@@ -164,22 +164,20 @@ struct ReceiptView: View {
                     Text("〇〇代として")
                         .foregroundColor(.gray)
                         .padding(.top, 12)
-                        .padding(.leading, 8)
+                        .padding(.leading, 12)
                 }
                 
                 TextEditor(text: $receiptData.remarks)
                     .frame(height: 80)
                     .padding(4) // 内側に余白
-                    .background(Color.white) // 背景を白にする
-                    .cornerRadius(8)
+                    .background(Color.clear) // ← 背景を透明に
                     .overlay(
                         RoundedRectangle(cornerRadius: 8)
                             .stroke(Color.gray.opacity(0.5))
                     )
             }
         }
-    }
-
+}
     private var issuerSection: some View {
         VStack(alignment: .leading, spacing: 6) {
             Text("発行元")
