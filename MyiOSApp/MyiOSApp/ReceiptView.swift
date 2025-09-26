@@ -122,10 +122,11 @@ struct ReceiptView: View {
                             .stroke(Color.gray.opacity(0.5))
                     )
     
-                Picker("敬称", selection: $receiptData.honorific) {
-                    Text("御中").tag("御中")
+                Picker("", selection: $receiptData.recipientSuffix) {
                     Text("様").tag("様")
+                    Text("御中").tag("御中")
                 }
+            
                 .pickerStyle(MenuPickerStyle()) // プルダウン形式
                 .frame(width: 80)
             }

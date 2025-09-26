@@ -12,6 +12,7 @@ struct ReceiptData: Identifiable, Codable {
     var id = UUID()
     var issueDate: Date = Date()
     var recipient: String = ""
+    var recipientSuffix: String = "様"
     var honorific: String = ""
     var amount: Double? = nil
     var taxRate: String = "10%"   // デフォルト
