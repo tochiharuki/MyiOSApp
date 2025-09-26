@@ -191,17 +191,32 @@ struct PDFGenerator {
                                              ])
             }
                 
-            // 発行元情報（右下）
-            let issuerY: CGFloat = tableTop + 40
-            let issuer = """
-            \(receipt.companyName)
-            〒XXX-XXXX
-            東京都千代田区〇〇1-2-3
-            TEL: 000-0000-0000
-            印：〇〇 太郎
-            """
-            issuer.draw(at: CGPoint(x: pageWidth - 300, y: issuerY),
-                        withAttributes: [.font: nameFont])
+            // 発行元
+            if !receipt.issuer.isEmpty {
+                let issuerParagraph = NSMutableParagraphStyle()
+                issuerParagraph.lineSpacing = 4  // 発行元も行間を少し広げる
+                
+                let issuerAttributes: [NSAttributedString.Key: Any] = [
+                    .font: nameFont,
+                    .paragraphStyle: issuerParagraph
+                ]
+                
+                // 描画する位置（remarks の下あたりに配置）
+                let issuerRect = CGRect(
+                    x: 50,
+                    y: amountRect.maxY + 120,  // remarks の下にずらす
+                    width: 400,
+                    height: 200
+                )
+                
+                let issuerText = "【発行元】\n\(receipt.issuer)"
+                issuerText.draw(
+                    with: issuerRect,
+                    options: [.usesLineFragmentOrigin, .usesFontLeading],
+                    attributes: issuerAttributes,
+                    context: nil
+                )
+            }
         }
         
         return pdfData
