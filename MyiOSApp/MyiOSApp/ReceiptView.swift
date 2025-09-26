@@ -155,28 +155,20 @@ struct ReceiptView: View {
     }
 
     private var remarksSection: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("但し書き")
-                .fontWeight(.medium)
-            
-            ZStack(alignment: .topLeading) {
-                if receiptData.remarks.isEmpty {
-                    Text("〇〇代として")
-                        .foregroundColor(.gray)
-                        .padding(.top, 12)
-                        .padding(.leading, 12)
-                }
-                
-                TextEditor(text: $receiptData.remarks)
-                    .frame(height: 80)
-                    .padding(4) // 内側に余白
-                    .background(Color.clear) // ← 背景を透明に
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 8)
-                            .stroke(Color.gray.opacity(0.5))
-                    )
-            }
-        }
+    VStack(alignment: .leading, spacing: 6) {
+        Text("但し書き")
+            .fontWeight(.medium)
+        
+        TextField("〇〇代として", text: $receiptData.remarks, axis: .vertical)
+            .lineLimit(4, reservesSpace: true) // 複数行に対応
+            .padding(8)
+            .background(Color.white)
+            .cornerRadius(8)
+            .overlay(
+                RoundedRectangle(cornerRadius: 8)
+                    .stroke(Color.gray.opacity(0.5))
+            )
+    }
 }
     private var issuerSection: some View {
         VStack(alignment: .leading, spacing: 6) {
