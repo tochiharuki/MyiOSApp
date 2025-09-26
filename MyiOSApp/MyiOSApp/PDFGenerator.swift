@@ -195,42 +195,43 @@ struct PDFGenerator {
             if !receipt.issuer.isEmpty {
                 let issuerParagraph = NSMutableParagraphStyle()
                 issuerParagraph.lineSpacing = 4
-                issuerParagraph.alignment = .right   // 右寄せにする
+                issuerParagraph.alignment = .right   // テキスト自体は右寄せ
             
                 let issuerAttributes: [NSAttributedString.Key: Any] = [
                     .font: nameFont,
                     .paragraphStyle: issuerParagraph
                 ]
             
-                // ページサイズ取得
-                let pageRect = CGRect(x: 0, y: 0, width: 595, height: 842) // A4 (72dpi)
+                // ページサイズ取得 (A4 595x842pt)
+                let pageRect = CGRect(x: 0, y: 0, width: 595, height: 842)
             
                 // 発行元のテキスト
                 let issuerText = "【発行元】\n\(receipt.issuer)"
             
                 // 描画サイズを計算
                 let textSize = issuerText.boundingRect(
-                    with: CGSize(width: pageRect.width - 100, height: .greatestFiniteMagnitude),
+                    with: CGSize(width: pageRect.width, height: .greatestFiniteMagnitude),
                     options: [.usesLineFragmentOrigin, .usesFontLeading],
                     attributes: issuerAttributes,
                     context: nil
                 )
             
-                // 下端から余白を取って配置（マージン 50）
+                // 右下に配置（右マージン 50, 下マージン 50）
                 let issuerRect = CGRect(
-                    x: 50,
-                    y: pageRect.height - 50 - textSize.height,
-                    width: pageRect.width - 100,
+                    x: pageRect.width - textSize.width - 50,
+                    y: pageRect.height - textSize.height - 50,
+                    width: textSize.width,
                     height: textSize.height
                 )
             
+                // 描画
                 issuerText.draw(
                     with: issuerRect,
                     options: [.usesLineFragmentOrigin, .usesFontLeading],
                     attributes: issuerAttributes,
                     context: nil
                 )
-            }
+}
         }
         
         return pdfData
