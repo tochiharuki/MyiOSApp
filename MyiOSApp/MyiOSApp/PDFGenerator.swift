@@ -150,21 +150,8 @@ struct PDFGenerator {
                 attributes: attributes,
                 context: nil
             )
-            
-            // 描画
-            let paragraph = NSMutableParagraphStyle()
-            paragraph.lineBreakMode = .byWordWrapping
-            paragraph.alignment = .left
-            
-            remarksText.draw(in: CGRect(x: 50,
-                                        y: amountRect.maxY + 40,
-                                        width: pageWidth - 100,
-                                        height: 100),
-                             withAttributes: [
-                                .font: nameFont,
-                                .paragraphStyle: paragraph
-                             ])
-            
+
+
             // 内訳表
             var tableTop: CGFloat = amountRect.maxY + 100
             let col1: CGFloat = 60
