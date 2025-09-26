@@ -155,36 +155,44 @@ struct ReceiptView: View {
     }
 
     private var remarksSection: some View {
-    VStack(alignment: .leading, spacing: 6) {
-        Text("但し書き")
-            .fontWeight(.medium)
-        
-        TextField("〇〇代として", text: $receiptData.remarks, axis: .vertical)
-            .lineLimit(4, reservesSpace: true) // 複数行に対応
-            .padding(8)
+        VStack(alignment: .leading, spacing: 6) {
+            Text("但し書き")
+                .fontWeight(.medium)
+            
+            TextField("〇〇代として", text: $receiptData.remarks)
+                .padding()
+                .background(Color.white)
+                .cornerRadius(8)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.gray.opacity(0.5))
+                )
+        }
+    }
+    private var issuerSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Text("発行元")
+                .fontWeight(.medium)
+            
+            Group {
+                TextField("郵便番号（例: 123-4567）", text: $receiptData.postalCode)
+                TextField("住所", text: $receiptData.address)
+                TextField("連絡先（電話番号やメール）", text: $receiptData.contact)
+                TextField("名称（例: 〇〇株式会社）", text: $receiptData.companyName)
+            }
+            .textFieldStyle(PlainTextFieldStyle()) // シンプルに
+            .padding(10)
             .background(Color.white)
             .cornerRadius(8)
             .overlay(
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.gray.opacity(0.5))
             )
-    }
-}
-    private var issuerSection: some View {
-        VStack(alignment: .leading, spacing: 6) {
-            Text("発行元")
-                .fontWeight(.medium)
-            TextField("〇〇株式会社", text: $receiptData.companyName)
-                .padding()
-                .background(Color.white)
-                .cornerRadius(8)
-                .overlay(RoundedRectangle(cornerRadius: 8).stroke(Color.gray.opacity(0.5)))
-                Toggle("収入印紙欄を表示", isOn: $receiptData.showStampBox)
-            .padding(.top, 8)
+            
+            Toggle("収入印紙欄を表示", isOn: $receiptData.showStampBox)
+                .padding(.top, 8)
         }
     }
-    
-
     private var createButtonSection: some View {
         VStack {
             Button(action: generatePDF) {
