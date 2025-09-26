@@ -127,8 +127,14 @@ struct PDFGenerator {
                          withAttributes: [.font: ReceiptFont.regular(size: 14)])
             
             // 但し書き
-            let remarks = receipt.remarks.isEmpty ? "上記正に領収いたしました。" : receipt.remarks
-            remarks.draw(at: CGPoint(x: 50, y: amountRect.maxY + 40), withAttributes: [.font: nameFont])
+            var remarksText = "上記正に領収いたしました。"
+            
+            if !receipt.remarks.isEmpty {
+                remarksText += "　但　\(receipt.remarks)"
+            }
+            
+            remarksText.draw(at: CGPoint(x: 50, y: amountRect.maxY + 40),
+                             withAttributes: [.font: nameFont])
             
             // 内訳表
             var tableTop: CGFloat = amountRect.maxY + 100
