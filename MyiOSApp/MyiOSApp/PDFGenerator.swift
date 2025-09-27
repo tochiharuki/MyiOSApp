@@ -191,48 +191,15 @@ struct PDFGenerator {
                                              ])
             }
                 
-            // 発行元を右下に配置
-            if !receipt.issuer.isEmpty {
-                let issuerParagraph = NSMutableParagraphStyle()
-                issuerParagraph.lineSpacing = 4
-                issuerParagraph.alignment = .right   // テキスト右寄せ
+            // 発行元をシンプルに表示（テスト用）
+            let testText = "発行元テスト"
+            let attrs: [NSAttributedString.Key: Any] = [
+                .font: UIFont.systemFont(ofSize: 16),
+                .foregroundColor: UIColor.black
+            ]
             
-                let issuerAttributes: [NSAttributedString.Key: Any] = [
-                    .font: nameFont,
-                    .paragraphStyle: issuerParagraph,
-                    .foregroundColor: UIColor.black
-                ]
-            
-                // ページサイズ (横向き A4: 841.8 x 595.2 pt)
-                let pageRect = CGRect(x: 0, y: 0, width: 841.8, height: 595.2)
-                
-                // 発行元テキスト
-                let issuerText = "【発行元】\n\(receipt.issuer)"
-                
-                let issuerParagraph = NSMutableParagraphStyle()
-                issuerParagraph.lineSpacing = 4
-                issuerParagraph.alignment = .right   // テキスト右寄せ
-                
-                let issuerAttributes: [NSAttributedString.Key: Any] = [
-                    .font: nameFont,
-                    .paragraphStyle: issuerParagraph,
-                    .foregroundColor: UIColor.black
-                ]
-                
-                // 右下に配置
-                let issuerRect = CGRect(
-                    x: 50,
-                    y: pageRect.height - 80,         // 下から少し上げる
-                    width: pageRect.width - 100,     // 左右にマージン
-                    height: 70                       // 高さ
-                )
-                
-                issuerText.draw(
-                    with: issuerRect,
-                    options: [.usesLineFragmentOrigin, .usesFontLeading],
-                    attributes: issuerAttributes,
-                    context: nil
-)
+            // ページ左上 (50, 100) に固定で表示
+            testText.draw(at: CGPoint(x: 50, y: 100), withAttributes: attrs)
             }
         }
         
