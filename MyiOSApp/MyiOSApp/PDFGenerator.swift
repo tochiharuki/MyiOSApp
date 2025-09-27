@@ -195,43 +195,45 @@ struct PDFGenerator {
             if !receipt.issuer.isEmpty {
                 let issuerParagraph = NSMutableParagraphStyle()
                 issuerParagraph.lineSpacing = 4
-                issuerParagraph.alignment = .right   // テキスト自体は右寄せ
+                issuerParagraph.alignment = .right   // テキスト右寄せ
             
                 let issuerAttributes: [NSAttributedString.Key: Any] = [
                     .font: nameFont,
-                    .paragraphStyle: issuerParagraph
+                    .paragraphStyle: issuerParagraph,
+                    .foregroundColor: UIColor.black
                 ]
             
-                // ページサイズ取得 (A4 595x842pt)
-                let pageRect = CGRect(x: 0, y: 0, width: 595, height: 842)
-            
-                // 発行元のテキスト
+                // ページサイズ (横向き A4: 841.8 x 595.2 pt)
+                let pageRect = CGRect(x: 0, y: 0, width: 841.8, height: 595.2)
+                
+                // 発行元テキスト
                 let issuerText = "【発行元】\n\(receipt.issuer)"
-            
-                // 描画サイズを計算
-                let textSize = issuerText.boundingRect(
-                    with: CGSize(width: pageRect.width, height: .greatestFiniteMagnitude),
-                    options: [.usesLineFragmentOrigin, .usesFontLeading],
-                    attributes: issuerAttributes,
-                    context: nil
-                )
-            
-                // 右下に配置（右マージン 50, 下マージン 50）
+                
+                let issuerParagraph = NSMutableParagraphStyle()
+                issuerParagraph.lineSpacing = 4
+                issuerParagraph.alignment = .right   // テキスト右寄せ
+                
+                let issuerAttributes: [NSAttributedString.Key: Any] = [
+                    .font: nameFont,
+                    .paragraphStyle: issuerParagraph,
+                    .foregroundColor: UIColor.black
+                ]
+                
+                // 右下に配置
                 let issuerRect = CGRect(
-                    x: pageRect.width - textSize.width - 50,
-                    y: pageRect.height - textSize.height - 50,
-                    width: textSize.width,
-                    height: textSize.height
+                    x: 50,
+                    y: pageRect.height - 80,         // 下から少し上げる
+                    width: pageRect.width - 100,     // 左右にマージン
+                    height: 70                       // 高さ
                 )
-            
-                // 描画
+                
                 issuerText.draw(
                     with: issuerRect,
                     options: [.usesLineFragmentOrigin, .usesFontLeading],
                     attributes: issuerAttributes,
                     context: nil
-                )
-}
+)
+            }
         }
         
         return pdfData
