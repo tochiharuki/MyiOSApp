@@ -191,15 +191,32 @@ struct PDFGenerator {
                                              ])
             }
                 
-            // 発行元をシンプルに表示（テスト用）
-            let testText = "発行元テスト"
-            let attrs: [NSAttributedString.Key: Any] = [
-                .font: UIFont.systemFont(ofSize: 16),
-                .foregroundColor: UIColor.black
-            ]
+            // 発行元（複数行対応）
+            if !receipt.issuer.isEmpty {
+                let issuerParagraph = NSMutableParagraphStyle()
+                issuerParagraph.lineSpacing = 4
+                issuerParagraph.alignment = .right   // 右寄せ
+                
+                let issuerAttributes: [NSAttributedString.Key: Any] = [
+                    .font: ReceiptFont.regular(size: 14),
+                    .paragraphStyle: issuerParagraph,
+                    .foregroundColor: UIColor.black
+                ]
             
-            // ページ左上 (50, 100) に固定で表示
-            testText.draw(at: CGPoint(x: 50, y: 100), withAttributes: attrs)
+                // ページ右下に配置
+                let issuerRect = CGRect(
+                    x: pageWidth - 300,
+                    y: pageHeight - 120,
+                    width: 250,
+                    height: 100
+                )
+                
+                (receipt.issuer as NSString).draw(
+                    with: issuerRect,
+                    options: [.usesLineFragmentOrigin, .usesFontLeading],
+                    attributes: issuerAttributes,
+                    context: nil
+                )
             }
         }
         
