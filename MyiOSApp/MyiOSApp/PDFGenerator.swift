@@ -155,7 +155,7 @@ struct PDFGenerator {
             // 内訳表
             var tableTop: CGFloat = amountRect.maxY + 100
             let col1: CGFloat = 60
-            let col2: CGFloat = 400
+            let col2: CGFloat = 300
             
             func drawRow(label: String, value: String) {
                 label.draw(at: CGPoint(x: col1, y: tableTop),

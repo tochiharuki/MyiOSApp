@@ -113,7 +113,7 @@ struct ReceiptView: View {
                 .fontWeight(.medium)
     
             HStack {
-                TextField("〇〇", text: $receiptData.recipient)
+                TextField("〇〇株式会社", text: $receiptData.recipient)
                     .padding()
                     .background(Color.white)
                     .cornerRadius(8)

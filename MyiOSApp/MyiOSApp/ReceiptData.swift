@@ -16,7 +16,7 @@ struct ReceiptData: Identifiable, Codable {
     var honorific: String = ""
     var amount: Double? = nil
     var taxRate: String = "10%"   // デフォルト
-    var taxType: String = "外税"  // 内税 or 外税
+    var taxType: String = "内税"  // 内税 or 外税
     var remarks: String = ""
     var companyName: String = ""
     var showStampBox: Bool = false
