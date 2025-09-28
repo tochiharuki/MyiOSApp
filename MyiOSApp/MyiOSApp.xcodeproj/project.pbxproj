@@ -21,6 +21,7 @@
 		888609AF2E803B1D006948EE /* TemplateView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609AE2E803B1D006948EE /* TemplateView.swift */; };
 		888609B22E82CACD006948EE /* PDFKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609B12E82CACD006948EE /* PDFKitView.swift */; };
 		888609B42E82CBA3006948EE /* PDFPreviewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609B32E82CBA3006948EE /* PDFPreviewWrapper.swift */; };
+		888609B82E895AFA006948EE /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609B72E895AFA006948EE /* AppSettings.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -66,6 +67,7 @@
 		888609AE2E803B1D006948EE /* TemplateView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateView.swift; sourceTree = "<group>"; };
 		888609B12E82CACD006948EE /* PDFKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFKitView.swift; sourceTree = "<group>"; };
 		888609B32E82CBA3006948EE /* PDFPreviewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFPreviewWrapper.swift; sourceTree = "<group>"; };
+		888609B72E895AFA006948EE /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -126,6 +128,7 @@
 				888609AE2E803B1D006948EE /* TemplateView.swift */,
 				888609B12E82CACD006948EE /* PDFKitView.swift */,
 				888609B32E82CBA3006948EE /* PDFPreviewWrapper.swift */,
+				888609B72E895AFA006948EE /* AppSettings.swift */,
 			);
 			path = MyiOSApp;
 			sourceTree = "<group>";
@@ -348,6 +351,7 @@
 				888609A52E80386F006948EE /* ReceiptData.swift in Sources */,
 				888609AF2E803B1D006948EE /* TemplateView.swift in Sources */,
 				888609AD2E803AEA006948EE /* ReceiptView.swift in Sources */,
+				888609B82E895AFA006948EE /* AppSettings.swift in Sources */,
 				884FF4282E7E6CAA00C1C682 /* MyiOSAppApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -79,6 +79,10 @@ struct ReceiptView: View {
             .environment(\.locale, Locale(identifier: "ja_JP"))
             .padding()
         }
+        .onAppear {
+            receiptData.issuer = AppSettings.issuer
+        }
+
     }
 
     // MARK: - Sections
@@ -192,7 +196,7 @@ struct ReceiptView: View {
                 text: $receiptData.issuer,
                 axis: .vertical
             )
-            .lineLimit(4, reservesSpace: true) // 複数行対応
+            .lineLimit(4, reservesSpace: true)
             .padding(8)
             .background(Color.white)
             .cornerRadius(8)
@@ -200,6 +204,19 @@ struct ReceiptView: View {
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.gray.opacity(0.5))
             )
+    
+            // 保存ボタンのみ
+            Button(action: {
+                AppSettings.issuer = receiptData.issuer
+            }) {
+                Text("保存")
+                    .frame(maxWidth: .infinity)
+                    .padding()
+                    .foregroundColor(.white)
+                    .background(Color.green)
+                    .cornerRadius(8)
+            }
+            .padding(.top, 6)
         }
     }
 
@@ -263,3 +280,6 @@ extension View {
     }
 }
 #endif
+
+
+
