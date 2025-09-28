@@ -191,32 +191,33 @@ struct ReceiptView: View {
             Text("発行元")
                 .fontWeight(.medium)
     
-            TextField(
-                "〒123-4567\n東京都新宿区〇〇町1-2-3\n〇〇株式会社\nTEL: 03-1234-5678",
-                text: $receiptData.issuer,
-                axis: .vertical
-            )
-            .lineLimit(4, reservesSpace: true)
-            .padding(8)
-            .background(Color.white)
-            .cornerRadius(8)
-            .overlay(
-                RoundedRectangle(cornerRadius: 8)
-                    .stroke(Color.gray.opacity(0.5))
-            )
+            HStack(alignment: .top, spacing: 8) {
+                TextField(
+                    "〒123-4567\n東京都新宿区〇〇町1-2-3\n〇〇株式会社\nTEL: 03-1234-5678",
+                    text: $receiptData.issuer,
+                    axis: .vertical
+                )
+                .lineLimit(4, reservesSpace: true)
+                .padding(8)
+                .background(Color.white)
+                .cornerRadius(8)
+                .overlay(
+                    RoundedRectangle(cornerRadius: 8)
+                        .stroke(Color.gray.opacity(0.5))
+                )
     
-            // 保存ボタンのみ
-            Button(action: {
-                AppSettings.issuer = receiptData.issuer
-            }) {
-                Text("保存")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .foregroundColor(.white)
-                    .background(Color.green)
-                    .cornerRadius(8)
+                Button(action: {
+                    AppSettings.issuer = receiptData.issuer
+                }) {
+                    Text("発行元を保存")
+                        .font(.caption) // 小さめの文字
+                        .padding(.horizontal, 10)
+                        .padding(.vertical, 6)
+                        .background(Color.green.opacity(0.85))
+                        .foregroundColor(.white)
+                        .cornerRadius(6)
+                }
             }
-            .padding(.top, 6)
         }
     }
 
