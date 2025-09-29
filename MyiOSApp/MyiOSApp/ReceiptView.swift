@@ -205,7 +205,7 @@ struct ReceiptView: View {
                         .foregroundColor(.white)
                         .cornerRadius(6)
                 }
-                // ✅ SwiftUI標準の押した感を出す
+                // ✅ 標準のボタンスタイル（タップで即反応）
                 .buttonStyle(.borderedProminent)
                 .tint(.green)
             }
