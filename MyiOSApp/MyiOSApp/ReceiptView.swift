@@ -198,7 +198,16 @@ struct ReceiptView: View {
     
                 Button(action: {
                     AppSettings.issuer = receiptData.issuer
-                    isSaved.toggle() // ✅ 保存状態をトグルしてUIで反映
+                    isSaved = true
+                    
+                    // バイブ
+                    let generator = UIImpactFeedbackGenerator(style: .light)
+                    generator.impactOccurred()
+                    
+                    // ✅ 2秒後に元に戻す
+                    DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                        isSaved = false
+                    }
                 }) {
                     Text(isSaved ? "保存済み" : "発行元を保存")
                         .font(.caption)
@@ -208,6 +217,8 @@ struct ReceiptView: View {
                         .foregroundColor(.white)
                         .cornerRadius(6)
                 }
+                .buttonStyle(.borderless)
+                .opacityEffectOnPress()
                 // ✅ ジェスチャー競合を回避
                 .contentShape(Rectangle())
                 .highPriorityGesture(TapGesture().onEnded {
