@@ -206,8 +206,7 @@ struct ReceiptView: View {
                         .cornerRadius(6)
                 }
                 // ✅ 押した時に暗く＆縮む効果
-                .buttonStyle(.scaleOnPress)
-            }
+                .buttonStyle(ScaleOnPressButtonStyle())           }
     
             TextField(
                 "〒123-4567\n東京都新宿区〇〇町1-2-3\n〇〇株式会社\nTEL: 03-1234-5678",
