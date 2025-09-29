@@ -264,7 +264,6 @@ struct ReceiptView: View {
                 self.isGenerating = false
                 self.pdfData = data
                 self.showPreview = true
-}
                 }
             }
         }
