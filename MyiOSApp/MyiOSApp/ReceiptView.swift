@@ -194,20 +194,10 @@ struct ReceiptView: View {
     
                 Spacer()
     
-                Button(action: {
+                Button("発行元を保存") {
+                    print("✅ 保存ボタン押された")
                     AppSettings.issuer = receiptData.issuer
-                }) {
-                    Text("発行元を保存")
-                        .font(.caption)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
-                        .background(Color.green.opacity(0.85))
-                        .foregroundColor(.white)
-                        .cornerRadius(6)
                 }
-                // ✅ 標準のボタンスタイル（タップで即反応）
-                .buttonStyle(.borderedProminent)
-                .tint(.green)
             }
     
             TextField(
