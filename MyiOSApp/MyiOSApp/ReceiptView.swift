@@ -15,6 +15,8 @@ struct ReceiptView: View {
     @State private var pdfData: Data? = nil
     @State private var errorMessage: String? = nil
     @State private var isGenerating = false
+    @State private var isSaved = false
+    
 
     var body: some View {
         ScrollView {
