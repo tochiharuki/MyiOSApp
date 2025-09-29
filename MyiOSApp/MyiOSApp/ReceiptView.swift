@@ -196,6 +196,10 @@ struct ReceiptView: View {
     
                 Button(action: {
                     AppSettings.issuer = receiptData.issuer
+    
+                    // ✅ 押した感を出す: 軽いバイブ
+                    let generator = UIImpactFeedbackGenerator(style: .light)
+                    generator.impactOccurred()
                 }) {
                     Text("発行元を保存")
                         .font(.caption)
@@ -205,8 +209,10 @@ struct ReceiptView: View {
                         .foregroundColor(.white)
                         .cornerRadius(6)
                 }
-                // ✅ 押した時に暗く＆縮む効果
-                .buttonStyle(ScaleOnPressButtonStyle())           }
+                // ✅ 押されたときに暗くなる
+                .buttonStyle(.borderless) 
+                .opacityEffectOnPress()  // ← カスタム修飾子（下に定義）
+            }
     
             TextField(
                 "〒123-4567\n東京都新宿区〇〇町1-2-3\n〇〇株式会社\nTEL: 03-1234-5678",
@@ -223,7 +229,6 @@ struct ReceiptView: View {
             )
         }
     }
-
 
     private var createButtonSection: some View {
         VStack {
@@ -259,8 +264,7 @@ struct ReceiptView: View {
                 self.isGenerating = false
                 self.pdfData = data
                 self.showPreview = true
-                if data == nil {
-                    self.errorMessage = "PDF生成に失敗しました"
+}
                 }
             }
         }
