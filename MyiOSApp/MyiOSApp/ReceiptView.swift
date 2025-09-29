@@ -196,6 +196,10 @@ struct ReceiptView: View {
     
                 Button(action: {
                     AppSettings.issuer = receiptData.issuer
+    
+                    // ✅ 押した感を出す: 軽いバイブ
+                    let generator = UIImpactFeedbackGenerator(style: .light)
+                    generator.impactOccurred()
                 }) {
                     Text("発行元を保存")
                         .font(.caption)
@@ -205,6 +209,9 @@ struct ReceiptView: View {
                         .foregroundColor(.white)
                         .cornerRadius(6)
                 }
+                // ✅ 押されたときに暗くなる
+                .buttonStyle(.borderless) 
+                .opacityEffectOnPress()  // ← カスタム修飾子（下に定義）
             }
     
             TextField(
