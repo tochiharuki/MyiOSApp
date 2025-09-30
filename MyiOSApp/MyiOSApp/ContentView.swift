@@ -84,7 +84,7 @@ struct MainView: View {
                 }
             }
             .padding()
-            .background(Color.white) // 白ベース
+            .background(Color.clear)
             .navigationTitle("領収書さん")
         }
     }
