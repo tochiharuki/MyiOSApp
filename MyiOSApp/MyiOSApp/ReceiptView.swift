@@ -16,6 +16,7 @@ struct ReceiptView: View {
     @State private var errorMessage: String? = nil
     @State private var isGenerating = false
     @State private var isSaved = false
+    @State private var showToast = false   // ← 通知表示フラグ
     
 
     var body: some View {
@@ -31,6 +32,23 @@ struct ReceiptView: View {
                 createButtonSection
             }
             .padding()
+            
+            // ✅ トースト通知
+            if showToast {
+                VStack {
+                    Spacer()
+                    Text("保存しました")
+                        .font(.caption)
+                        .padding(.horizontal, 16)
+                        .padding(.vertical, 8)
+                        .background(Color.black.opacity(0.6))
+                        .foregroundColor(.white)
+                        .cornerRadius(8)
+                        .transition(.opacity.combined(with: .move(edge: .bottom)))
+                        .padding(.bottom, 40)
+                }
+                .animation(.easeInOut(duration: 0.3), value: showToast)
+            }
         }
         .background(Color.white.ignoresSafeArea())
         .onTapGesture { hideKeyboard() }
@@ -193,40 +211,39 @@ struct ReceiptView: View {
             HStack {
                 Text("発行元")
                     .fontWeight(.medium)
-    
+
                 Spacer()
-    
+
                 Button(action: {
                     AppSettings.issuer = receiptData.issuer
-                    isSaved = true
                     
-                    // バイブ
+                    // ✅ バイブ
                     let generator = UIImpactFeedbackGenerator(style: .light)
                     generator.impactOccurred()
                     
-                    // ✅ 2秒後に元に戻す
+                    // ✅ トーストを表示
+                    withAnimation {
+                        showToast = true
+                    }
+                    // 2秒後に非表示
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                        isSaved = false
+                        withAnimation {
+                            showToast = false
+                        }
                     }
                 }) {
-                    Text(isSaved ? "保存済み" : "発行元を保存")
+                    Text("発行元を保存")
                         .font(.caption)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
-                        .background(isSaved ? Color.gray : Color.green.opacity(0.85))
+                        .background(Color.green.opacity(0.85))
                         .foregroundColor(.white)
                         .cornerRadius(6)
                 }
                 .buttonStyle(.borderless)
                 .opacityEffectOnPress()
-                // ✅ ジェスチャー競合を回避
-                .contentShape(Rectangle())
-                .highPriorityGesture(TapGesture().onEnded {
-                    AppSettings.issuer = receiptData.issuer
-                    isSaved.toggle()
-                })
             }
-    
+
             TextField(
                 "〒123-4567\n東京都新宿区〇〇町1-2-3\n〇〇株式会社\nTEL: 03-1234-5678",
                 text: $receiptData.issuer,
@@ -242,6 +259,7 @@ struct ReceiptView: View {
             )
         }
     }
+
 
     private var createButtonSection: some View {
         VStack {
