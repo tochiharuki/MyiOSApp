@@ -31,6 +31,7 @@ struct MyiOSAppApp: App {
                     .ignoresSafeArea()
 
                 ContentView()
+                    .background(Color(red: 0.95, green: 0.97, blue: 1.0))
                     .preferredColorScheme(.light) // ライトモード固定
                     .tint(.blue)                  // 全体のアクセントカラー
                     .environment(\.font, .system(size: 16))
