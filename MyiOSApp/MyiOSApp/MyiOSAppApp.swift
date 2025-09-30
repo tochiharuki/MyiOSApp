@@ -25,10 +25,16 @@ struct MyiOSAppApp: App {
     
     var body: some Scene {
         WindowGroup {
-            ContentView()
-                .preferredColorScheme(.light) // ライトモード固定
-                .tint(.blue)                  // 全体のアクセントカラー
-                .environment(\.font, .system(size: 16))
+            ZStack {
+                // ★ 全画面の背景（薄い水色）
+                Color(red: 0.95, green: 0.97, blue: 1.0)
+                    .ignoresSafeArea()
+
+                ContentView()
+                    .preferredColorScheme(.light) // ライトモード固定
+                    .tint(.blue)                  // 全体のアクセントカラー
+                    .environment(\.font, .system(size: 16))
+            }
         }
     }
 }
