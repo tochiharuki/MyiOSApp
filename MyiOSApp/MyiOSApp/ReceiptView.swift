@@ -103,7 +103,7 @@ struct ReceiptView: View {
                     .transition(.opacity)
                     .onAppear {
                         // 1.5秒後に自動で非表示
-                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 0.8) {
                             withAnimation {
                                 showToast = false
                             }
