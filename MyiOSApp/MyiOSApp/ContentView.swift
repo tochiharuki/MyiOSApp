@@ -2,40 +2,7 @@ import SwiftUI
 
 import SwiftUI
 
-@main
-struct MyApp: App {
-    init() {
-        // --- NavigationBar 全体スタイル（青ベース） ---
-        let appearance = UINavigationBarAppearance()
-        appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor.systemBlue
-        appearance.titleTextAttributes = [
-            .foregroundColor: UIColor.white,
-            .font: UIFont.boldSystemFont(ofSize: 18)
-        ]
-        appearance.largeTitleTextAttributes = [
-            .foregroundColor: UIColor.white,
-            .font: UIFont.boldSystemFont(ofSize: 24)
-        ]
-        
-        UINavigationBar.appearance().standardAppearance = appearance
-        UINavigationBar.appearance().scrollEdgeAppearance = appearance
-        UINavigationBar.appearance().compactAppearance = appearance
-        UINavigationBar.appearance().tintColor = .white // 戻るボタン色
-    }
-    
-    var body: some Scene {
-        WindowGroup {
-            ContentView()
-                // --- 全体のアクセントカラー（リンク、ボタン等） ---
-                .tint(.blue)
-                // --- 全体のデフォルトフォント ---
-                .environment(\.font, .system(size: 16, weight: .regular))
-                // --- 全体の背景色（白ベース） ---
-                .background(Color.white)
-        }
-    }
-}
+
 
 struct ContentView: View {
     @State private var showMainView = false
