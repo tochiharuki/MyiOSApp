@@ -318,5 +318,18 @@ extension View {
 }
 #endif
 
+// ✅ カスタムモディファイア
+struct OpacityEffectOnPress: ButtonStyle {
+    func makeBody(configuration: Configuration) -> some View {
+        configuration.label
+            .opacity(configuration.isPressed ? 0.6 : 1.0) // 押したら暗くなる
+    }
+}
+
+extension View {
+    func opacityEffectOnPress() -> some View {
+        self.buttonStyle(OpacityEffectOnPress())
+    }
+}
 
 
