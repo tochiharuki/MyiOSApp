@@ -85,22 +85,34 @@ struct ReceiptView: View {
         .onAppear {
             receiptData.issuer = AppSettings.issuer
         }
-        // ✅ トーストはオーバーレイで配置
-        if showToast {
-            VStack {
-                Spacer()
-                Text("保存しました")
-                    .font(.caption)
-                    .padding(.horizontal, 16)
-                    .padding(.vertical, 8)
-                    .background(Color.black.opacity(0.6))
-                    .foregroundColor(.white)
-                    .cornerRadius(8)
-                    .transition(.opacity.combined(with: .move(edge: .bottom)))
-                    .padding(.bottom, 40)
+        // ✅ 全画面オーバーレイ
+        .overlay(
+            Group {
+                if showToast {
+                    ZStack {
+                        Color.black.opacity(0.3) // 画面全体を薄暗く
+                            .ignoresSafeArea()
+                        Text("保存しました")
+                            .font(.headline)
+                            .foregroundColor(.white)
+                            .padding(.horizontal, 24)
+                            .padding(.vertical, 12)
+                            .background(Color.black.opacity(0.7))
+                            .cornerRadius(10)
+                    }
+                    .transition(.opacity)
+                    .onAppear {
+                        // 1.5秒後に自動で非表示
+                        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                            withAnimation {
+                                showToast = false
+                            }
+                        }
+                    }
+                }
             }
-            .animation(.easeInOut(duration: 0.3), value: showToast)
-        }
+        )
+        .animation(.easeInOut(duration: 0.3), value: showToast)
     }
 
     // MARK: - Sections
