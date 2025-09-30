@@ -32,23 +32,6 @@ struct ReceiptView: View {
                 createButtonSection
             }
             .padding()
-            
-            // ✅ トースト通知
-            if showToast {
-                VStack {
-                    Spacer()
-                    Text("保存しました")
-                        .font(.caption)
-                        .padding(.horizontal, 16)
-                        .padding(.vertical, 8)
-                        .background(Color.black.opacity(0.6))
-                        .foregroundColor(.white)
-                        .cornerRadius(8)
-                        .transition(.opacity.combined(with: .move(edge: .bottom)))
-                        .padding(.bottom, 40)
-                }
-                .animation(.easeInOut(duration: 0.3), value: showToast)
-            }
         }
         .background(Color.white.ignoresSafeArea())
         .onTapGesture { hideKeyboard() }
@@ -102,7 +85,22 @@ struct ReceiptView: View {
         .onAppear {
             receiptData.issuer = AppSettings.issuer
         }
-
+        // ✅ トーストはオーバーレイで配置
+        if showToast {
+            VStack {
+                Spacer()
+                Text("保存しました")
+                    .font(.caption)
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 8)
+                    .background(Color.black.opacity(0.6))
+                    .foregroundColor(.white)
+                    .cornerRadius(8)
+                    .transition(.opacity.combined(with: .move(edge: .bottom)))
+                    .padding(.bottom, 40)
+            }
+            .animation(.easeInOut(duration: 0.3), value: showToast)
+        }
     }
 
     // MARK: - Sections
