@@ -20,18 +20,24 @@ struct ReceiptView: View {
     
 
     var body: some View {
-        ScrollView {
-            VStack(alignment: .leading, spacing: 20) {
-                headerSection
-                issueDateSection
-                recipientSection
-                taxSection
-                amountSection
-                remarksSection
-                issuerSection
-                createButtonSection
+        ZStack {
+            // ★ 全画面背景
+            Color(red: 0.95, green: 0.97, blue: 1.0)
+                .ignoresSafeArea()
+            
+            ScrollView {
+                VStack(alignment: .leading, spacing: 20) {
+                    headerSection
+                    issueDateSection
+                    recipientSection
+                    taxSection
+                    amountSection
+                    remarksSection
+                    issuerSection
+                    createButtonSection
+                }
+                .padding()
             }
-            .padding()
         }
         .background(Color.white.ignoresSafeArea())
         .onTapGesture { hideKeyboard() }
