@@ -43,53 +43,54 @@ struct SplashView: View {
 struct MainView: View {
     var body: some View {
         NavigationStack {
-            VStack(spacing: 24) {
-                NavigationLink(destination: ReceiptView()) {
-                    Text("領収書を作成")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.blue.opacity(0.1))
-                        .foregroundColor(.blue)
-                        .cornerRadius(10)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                        )
+            ZStack {
+                // ★ 画面全体の背景
+                Color(red: 0.95, green: 0.97, blue: 1.0)
+                    .ignoresSafeArea()
+
+                VStack(spacing: 24) {
+                    NavigationLink(destination: ReceiptView()) {
+                        Text("領収書を作成")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.blue.opacity(0.1))
+                            .foregroundColor(.blue)
+                            .cornerRadius(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                            )
+                    }
+
+                    NavigationLink(destination: TemplateView()) {
+                        Text("テンプレートから作成")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .foregroundColor(.gray)
+                            .background(Color.white)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.gray, lineWidth: 1.5)
+                            )
+                            .cornerRadius(10)
+                    }
+
+                    NavigationLink(destination: HistoryView()) {
+                        Text("履歴を見る")
+                            .frame(maxWidth: .infinity)
+                            .padding()
+                            .background(Color.gray.opacity(0.1))
+                            .foregroundColor(.gray)
+                            .cornerRadius(10)
+                            .overlay(
+                                RoundedRectangle(cornerRadius: 10)
+                                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                            )
+                    }
                 }
-                
-                NavigationLink(destination: TemplateView()) {
-                    Text("テンプレートから作成")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .foregroundColor(.gray)
-                        .background(Color.white)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.gray, lineWidth: 1.5)
-                        )
-                        .cornerRadius(10)
-                }
-                
-                NavigationLink(destination: HistoryView()) {
-                    Text("履歴を見る")
-                        .frame(maxWidth: .infinity)
-                        .padding()
-                        .background(Color.gray.opacity(0.1))
-                        .foregroundColor(.gray)
-                        .cornerRadius(10)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                        )
-                }
+                .padding()
             }
-            .padding()
-            .background(Color(red: 0.95, green: 0.97, blue: 1.0))
             .navigationTitle("領収書さん")
         }
     }
-}
-
-#Preview {
-    ContentView()
 }
