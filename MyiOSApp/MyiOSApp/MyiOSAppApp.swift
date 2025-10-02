@@ -32,7 +32,6 @@ struct MyiOSAppApp: App {
 
                 ContentView()
                     .preferredColorScheme(.light) // ライトモード固定
-                    .tint(.blue)                  // 全体のアクセントカラー
                     .environment(\.font, .system(size: 16))
             }
         }
