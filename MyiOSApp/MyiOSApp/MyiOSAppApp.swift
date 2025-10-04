@@ -10,17 +10,21 @@ import SwiftUI
 @main
 struct MyiOSAppApp: App {
     init() {
-        // --- ナビゲーションバー全体のスタイルを一括指定 ---
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
         appearance.backgroundColor = UIColor.systemBlue
+    
+        // タイトル文字色
         appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
-        appearance.largeTitleTextAttributes = [.foregroundColor: UIColor.white]
-
+    
+        // 戻るボタンなどの色
+        appearance.buttonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
+        appearance.doneButtonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
+    
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().compactAppearance = appearance
-        UINavigationBar.appearance().tintColor = .white
+        UINavigationBar.appearance().tintColor = .white  // ← アイコン色を白に
     }
     
     var body: some Scene {

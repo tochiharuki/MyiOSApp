@@ -39,8 +39,6 @@ struct ReceiptView: View {
                 .padding()
             }
         }
-        .tint(.blue)
-        .background(Color.white.ignoresSafeArea())
         .onTapGesture { hideKeyboard() }
         .navigationTitle("領収書作成")
         .navigationBarTitleDisplayMode(.inline)
