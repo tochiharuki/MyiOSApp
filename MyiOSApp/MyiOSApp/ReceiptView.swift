@@ -53,13 +53,12 @@ struct ReceiptView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
-                Button(action: {
-                    // 戻る処理
-                    // NavigationStack なら自動で戻れる
-                }) {
+                Button(action: { dismiss() }) {
                     HStack(spacing: 4) {
                         Image(systemName: "chevron.backward")
+                            .foregroundColor(.white)
                         Text("戻る")
+                            .foregroundColor(.white)  // ← ここで白に固定
                     }
                 }
             }
