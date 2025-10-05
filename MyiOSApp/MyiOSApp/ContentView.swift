@@ -1,7 +1,5 @@
 import SwiftUI
 
-import SwiftUI
-
 
 
 struct ContentView: View {
@@ -90,7 +88,8 @@ struct MainView: View {
                 }
                 .padding()
             }
-            .navigationTitle("領収書さん")
+            .navigationTitle("領収書作成")
+            .navigationBarTitleDisplayMode(.inline)
         }
     }
 }
