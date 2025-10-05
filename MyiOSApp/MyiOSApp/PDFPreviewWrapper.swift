@@ -22,33 +22,28 @@ struct PDFPreviewWrapper: View {
                 .edgesIgnoringSafeArea(.all)
             Spacer(minLength: 20)
             Button("PDFを保存") {
-                // ボタンを押した瞬間に一時ファイルを生成
                 savePDFToTemporaryFile()
             }
             .padding()
             .background(Color.blue)
             .foregroundColor(.white)
             .cornerRadius(10)
-            .sheet(isPresented: $showDocumentPicker) {
-                if let fileURL = tempFileURL {
-                    DocumentPickerView(fileURL: fileURL)
-                } else {
-                    Text("PDFを生成できませんでした。")
-                }
-            }
         }
         // ✅ ナビゲーションバーを統一
         .toolbarBackground(Color.blue, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
-        // ✅ 保存時にドキュメントピッカーを開く
+        // ✅ シートはここだけにする
         .sheet(isPresented: $showDocumentPicker) {
             if let fileURL = tempFileURL {
                 DocumentPickerView(fileURL: fileURL)
+            } else {
+                Text("PDFを生成できませんでした。")
             }
         }
     }
 
+    
     // 一時ファイルにPDFを書き出して → ピッカーで保存先選択
     private func savePDFToTemporaryFile() {
         let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent("領収書_\(Date().timeIntervalSince1970).pdf")
