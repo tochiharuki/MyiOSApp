@@ -22,7 +22,9 @@ struct PDFPreviewWrapper: View {
                 .edgesIgnoringSafeArea(.all)
             Spacer(minLength: 20)
             Button("PDFを保存") {
-                savePDFToTemporaryFile()
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                    showDocumentPicker = true
+                }
             }
             .padding()
             .background(Color.blue)
