@@ -221,6 +221,7 @@ struct ReceiptView: View {
                 )
         }
     }
+    
     private var issuerSection: some View {
         VStack(alignment: .leading, spacing: 6) {
             HStack {
@@ -272,9 +273,19 @@ struct ReceiptView: View {
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.gray.opacity(0.5))
             )
+            stampSection
         }
     }
-
+    // MARK: - 印紙枠切り替えセクション
+    private var stampSection: some View {
+        VStack(alignment: .leading, spacing: 6) {
+            Toggle(isOn: $receiptData.showStampFrame) {
+                Text("収入印紙枠を表示")
+                    .fontWeight(.medium)
+            }
+            .tint(.blue)
+        }
+    }
 
     private var createButtonSection: some View {
         VStack {
