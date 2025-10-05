@@ -26,6 +26,11 @@ struct PDFPreviewWrapper: View {
                 }
             }
         }
+        // ✅ ナビゲーションバーを青背景・白アイコンに統一
+        .toolbarBackground(Color.blue, for: .navigationBar)
+        .toolbarBackground(.visible, for: .navigationBar)
+        .toolbarColorScheme(.dark, for: .navigationBar)
+        // ✅ シェアシート
         .sheet(isPresented: $showShareSheet) {
             ActivityView(activityItems: [data])
         }
