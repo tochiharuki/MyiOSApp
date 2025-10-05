@@ -39,5 +39,6 @@ struct TemplateView: View {
         .onAppear {
             templates = manager.loadTemplates()
         }
+        .navigationBarBackButtonHidden(true) // ← 標準の戻るを非表示に
     }
 }
