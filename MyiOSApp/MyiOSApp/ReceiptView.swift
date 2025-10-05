@@ -64,6 +64,7 @@ struct ReceiptView: View {
                 }
             }
         }
+        .navigationBarBackButtonHidden(true) // ← 標準の戻るを非表示に
         .sheet(isPresented: $showPreview) {
             if let data = pdfData {
                 NavigationView {
