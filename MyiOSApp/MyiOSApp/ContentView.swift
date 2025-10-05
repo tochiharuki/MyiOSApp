@@ -74,7 +74,7 @@ struct MainView: View {
                     }
 
                     NavigationLink(destination: HistoryView()) {
-                        Text("履歴を見る")
+                        Text("履歴から作成")
                             .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.gray.opacity(0.1))
