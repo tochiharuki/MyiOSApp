@@ -10,6 +10,9 @@ import UIKit
 
 struct ReceiptView: View {
     @State private var receiptData = ReceiptData()
+    init(prefilledData: ReceiptData? = nil) {
+        _receiptData = State(initialValue: prefilledData ?? ReceiptData())
+    }
     @State private var showPreview = false
     @State private var showDatePicker = false
     @State private var pdfData: Data? = nil
@@ -17,6 +20,12 @@ struct ReceiptView: View {
     @State private var isGenerating = false
     @State private var isSaved = false
     @State private var showToast = false   // ← 通知表示フラグ
+    @State private var showSaveAlert = false
+    @State private var templateName = ""
+
+    func saveAsTemplate() {
+        showSaveAlert = true
+    }
     
 
     var body: some View {
@@ -274,7 +283,7 @@ struct ReceiptView: View {
             }
 
             TextField(
-                "〒123-4567\n東京都新宿区〇〇町1-2-3\n〇〇株式会社\nTEL: 03-1234-5678",
+                "〇〇株式会社\n〒123-4567\n東京都新宿区〇〇町1-2-3\nTEL: 03-1234-5678",
                 text: $receiptData.issuer,
                 axis: .vertical
             )
@@ -318,9 +327,37 @@ struct ReceiptView: View {
                 .cornerRadius(10)
             }
             .disabled(isGenerating)
+
+            // --- テンプレートとして保存ボタン ---
+            Button("テンプレートとして保存") {
+                saveAsTemplate()
+            }
+            .frame(maxWidth: .infinity)
+            .padding()
+            .background(Color.orange.opacity(0.1))
+            .foregroundColor(.orange)
+            .cornerRadius(10)
+            .overlay(
+                RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.orange.opacity(0.3), lineWidth: 1)
+            )
         }
         .padding(.top, 20)
+        // --- アラートをVStack全体に適用 ---
+        .alert("テンプレート名を入力", isPresented: $showSaveAlert) {
+            TextField("例：会社A用", text: $templateName)
+            Button("保存") {
+                guard !templateName.isEmpty else { return }
+                let manager = TemplateManager()
+                let template = ReceiptTemplate(name: templateName, data: receiptData)
+                manager.saveTemplate(template)
+                templateName = ""
+            }
+            Button("キャンセル", role: .cancel) { }
+        }
     }
+
+    
 
     // MARK: - Actions
     private func generatePDF() {

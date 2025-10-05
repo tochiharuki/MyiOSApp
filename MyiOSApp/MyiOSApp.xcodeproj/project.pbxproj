@@ -22,6 +22,8 @@
 		888609B22E82CACD006948EE /* PDFKitView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609B12E82CACD006948EE /* PDFKitView.swift */; };
 		888609B42E82CBA3006948EE /* PDFPreviewWrapper.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609B32E82CBA3006948EE /* PDFPreviewWrapper.swift */; };
 		888609B82E895AFA006948EE /* AppSettings.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609B72E895AFA006948EE /* AppSettings.swift */; };
+		888609BB2E922F60006948EE /* ReceiptTemplate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609BA2E922F60006948EE /* ReceiptTemplate.swift */; };
+		888609BD2E922F80006948EE /* TemplateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609BC2E922F80006948EE /* TemplateManager.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -68,6 +70,8 @@
 		888609B12E82CACD006948EE /* PDFKitView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFKitView.swift; sourceTree = "<group>"; };
 		888609B32E82CBA3006948EE /* PDFPreviewWrapper.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PDFPreviewWrapper.swift; sourceTree = "<group>"; };
 		888609B72E895AFA006948EE /* AppSettings.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppSettings.swift; sourceTree = "<group>"; };
+		888609BA2E922F60006948EE /* ReceiptTemplate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptTemplate.swift; sourceTree = "<group>"; };
+		888609BC2E922F80006948EE /* TemplateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateManager.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +133,8 @@
 				888609B12E82CACD006948EE /* PDFKitView.swift */,
 				888609B32E82CBA3006948EE /* PDFPreviewWrapper.swift */,
 				888609B72E895AFA006948EE /* AppSettings.swift */,
+				888609BA2E922F60006948EE /* ReceiptTemplate.swift */,
+				888609BC2E922F80006948EE /* TemplateManager.swift */,
 			);
 			path = MyiOSApp;
 			sourceTree = "<group>";
@@ -352,7 +358,9 @@
 				888609AF2E803B1D006948EE /* TemplateView.swift in Sources */,
 				888609AD2E803AEA006948EE /* ReceiptView.swift in Sources */,
 				888609B82E895AFA006948EE /* AppSettings.swift in Sources */,
+				888609BB2E922F60006948EE /* ReceiptTemplate.swift in Sources */,
 				884FF4282E7E6CAA00C1C682 /* MyiOSAppApp.swift in Sources */,
+				888609BD2E922F80006948EE /* TemplateManager.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -8,8 +8,25 @@
 import SwiftUI
 
 struct TemplateView: View {
+    @State private var templates: [ReceiptTemplate] = []
+    private let manager = TemplateManager()
+    @State private var selectedTemplate: ReceiptTemplate?
+
     var body: some View {
-        Text("テンプレートから作成画面")
-            .font(.title)
+        List {
+            ForEach(templates) { template in
+                NavigationLink(destination: ReceiptView(prefilledData: template.data)) {
+                    Text(template.name)
+                }
+            }
+            .onDelete { indexSet in
+                indexSet.forEach { manager.deleteTemplate(id: templates[$0].id) }
+                templates = manager.loadTemplates()
+            }
+        }
+        .navigationTitle("テンプレート一覧")
+        .onAppear {
+            templates = manager.loadTemplates()
+        }
     }
 }
