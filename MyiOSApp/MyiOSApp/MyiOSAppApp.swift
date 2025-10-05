@@ -19,10 +19,6 @@ struct MyiOSAppApp: App {
         // タイトル文字色
         appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
     
-        // 戻るボタンなどの色
-        appearance.buttonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
-        appearance.doneButtonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
-    
         UINavigationBar.appearance().standardAppearance = appearance
         UINavigationBar.appearance().scrollEdgeAppearance = appearance
         UINavigationBar.appearance().compactAppearance = appearance
