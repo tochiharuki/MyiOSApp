@@ -26,6 +26,7 @@ struct TemplateView: View {
             }
         }
         .navigationTitle("テンプレート一覧")
+        .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
