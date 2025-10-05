@@ -12,7 +12,7 @@ struct MyiOSAppApp: App {
     init() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = UIColor.systemBlue
+        appearance.backgroundColor = .systemBlue.withAlphaComponent(0.95)
     
         // タイトル文字色
         appearance.titleTextAttributes = [.foregroundColor: UIColor.white]
