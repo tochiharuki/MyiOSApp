@@ -18,16 +18,14 @@ struct PDFPreviewWrapper: View {
         VStack {
             PDFKitView(data: data)
                 .edgesIgnoringSafeArea(.all)
-            Spacer() // PDF とボタンを分ける
-            Button(action: savePDF) {
-                Text("PDFを保存")
-                    .frame(maxWidth: .infinity)
-                    .padding()
-                    .background(Color.blue)
-                    .foregroundColor(.white)
-                    .cornerRadius(10)
-                    .padding()
+            Spacer(minLength: 20)
+            Button("PDFを保存") {
+                savePDF(data: data)  // self を使わない
             }
+            .padding()
+            .background(Color.blue)
+            .foregroundColor(.white)
+            .cornerRadius(10)
         }
         // ✅ ナビゲーションバーを青背景・白アイコンに統一
         .toolbarBackground(Color.blue, for: .navigationBar)
@@ -53,16 +51,17 @@ struct ActivityView: UIViewControllerRepresentable {
     func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
 
-private func savePDF() {
+private func savePDF(data: Data) {
     let fileName = "領収書_\(Date().timeIntervalSince1970).pdf"
     let documentsURL = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
     let fileURL = documentsURL.appendingPathComponent(fileName)
     
     do {
-        try self.data.write(to: fileURL) // ← self.data にして明示
+        try data.write(to: fileURL)
         let historyManager = ReceiptHistoryManager()
-        let newEntry = ReceiptHistory(id: UUID(), data: self.data, date: Date()) // ← id を明示
+        let newEntry = ReceiptHistory(id: UUID(), data: data, date: Date())
         historyManager.add(entry: newEntry)
+        print("PDF保存成功")
     } catch {
         print("PDF保存失敗: \(error)")
     }
