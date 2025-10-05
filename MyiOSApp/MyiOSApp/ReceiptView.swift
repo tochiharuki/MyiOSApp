@@ -22,6 +22,7 @@ struct ReceiptView: View {
     @State private var showToast = false   // ← 通知表示フラグ
     @State private var showSaveAlert = false
     @State private var templateName = ""
+    @Environment(\.dismiss) private var dismiss
 
     func saveAsTemplate() {
         showSaveAlert = true
