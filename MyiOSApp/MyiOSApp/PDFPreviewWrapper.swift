@@ -22,14 +22,20 @@ struct PDFPreviewWrapper: View {
                 .edgesIgnoringSafeArea(.all)
             Spacer(minLength: 20)
             Button("PDFを保存") {
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
-                    showDocumentPicker = true
-                }
+                // ボタンを押した瞬間に一時ファイルを生成
+                savePDFToTemporaryFile()
             }
             .padding()
             .background(Color.blue)
             .foregroundColor(.white)
             .cornerRadius(10)
+            .sheet(isPresented: $showDocumentPicker) {
+                if let fileURL = tempFileURL {
+                    DocumentPickerView(fileURL: fileURL)
+                } else {
+                    Text("PDFを生成できませんでした。")
+                }
+            }
         }
         // ✅ ナビゲーションバーを統一
         .toolbarBackground(Color.blue, for: .navigationBar)
