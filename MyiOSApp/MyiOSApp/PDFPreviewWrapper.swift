@@ -6,6 +6,8 @@
 //
 
 import SwiftUI
+import PDFKit
+import Foundation  // Data を扱うため
 
 struct PDFPreviewWrapper: View {
     let data: Data

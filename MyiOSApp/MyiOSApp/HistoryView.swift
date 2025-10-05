@@ -4,6 +4,9 @@
 //
 //  Created by Tochishita Haruki on 2025/09/21.
 //
+import SwiftUI
+import Foundation  // JSONDecoder, Data など
+
 
 struct HistoryView: View {
     @State private var histories: [ReceiptHistory] = []

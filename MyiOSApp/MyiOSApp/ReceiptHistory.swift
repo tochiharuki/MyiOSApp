@@ -8,7 +8,7 @@
 import Foundation
 
 struct ReceiptHistory: Identifiable, Codable {
-    let id = UUID()
+    var id: UUID 
     let data: Data
     let date: Date
 }
