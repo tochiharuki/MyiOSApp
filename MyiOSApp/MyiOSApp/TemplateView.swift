@@ -27,6 +27,7 @@ struct TemplateView: View {
         }
         .navigationTitle("テンプレート一覧")
         .navigationBarTitleDisplayMode(.inline)
+        .navigationBarBackButtonHidden(true) // ← 標準の戻るを非表示に
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {

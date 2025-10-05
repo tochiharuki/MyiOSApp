@@ -51,7 +51,6 @@ struct ReceiptView: View {
         .onTapGesture { hideKeyboard() }
         .navigationTitle("領収書作成")
         .navigationBarTitleDisplayMode(.inline)
-        .navigationBarBackButtonHidden(true) // ← 標準の戻るを非表示に
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
