@@ -59,14 +59,10 @@ private func savePDF() {
     let fileURL = documentsURL.appendingPathComponent(fileName)
     
     do {
-        try data.write(to: fileURL)
-        print("PDF保存完了: \(fileURL)")
-        
-        // 履歴に追加
+        try self.data.write(to: fileURL) // ← self.data にして明示
         let historyManager = ReceiptHistoryManager()
-        let newEntry = ReceiptHistory(data: data, date: Date())
+        let newEntry = ReceiptHistory(id: UUID(), data: self.data, date: Date()) // ← id を明示
         historyManager.add(entry: newEntry)
-        
     } catch {
         print("PDF保存失敗: \(error)")
     }
