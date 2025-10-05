@@ -279,7 +279,7 @@ struct ReceiptView: View {
     // MARK: - 印紙枠切り替えセクション
     private var stampSection: some View {
         VStack(alignment: .leading, spacing: 6) {
-            Toggle(isOn: $receiptData.showStampFrame) {
+            Toggle(isOn: $receiptData.showStampBox) {
                 Text("収入印紙枠を表示")
                     .fontWeight(.medium)
             }
