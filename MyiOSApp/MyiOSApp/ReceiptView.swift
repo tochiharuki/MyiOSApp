@@ -42,6 +42,19 @@ struct ReceiptView: View {
         .onTapGesture { hideKeyboard() }
         .navigationTitle("領収書作成")
         .navigationBarTitleDisplayMode(.inline)
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    // 戻る処理
+                    // NavigationStack なら自動で戻れる
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.backward")
+                        Text("戻る")
+                    }
+                }
+            }
+        }
         .sheet(isPresented: $showPreview) {
             if let data = pdfData {
                 NavigationView {
