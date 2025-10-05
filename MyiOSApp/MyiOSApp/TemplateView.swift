@@ -11,6 +11,7 @@ struct TemplateView: View {
     @State private var templates: [ReceiptTemplate] = []
     private let manager = TemplateManager()
     @State private var selectedTemplate: ReceiptTemplate?
+    @Environment(\.dismiss) private var dismiss
 
     var body: some View {
         List {
