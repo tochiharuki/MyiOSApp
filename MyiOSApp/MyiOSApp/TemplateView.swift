@@ -25,6 +25,18 @@ struct TemplateView: View {
             }
         }
         .navigationTitle("テンプレート一覧")
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: {
+                    // 戻る処理
+                    // NavigationStack なら自動で戻れる
+                }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.backward")
+                        Text("戻る")
+                    }
+                }
+            }
         .onAppear {
             templates = manager.loadTemplates()
         }

@@ -334,12 +334,12 @@ struct ReceiptView: View {
             }
             .frame(maxWidth: .infinity)
             .padding()
-            .background(Color.orange.opacity(0.1))
-            .foregroundColor(.orange)
+            .background(Color.blue.opacity(0.1))
+            .foregroundColor(.blue)
             .cornerRadius(10)
             .overlay(
                 RoundedRectangle(cornerRadius: 10)
-                    .stroke(Color.orange.opacity(0.3), lineWidth: 1)
+                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
             )
         }
         .padding(.top, 20)
