@@ -274,7 +274,7 @@ struct ReceiptView: View {
                         .font(.caption)
                         .padding(.horizontal, 8)
                         .padding(.vertical, 4)
-                        .background(Color.green.opacity(0.85))
+                        .background(Color.blue.opacity(0.85))
                         .foregroundColor(.white)
                         .cornerRadius(6)
                 }

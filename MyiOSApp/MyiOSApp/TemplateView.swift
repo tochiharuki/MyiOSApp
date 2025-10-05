@@ -28,8 +28,7 @@ struct TemplateView: View {
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
                 Button(action: {
-                    // 戻る処理
-                    // NavigationStack なら自動で戻れる
+                    dismiss()  // ← NavigationStackならこれで戻る
                 }) {
                     HStack(spacing: 4) {
                         Image(systemName: "chevron.backward")
@@ -37,6 +36,7 @@ struct TemplateView: View {
                     }
                 }
             }
+        }
         .onAppear {
             templates = manager.loadTemplates()
         }
