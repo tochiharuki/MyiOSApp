@@ -23,6 +23,8 @@ struct ReceiptData: Identifiable, Codable {
     
      /// 発行元（複数行対応）
     var issuer: String = ""
+    /// ✅ 収入印紙枠の表示可否（デフォルト非表示）
+    var showStampFrame: Bool = false
     
 
     // MARK: - 計算プロパティ
