@@ -17,6 +17,12 @@ class ReceiptHistoryManager {
         }
         return []
     }
+    // 履歴を保存するファイルURLを取得
+    private func getFileURL() -> URL {
+        let documents = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask).first!
+        return documents.appendingPathComponent(fileName)
+    }
+
     func saveHistory(_ histories: [ReceiptHistory]) {
         let url = getFileURL()
         if let data = try? JSONEncoder().encode(histories) {
