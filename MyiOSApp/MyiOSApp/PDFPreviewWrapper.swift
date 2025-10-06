@@ -1,10 +1,16 @@
+//
+//  PDFPreviewWrapper.swift
+//  MyiOSApp
+//
+//  Created by Tochishita Haruki on 2025/09/23.
+//
+
 import SwiftUI
 import PDFKit
 import UIKit
 
 struct PDFPreviewWrapper: View {
     let data: Data
-
     @State private var showDocumentPicker = false
     @State private var tempFileURL: URL? = nil
     @State private var errorMessage: String? = nil
@@ -13,70 +19,69 @@ struct PDFPreviewWrapper: View {
         VStack {
             PDFKitView(data: data)
                 .edgesIgnoringSafeArea(.all)
-
+            
             Spacer(minLength: 20)
-
+            
             Button("PDFを保存") {
-                generatePDFAndShowPicker()
+                savePDFToTemporaryFile()
             }
             .padding()
             .background(Color.blue)
             .foregroundColor(.white)
             .cornerRadius(10)
-
-            // 🔻 エラーがある場合のみ表示
-            if let errorMessage = errorMessage {
-                Text("PDFを生成できませんでした。\n\(errorMessage)")
-                    .font(.footnote)
+            
+            // ✅ エラーがある場合のみ表示
+            if let error = errorMessage {
+                Text(error)
                     .foregroundColor(.red)
-                    .multilineTextAlignment(.center)
-                    .padding(.top, 10)
-                    .transition(.opacity)
+                    .padding(.top, 8)
             }
         }
-        .animation(.easeInOut, value: errorMessage)
+        // ✅ ナビゲーションバー設定
         .toolbarBackground(Color.blue, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
+        
+        // ✅ DocumentPicker 表示
         .sheet(isPresented: $showDocumentPicker) {
             if let fileURL = tempFileURL {
                 DocumentPickerView(fileURL: fileURL)
+            } else {
+                Text("PDFを生成できませんでした。")
+                    .foregroundColor(.red)
             }
         }
     }
 
-    // 🔹 1回目から確実に動くようにしたバージョン
-    private func generatePDFAndShowPicker() {
-        // データチェック
-        guard data.count > 0 else {
-            errorMessage = "PDFデータが空です。"
-            print("❌ PDFデータが空")
-            return
-        }
-
-        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(
-            "領収書_\(Date().timeIntervalSince1970).pdf"
-        )
-
+    // MARK: - PDFを一時保存してPicker表示
+    private func savePDFToTemporaryFile() {
+        // まずエラーメッセージをクリア
+        errorMessage = nil
+        
+        // 一時ファイルのパス
+        let tempURL = FileManager.default.temporaryDirectory
+            .appendingPathComponent("領収書_\(Date().timeIntervalSince1970).pdf")
+        
         do {
+            // PDFデータを書き込み
             try data.write(to: tempURL)
-            tempFileURL = tempURL
-            errorMessage = nil
-
-            print("✅ 一時PDF作成成功: \(tempURL)")
-
-            // 🔹 sheet 表示を遅延させる（SwiftUI のタイミングバグ対策）
+            
+            // 少し遅延を入れて state 反映を安定化
             DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                showDocumentPicker = true
+                self.tempFileURL = tempURL
+                self.showDocumentPicker = true
             }
-
+            
+            print("✅ 一時PDF作成: \(tempURL)")
         } catch {
-            print("❌ PDF保存失敗: \(error)")
-            errorMessage = error.localizedDescription
+            // 失敗時のエラーメッセージ
+            self.errorMessage = "PDFの作成に失敗しました: \(error.localizedDescription)"
+            print("❌ PDF一時保存失敗: \(error)")
         }
     }
 }
 
+// MARK: - Document Picker
 struct DocumentPickerView: UIViewControllerRepresentable {
     let fileURL: URL
 
