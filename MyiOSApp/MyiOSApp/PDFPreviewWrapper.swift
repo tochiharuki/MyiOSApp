@@ -13,6 +13,9 @@ struct PDFPreviewWrapper: View {
     let data: Data
     @State private var showShareSheet = false
 
+    // 履歴管理用
+    private let historyManager = ReceiptHistoryManager()
+
     var body: some View {
         VStack {
             // ✅ PDFプレビュー
@@ -21,9 +24,10 @@ struct PDFPreviewWrapper: View {
 
             Spacer(minLength: 20)
 
-            // ✅ 共有ボタン（保存ボタンの代わり）
+            // ✅ 共有ボタン（押すと履歴に保存される）
             Button("PDFを共有") {
-                showShareSheet = true
+                saveToHistory()   // まず履歴に保存
+                showShareSheet = true  // 共有シート表示
             }
             .padding()
             .background(Color.blue)
@@ -31,7 +35,7 @@ struct PDFPreviewWrapper: View {
             .cornerRadius(10)
             .padding(.bottom, 30)
         }
-        // ✅ ナビゲーションバー統一
+        // ✅ ナビゲーションバーを青背景・白アイコンに統一
         .toolbarBackground(Color.blue, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
@@ -41,22 +45,30 @@ struct PDFPreviewWrapper: View {
             ActivityView(activityItems: [data])
         }
     }
+
     // ✅ 履歴へ保存する処理
     private func saveToHistory() {
-        // ReceiptData を保存対象にする場合
-        if let receiptData = try? JSONDecoder().decode(ReceiptData.self, from: data) {
+        do {
+            // ReceiptData にデコード
+            let receiptData = try JSONDecoder().decode(ReceiptData.self, from: data)
+
+            // ReceiptHistory 作成
             let entry = ReceiptHistory(
                 id: UUID(),
-                date: Date(),
-                data: try! JSONEncoder().encode(receiptData)
+                data: try JSONEncoder().encode(receiptData),
+                date: Date()
             )
+
+            // 保存
             historyManager.add(entry: entry)
             print("✅ 履歴に保存しました: \(entry.id)")
-        } else {
-            print("⚠️ ReceiptData のデコードに失敗しました")
+        } catch {
+            print("⚠️ ReceiptData のデコードまたは履歴保存に失敗しました: \(error)")
         }
     }
 }
+
+// ✅ UIKit の UIActivityViewController を SwiftUI でラップ
 struct ActivityView: UIViewControllerRepresentable {
     let activityItems: [Any]
 
