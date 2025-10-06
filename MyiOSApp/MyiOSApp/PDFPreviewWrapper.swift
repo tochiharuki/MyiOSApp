@@ -22,9 +22,12 @@ struct PDFPreviewWrapper: View {
             Spacer(minLength: 20)
 
             // ✅ 共有ボタン（保存ボタンの代わり）
+            // ✅ 共有ボタン（押すと履歴にも保存）
             Button("PDFを共有") {
+                saveToHistory() // ← 履歴に追加
                 showShareSheet = true
             }
+
             .padding()
             .background(Color.blue)
             .foregroundColor(.white)
@@ -41,6 +44,22 @@ struct PDFPreviewWrapper: View {
             ActivityView(activityItems: [data])
         }
     }
+    // ✅ 履歴へ保存する処理
+    private func saveToHistory() {
+        // ReceiptData を保存対象にする場合
+        if let receiptData = try? JSONDecoder().decode(ReceiptData.self, from: data) {
+            let entry = ReceiptHistory(
+                id: UUID(),
+                date: Date(),
+                data: try! JSONEncoder().encode(receiptData)
+            )
+            historyManager.add(entry: entry)
+            print("✅ 履歴に保存しました: \(entry.id)")
+        } else {
+            print("⚠️ ReceiptData のデコードに失敗しました")
+        }
+    }
+
 }
 
 struct ActivityView: UIViewControllerRepresentable {
