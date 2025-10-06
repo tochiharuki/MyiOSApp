@@ -26,7 +26,7 @@ struct PDFPreviewWrapper: View {
 
             // 🔻 エラーがある場合のみ表示
             if let errorMessage = errorMessage {
-                Text("PDFを生成できませんでした。\n\(errorMessage)")
+                Text("PDFを生成でききませんでした。\n\(errorMessage)")
                     .font(.footnote)
                     .foregroundColor(.red)
                     .multilineTextAlignment(.center)
