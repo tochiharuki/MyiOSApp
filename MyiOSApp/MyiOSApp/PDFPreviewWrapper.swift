@@ -29,6 +29,7 @@ struct PDFPreviewWrapper: View {
             .background(Color.blue)
             .foregroundColor(.white)
             .cornerRadius(10)
+            .padding(.bottom, 30)
         }
         // ✅ ナビゲーションバー統一
         .toolbarBackground(Color.blue, for: .navigationBar)
