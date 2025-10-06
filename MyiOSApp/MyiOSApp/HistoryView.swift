@@ -23,6 +23,8 @@ struct HistoryView: View {
                     }
                 }
             }
+            .onDelete(perform: deleteHistory)
+
         }
         .navigationTitle("履歴")
         .onAppear {
@@ -32,5 +34,11 @@ struct HistoryView: View {
     
     private func decodeData(_ data: Data) -> ReceiptData {
         (try? JSONDecoder().decode(ReceiptData.self, from: data)) ?? ReceiptData()
+    }
+    private func deleteHistory(at offsets: IndexSet) {
+        // 選択された履歴を削除
+        histories.remove(atOffsets: offsets)
+        // 保存データを更新
+        manager.saveHistory(histories)
     }
 }
