@@ -17,6 +17,12 @@ class ReceiptHistoryManager {
         }
         return []
     }
+    func saveHistory(_ histories: [ReceiptHistory]) {
+        let url = getFileURL()
+        if let data = try? JSONEncoder().encode(histories) {
+            try? data.write(to: url)
+        }
+    }
     
     func add(entry: ReceiptHistory) {
         var histories = loadHistory()
