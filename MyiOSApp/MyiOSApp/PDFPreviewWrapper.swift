@@ -7,89 +7,96 @@
 
 import SwiftUI
 import PDFKit
-import UIKit
+import UniformTypeIdentifiers
 
 struct PDFPreviewWrapper: View {
-    let data: Data
-    @State private var showDocumentPicker = false
-    @State private var tempFileURL: URL? = nil
-    @State private var errorMessage: String? = nil
+    let data: Data  // ✅ 生成済みPDFデータを受け取る
+
+    @State private var showFileExporter = false
+    @State private var showErrorMessage = false
 
     var body: some View {
-        VStack {
-            PDFKitView(data: data)
-                .edgesIgnoringSafeArea(.all)
-            
-            Spacer(minLength: 20)
-            
-            Button("PDFを保存") {
-                savePDFToTemporaryFile()
-            }
-            .padding()
-            .background(Color.blue)
-            .foregroundColor(.white)
-            .cornerRadius(10)
-            
-            // ✅ エラーがある場合のみ表示
-            if let error = errorMessage {
-                Text(error)
+        VStack(spacing: 20) {
+            // PDF表示
+            if let document = PDFDocument(data: data) {
+                PDFKitView(pdfDocument: document)
+                    .frame(maxHeight: 450)
+            } else {
+                Text("PDFの読み込みに失敗しました。")
                     .foregroundColor(.red)
-                    .padding(.top, 8)
+            }
+
+            // 保存ボタン
+            Button("PDFを保存") {
+                if !data.isEmpty {
+                    showFileExporter = true
+                } else {
+                    showErrorMessage = true
+                }
+            }
+            .buttonStyle(.borderedProminent)
+            .padding(.top, 20)
+
+            // 失敗時メッセージ
+            if showErrorMessage {
+                Text("PDFデータが無効です。")
+                    .foregroundColor(.red)
+                    .bold()
             }
         }
-        // ✅ ナビゲーションバー設定
+        .padding()
         .toolbarBackground(Color.blue, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
-        
-        // ✅ DocumentPicker 表示
-        .sheet(isPresented: $showDocumentPicker) {
-            if let fileURL = tempFileURL {
-                DocumentPickerView(fileURL: fileURL)
-            } else {
-                Text("PDFを生成できませんでした。")
-                    .foregroundColor(.red)
+        // ✅ ファイル保存先選択
+        .fileExporter(
+            isPresented: $showFileExporter,
+            document: PDFDocumentData(data: data),
+            contentType: .pdf,
+            defaultFilename: "領収書"
+        ) { result in
+            switch result {
+            case .success(let url):
+                print("✅ 保存完了: \(url.path)")
+            case .failure(let error):
+                print("❌ 保存失敗: \(error.localizedDescription)")
             }
-        }
-    }
-
-    // MARK: - PDFを一時保存してPicker表示
-    private func savePDFToTemporaryFile() {
-        // まずエラーメッセージをクリア
-        errorMessage = nil
-        
-        // 一時ファイルのパス
-        let tempURL = FileManager.default.temporaryDirectory
-            .appendingPathComponent("領収書_\(Date().timeIntervalSince1970).pdf")
-        
-        do {
-            // PDFデータを書き込み
-            try data.write(to: tempURL)
-            
-            // 少し遅延を入れて state 反映を安定化
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.1) {
-                self.tempFileURL = tempURL
-                self.showDocumentPicker = true
-            }
-            
-            print("✅ 一時PDF作成: \(tempURL)")
-        } catch {
-            // 失敗時のエラーメッセージ
-            self.errorMessage = "PDFの作成に失敗しました: \(error.localizedDescription)"
-            print("❌ PDF一時保存失敗: \(error)")
         }
     }
 }
 
-// MARK: - Document Picker
-struct DocumentPickerView: UIViewControllerRepresentable {
-    let fileURL: URL
+// MARK: - PDF表示ビュー
+struct PDFKitView: UIViewRepresentable {
+    let pdfDocument: PDFDocument
 
-    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
-        let picker = UIDocumentPickerViewController(forExporting: [fileURL])
-        picker.allowsMultipleSelection = false
-        return picker
+    func makeUIView(context: Context) -> PDFView {
+        let view = PDFView()
+        view.autoScales = true
+        view.displayMode = .singlePageContinuous
+        view.displayDirection = .vertical
+        view.document = pdfDocument
+        return view
     }
 
-    func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {}
+    func updateUIView(_ uiView: PDFView, context: Context) {
+        uiView.document = pdfDocument
+    }
+}
+
+// MARK: - FileDocument準拠で保存処理
+struct PDFDocumentData: FileDocument {
+    static var readableContentTypes: [UTType] { [.pdf] }
+    var data: Data
+
+    init(data: Data) {
+        self.data = data
+    }
+
+    init(configuration: ReadConfiguration) throws {
+        self.data = Data()
+    }
+
+    func fileWrapper(configuration: WriteConfiguration) throws -> FileWrapper {
+        FileWrapper(regularFileWithContents: data)
+    }
 }
