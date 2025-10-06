@@ -11,9 +11,7 @@ import UIKit
 
 struct PDFPreviewWrapper: View {
     let data: Data
-    @State private var showDocumentPicker = false
-    @State private var tempFileURL: URL? = nil
-    @State private var showError = false
+    @State private var showShareSheet = false
 
     var body: some View {
         VStack {
@@ -23,63 +21,33 @@ struct PDFPreviewWrapper: View {
 
             Spacer(minLength: 20)
 
-            // ✅ 保存ボタン
-            Button("PDFを保存") {
-                savePDFToTemporaryFile()
+            // ✅ 共有ボタン（保存ボタンの代わり）
+            Button("PDFを共有") {
+                showShareSheet = true
             }
             .padding()
             .background(Color.blue)
             .foregroundColor(.white)
             .cornerRadius(10)
         }
-        // ✅ ナビゲーションバー設定
+        // ✅ ナビゲーションバー統一
         .toolbarBackground(Color.blue, for: .navigationBar)
         .toolbarBackground(.visible, for: .navigationBar)
         .toolbarColorScheme(.dark, for: .navigationBar)
 
-        // ✅ 保存先選択シート
-        .sheet(isPresented: $showDocumentPicker) {
-            if let fileURL = tempFileURL {
-                DocumentPickerView(fileURL: fileURL)
-            } else {
-                Text("PDFを生成できませんでした。")
-                    .foregroundColor(.red)
-                    .padding()
-            }
-        }
-
-        // ✅ 失敗時アラート
-        .alert("PDFの保存に失敗しました", isPresented: $showError) {
-            Button("OK", role: .cancel) {}
-        }
-    }
-
-    // MARK: - PDFを一時ファイルとして保存
-    private func savePDFToTemporaryFile() {
-        let tempURL = FileManager.default.temporaryDirectory
-            .appendingPathComponent("領収書_\(Int(Date().timeIntervalSince1970)).pdf")
-
-        do {
-            try data.write(to: tempURL)
-            self.tempFileURL = tempURL
-            self.showDocumentPicker = true
-            print("✅ 一時PDF作成成功: \(tempURL)")
-        } catch {
-            print("❌ PDF一時保存失敗: \(error)")
-            self.showError = true
+        // ✅ シェアシート
+        .sheet(isPresented: $showShareSheet) {
+            ActivityView(activityItems: [data])
         }
     }
 }
 
-// MARK: - DocumentPickerView
-struct DocumentPickerView: UIViewControllerRepresentable {
-    let fileURL: URL
+struct ActivityView: UIViewControllerRepresentable {
+    let activityItems: [Any]
 
-    func makeUIViewController(context: Context) -> UIDocumentPickerViewController {
-        let picker = UIDocumentPickerViewController(forExporting: [fileURL])
-        picker.allowsMultipleSelection = false
-        return picker
+    func makeUIViewController(context: Context) -> UIActivityViewController {
+        UIActivityViewController(activityItems: activityItems, applicationActivities: nil)
     }
 
-    func updateUIViewController(_ uiViewController: UIDocumentPickerViewController, context: Context) {}
+    func updateUIViewController(_ uiViewController: UIActivityViewController, context: Context) {}
 }
