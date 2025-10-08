@@ -68,7 +68,7 @@ struct ReceiptView: View {
         .sheet(isPresented: $showPreview) {
             if let data = pdfData {
                 NavigationView {
-                    PDFPreviewWrapper(data: data)
+                     PDFPreviewWrapper(pdfData: data, receiptData: receiptData)
                         .navigationTitle("PDFプレビュー")
                         .navigationBarTitleDisplayMode(.inline)
                 }
