@@ -10,24 +10,25 @@ import PDFKit
 import UIKit
 
 struct PDFPreviewWrapper: View {
-    let data: Data
+    let pdfData: Data           // ← PDFプレビュー用
+    let receiptData: ReceiptData  // ← 履歴保存用
     @State private var showShareSheet = false
 
-    // 履歴管理用
+    // 履歴管理
     private let historyManager = ReceiptHistoryManager()
 
     var body: some View {
         VStack {
             // ✅ PDFプレビュー
-            PDFKitView(data: data)
+            PDFKitView(data: pdfData)
                 .edgesIgnoringSafeArea(.all)
 
             Spacer(minLength: 20)
 
-            // ✅ 共有ボタン（押すと履歴に保存される）
+            // ✅ 共有ボタン（押すと履歴にも保存）
             Button("PDFを共有") {
-                saveToHistory()   // まず履歴に保存
-                showShareSheet = true  // 共有シート表示
+                saveToHistory()      // 履歴に保存
+                showShareSheet = true  // シェアシート表示
             }
             .padding()
             .background(Color.blue)
@@ -42,28 +43,22 @@ struct PDFPreviewWrapper: View {
 
         // ✅ シェアシート
         .sheet(isPresented: $showShareSheet) {
-            ActivityView(activityItems: [data])
+            ActivityView(activityItems: [pdfData])
         }
     }
 
-    // ✅ 履歴へ保存する処理
+    // ✅ 履歴へ保存
     private func saveToHistory() {
         do {
-            // ReceiptData にデコード
-            let receiptData = try JSONDecoder().decode(ReceiptData.self, from: data)
-
-            // ReceiptHistory 作成
             let entry = ReceiptHistory(
                 id: UUID(),
                 data: try JSONEncoder().encode(receiptData),
                 date: Date()
             )
-
-            // 保存
             historyManager.add(entry: entry)
             print("✅ 履歴に保存しました: \(entry.id)")
         } catch {
-            print("⚠️ ReceiptData のデコードまたは履歴保存に失敗しました: \(error)")
+            print("⚠️ 履歴保存に失敗: \(error)")
         }
     }
 }
