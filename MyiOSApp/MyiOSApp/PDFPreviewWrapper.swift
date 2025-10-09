@@ -13,6 +13,7 @@ struct PDFPreviewWrapper: View {
     let pdfData: Data           // ← PDFプレビュー用
     let receiptData: ReceiptData  // ← 履歴保存用
     @State private var showShareSheet = false
+    @State private var shareURL: URL? = nil
 
     // 履歴管理
     private let historyManager = ReceiptHistoryManager()
@@ -27,9 +28,11 @@ struct PDFPreviewWrapper: View {
 
             // ✅ 共有ボタン（押すと履歴にも保存）
             Button("PDFを共有") {
-                saveToHistory()      // 履歴に保存
-                showShareSheet = true  // シェアシート表示
+                saveToHistory()       // 履歴に保存
+                prepareShareFile()    // ← ✅ ファイル名付きで一時PDF作成
+                showShareSheet = true // シェアシート表示
             }
+  
             .padding()
             .background(Color.blue)
             .foregroundColor(.white)
@@ -43,7 +46,9 @@ struct PDFPreviewWrapper: View {
 
         // ✅ シェアシート
         .sheet(isPresented: $showShareSheet) {
-            ActivityView(activityItems: [pdfData])
+            if let shareURL = shareURL {
+                ActivityView(activityItems: [shareURL])
+            }
         }
     }
 
@@ -61,6 +66,17 @@ struct PDFPreviewWrapper: View {
             print("⚠️ 履歴保存に失敗: \(error)")
         }
     }
+    // ✅ 一時ファイルを生成して共有用に準備
+    private func prepareShareFile() {
+        let formatter = DateFormatter()
+        formatter.dateFormat = "yyyyMMdd_HHmm"
+        let fileName = "領収書_\(formatter.string(from: Date())).pdf"
+        
+        let tempURL = FileManager.default.temporaryDirectory.appendingPathComponent(fileName)
+        try? pdfData.write(to: tempURL)
+        shareURL = tempURL
+    }
+
 }
 
 // ✅ UIKit の UIActivityViewController を SwiftUI でラップ
