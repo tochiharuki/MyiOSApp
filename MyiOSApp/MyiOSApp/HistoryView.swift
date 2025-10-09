@@ -4,9 +4,9 @@
 //
 //  Created by Tochishita Haruki on 2025/09/21.
 //
+
 import SwiftUI
 import Foundation  // JSONDecoder, Data など
-
 
 struct HistoryView: View {
     @State private var histories: [ReceiptHistory] = []
@@ -17,14 +17,13 @@ struct HistoryView: View {
             ForEach(histories) { history in
                 NavigationLink(destination: ReceiptView(prefilledData: decodeData(history.data))) {
                     VStack(alignment: .leading) {
-                        Text("日付: \(history.date.formatted(.dateTime.year().month().day()))")
+                        Text("日付: \(formattedDate(history.date))")   // ← ✅ 日本語形式
                         Text("宛名: \(decodeData(history.data).recipient)")
                         Text("但し書き: \(decodeData(history.data).remarks)")
                     }
                 }
             }
             .onDelete(perform: deleteHistory)
-
         }
         .navigationTitle("履歴")
         .onAppear {
@@ -32,13 +31,22 @@ struct HistoryView: View {
         }
     }
     
+    /// ✅ ReceiptData を安全に復元
     private func decodeData(_ data: Data) -> ReceiptData {
         (try? JSONDecoder().decode(ReceiptData.self, from: data)) ?? ReceiptData()
     }
+    
+    /// ✅ 履歴削除処理
     private func deleteHistory(at offsets: IndexSet) {
-        // 選択された履歴を削除
         histories.remove(atOffsets: offsets)
-        // 保存データを更新
         manager.saveHistory(histories)
+    }
+    
+    /// ✅ 日付を日本語形式で表示する関数
+    private func formattedDate(_ date: Date) -> String {
+        let formatter = DateFormatter()
+        formatter.locale = Locale(identifier: "ja_JP") // ← 日本語ロケール
+        formatter.dateFormat = "yyyy年MM月dd日"         // ← 任意のフォーマット
+        return formatter.string(from: date)
     }
 }
