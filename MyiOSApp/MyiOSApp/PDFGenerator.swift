@@ -21,7 +21,7 @@ struct PDFGenerator {
     // 領収番号生成（日付 + ランダム）
     private static func generateReceiptNo(from date: Date) -> String {
         let formatter = DateFormatter()
-        formatter.dateFormat = "yyyy年MM月dd日"
+        formatter.dateFormat = "yyyyMMdd"
         formatter.locale = Locale(identifier: "ja_JP")
         formatter.calendar = Calendar(identifier: .gregorian)
         formatter.timeZone = TimeZone(identifier: "Asia/Tokyo")
