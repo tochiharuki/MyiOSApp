@@ -99,6 +99,7 @@ struct PDFGenerator {
             let receiptNo = generateReceiptNo(from: receipt.issueDate)
             let formatter = DateFormatter()
             formatter.dateFormat = "yyyy年MM月dd日"
+            formatter.locale = Locale(identifier: "ja_JP") 
             
             let rightAttr: [NSAttributedString.Key: Any] = [.font: nameFont]
             "領収番号: \(receiptNo)".draw(at: CGPoint(x: pageWidth - 250, y: recipientPoint.y), withAttributes: rightAttr)
