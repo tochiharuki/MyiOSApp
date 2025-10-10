@@ -41,21 +41,23 @@ struct PDFGenerator {
     static func generate(from receipt: ReceiptData) -> Data {
         let pdfMetaData = [
             kCGPDFContextCreator: "MyiOSApp",
+            kCGPDFContextAuthor: "MyiOSApp User",
             kCGPDFContextTitle: "領収書"
         ]
         
         let format = UIGraphicsPDFRendererFormat()
         format.documentInfo = pdfMetaData as [String: Any]
         
-        let pageWidth: CGFloat = 841.8   // A4横
+        // A4 横
+        let pageWidth: CGFloat = 841.8
         let pageHeight: CGFloat = 595.2
         let pageRect = CGRect(x: 0, y: 0, width: pageWidth, height: pageHeight)
         
         let renderer = UIGraphicsPDFRenderer(bounds: pageRect, format: format)
         
-        return renderer.pdfData { context in
+        let data = renderer.pdfData { context in
             context.beginPage()
-            let ctx = UIGraphicsGetCurrentContext()!
+            guard let ctx = UIGraphicsGetCurrentContext() else { return }
             
             // --- タイトル ---
             let title = "領　収　書"
@@ -63,81 +65,88 @@ struct PDFGenerator {
             let titleAttr: [NSAttributedString.Key: Any] = [.font: titleFont]
             let titleSize = title.size(withAttributes: titleAttr)
             
-            // ✅ タイトルの描画位置を調整
-            let titleY: CGFloat = 60  // ← 上に余裕（上マージン）
+            // 上余白（上マージン）
+            let titleY: CGFloat = 60
             title.draw(at: CGPoint(x: (pageWidth - titleSize.width)/2, y: titleY), withAttributes: titleAttr)
             
-            // ✅ タイトルの下に余裕を追加
-            let afterTitleY = titleY + titleSize.height + 60  // ← "+40" で下マージン（数値を増やせばさらに余裕）
+            // タイトル下余白基準（他要素はこれを基準に配置）
+            let afterTitleY = titleY + titleSize.height + 40 // 下余白を広めに
             
-            // 下線
+            // タイトル下線（見た目整える）
             ctx.setStrokeColor(UIColor.black.cgColor)
             ctx.setLineWidth(1.2)
-            ctx.move(to: CGPoint(x: 60, y: titleY + titleSize.height + 15))
-            ctx.addLine(to: CGPoint(x: pageWidth - 60, y: titleY + titleSize.height + 15))
+            ctx.move(to: CGPoint(x: 60, y: titleY + titleSize.height + 18))
+            ctx.addLine(to: CGPoint(x: pageWidth - 60, y: titleY + titleSize.height + 18))
             ctx.strokePath()
             
             // --- 宛名 ---
             let nameFont = ReceiptFont.regular(size: 22)
             let recipient = "\(receipt.recipient) \(receipt.recipientSuffix)"
-            let recipientY: CGFloat = titleY + titleSize.height + 60
+            let recipientY: CGFloat = afterTitleY + 10
             recipient.draw(at: CGPoint(x: 80, y: recipientY), withAttributes: [.font: nameFont])
             
             let recipientSize = recipient.size(withAttributes: [.font: nameFont])
-            ctx.move(to: CGPoint(x: 80, y: recipientY + recipientSize.height + 3))
-            ctx.addLine(to: CGPoint(x: 80 + recipientSize.width + 40, y: recipientY + recipientSize.height + 3))
+            ctx.setLineWidth(1.0)
+            ctx.move(to: CGPoint(x: 80, y: recipientY + recipientSize.height + 6))
+            ctx.addLine(to: CGPoint(x: 80 + recipientSize.width + 40, y: recipientY + recipientSize.height + 6))
             ctx.strokePath()
             
-            // --- 発行日・番号（右上） ---
+            // --- 発行日・領収番号（右上） ---
             let infoFont = ReceiptFont.regular(size: 14)
-            let formatter = DateFormatter()
-            formatter.dateFormat = "yyyy年MM月dd日"
-            let rightX = pageWidth - 250
-            "領収番号：\(generateReceiptNo(from: receipt.issueDate))".draw(at: CGPoint(x: rightX, y: recipientY), withAttributes: [.font: infoFont])
-            "発行日：\(formatter.string(from: receipt.issueDate))".draw(at: CGPoint(x: rightX, y: recipientY + 25), withAttributes: [.font: infoFont])
+            let dateFormatter = DateFormatter()
+            dateFormatter.locale = Locale(identifier: "ja_JP")
+            dateFormatter.dateFormat = "yyyy年MM月dd日"
+            let rightX = pageWidth - 260
+            ("領収番号: \(generateReceiptNo(from: receipt.issueDate))" as NSString).draw(at: CGPoint(x: rightX, y: recipientY), withAttributes: [.font: infoFont])
+            ("発行日: \(dateFormatter.string(from: receipt.issueDate))" as NSString).draw(at: CGPoint(x: rightX, y: recipientY + 24), withAttributes: [.font: infoFont])
             
             // --- 金額 ---
             let total = receipt.totalAmount
             let amountText = "¥ \(formatNumber(total))"
             let amountFont = ReceiptFont.bold(size: 36)
             let amountSize = amountText.size(withAttributes: [.font: amountFont])
-            let amountY = recipientY + 100
-            let amountX = (pageWidth - amountSize.width)/2
-            amountText.draw(at: CGPoint(x: amountX, y: amountY), withAttributes: [.font: amountFont])
+            let amountY = recipientY + 90
+            let amountX = (pageWidth - amountSize.width) / 2
+            (amountText as NSString).draw(at: CGPoint(x: amountX, y: amountY), withAttributes: [.font: amountFont])
             
-            // 金額下線
+            // 金額下線（幅を金額に合わせて上品に）
             ctx.setLineWidth(1.0)
-            ctx.move(to: CGPoint(x: amountX - 10, y: amountY + amountSize.height + 6))
-            ctx.addLine(to: CGPoint(x: amountX + amountSize.width + 10, y: amountY + amountSize.height + 6))
+            ctx.move(to: CGPoint(x: amountX - 12, y: amountY + amountSize.height + 8))
+            ctx.addLine(to: CGPoint(x: amountX + amountSize.width + 12, y: amountY + amountSize.height + 8))
             ctx.strokePath()
             
-            "(税込)".draw(at: CGPoint(x: amountX + amountSize.width + 20, y: amountY + 10),
-                          withAttributes: [.font: ReceiptFont.regular(size: 14)])
+            // (税込) 表示
+            ("(税込)" as NSString).draw(at: CGPoint(x: amountX + amountSize.width + 18, y: amountY + 10), withAttributes: [.font: ReceiptFont.regular(size: 14)])
             
-            // --- 但し書き ---
-            let remarks: String
+            // --- 右側の起点（但し書き・内訳を右にまとめる） ---
+            let contentTop: CGFloat = amountY + amountSize.height + 24
+            let rightAreaX: CGFloat = pageWidth / 2 + 20
+            let rightAreaWidth: CGFloat = pageWidth - rightAreaX - 80
+            
+            // --- 但し書き（右側） ---
+            let remarksText: String
             if receipt.remarks.isEmpty {
-                remarks = "上記正に領収いたしました。"
+                remarksText = "上記正に領収いたしました。"
             } else {
-                remarks = "但し　\(receipt.remarks)\n上記正に領収いたしました。"
+                remarksText = "但し　\(receipt.remarks)\n上記正に領収いたしました。"
             }
             
-            let paragraph = NSMutableParagraphStyle()
-            paragraph.lineSpacing = 8
+            let remarksParagraph = NSMutableParagraphStyle()
+            remarksParagraph.lineSpacing = 6
             let remarksAttr: [NSAttributedString.Key: Any] = [
                 .font: ReceiptFont.regular(size: 16),
-                .paragraphStyle: paragraph
+                .paragraphStyle: remarksParagraph
             ]
-            (remarks as NSString).draw(
-                in: CGRect(x: 80, y: amountY + 70, width: 400, height: 100),
-                withAttributes: remarksAttr
-            )
+            let remarksRect = CGRect(x: rightAreaX, y: contentTop, width: rightAreaWidth, height: 120)
+            (remarksText as NSString).draw(with: remarksRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: remarksAttr, context: nil)
             
-            // --- 内訳表 ---
-            var tableY = amountY + 170
+            // --- 内訳表（但し書きの下、右側） ---
+            var tableY = remarksRect.maxY + 12
+            let col1X: CGFloat = rightAreaX
+            let col2X: CGFloat = rightAreaX + 200
             func drawRow(label: String, value: String) {
-                label.draw(at: CGPoint(x: 100, y: tableY), withAttributes: [.font: infoFont])
-                value.draw(at: CGPoint(x: 340, y: tableY), withAttributes: [.font: infoFont])
+                (label as NSString).draw(at: CGPoint(x: col1X, y: tableY), withAttributes: [.font: infoFont])
+                (value as NSString).draw(at: CGPoint(x: col2X, y: tableY), withAttributes: [.font: infoFont])
                 tableY += 28
             }
             if receipt.taxRate == "8%" {
@@ -148,76 +157,75 @@ struct PDFGenerator {
                 drawRow(label: "10% 消費税", value: "¥\(formatNumber(receipt.tax))")
             }
             
-            // --- 収入印紙枠 ---
+            // --- 収入印紙枠（左側） ---
             if receipt.showStampBox {
-                // 枠のサイズと位置（上に少し余裕を持たせる）
                 let stampWidth: CGFloat = 100
                 let stampHeight: CGFloat = 100
                 let stampX: CGFloat = 80
-                let stampY: CGFloat = tableY + 40  // ← 下の表との距離が近いなら +40 → +60 でもOK
-            
+                // stamp を右側要素と重ならない高さにする：contentTop を基準にする
+                var stampY: CGFloat = contentTop
+                // 収入印紙がページ下にはみ出すのを防ぐため調整
+                let bottomMargin: CGFloat = 60
+                if stampY + stampHeight + bottomMargin > pageHeight {
+                    stampY = pageHeight - stampHeight - bottomMargin
+                }
+                
                 let stampRect = CGRect(x: stampX, y: stampY, width: stampWidth, height: stampHeight)
-            
+                
                 // 点線枠
                 let path = UIBezierPath(rect: stampRect)
                 UIColor.gray.setStroke()
                 path.setLineDash([5, 4], count: 2, phase: 0)
+                path.lineWidth = 1.0
                 path.stroke()
-            
-                // テキスト中央配置用の段落設定
+                
+                // テキストを中央に描画する（行間調整）
                 let stampText = "収 入\n印 紙"
                 let stampParagraph = NSMutableParagraphStyle()
                 stampParagraph.alignment = .center
-            
-                // 行間を少し広げてバランス調整
                 stampParagraph.lineSpacing = 6
-            
+                
                 let textAttributes: [NSAttributedString.Key: Any] = [
                     .font: ReceiptFont.regular(size: 16),
                     .paragraphStyle: stampParagraph
                 ]
-            
-                // テキストサイズを計算
-                let textSize = (stampText as NSString).boundingRect(
+                
+                let textBounding = (stampText as NSString).boundingRect(
                     with: CGSize(width: stampWidth, height: CGFloat.greatestFiniteMagnitude),
                     options: [.usesLineFragmentOrigin, .usesFontLeading],
                     attributes: textAttributes,
                     context: nil
-                ).size
-            
-                // 完全中央に配置（枠の中でテキスト高さを考慮）
-                let textY = stampRect.midY - textSize.height / 2
-                let textRect = CGRect(x: stampRect.origin.x,
-                                      y: textY,
-                                      width: stampRect.width,
-                                      height: textSize.height)
-            
+                )
+                // 中央揃え：枠の中央 - テキスト高さ/2
+                let textY = stampRect.midY - textBounding.height / 2
+                let textRect = CGRect(x: stampRect.origin.x, y: textY, width: stampRect.width, height: textBounding.height)
                 (stampText as NSString).draw(in: textRect, withAttributes: textAttributes)
             }
             
-            // --- 発行者情報（右下） ---
+            // --- 発行元（右下、余裕を持って） ---
             if !receipt.issuer.isEmpty {
                 let issuerParagraph = NSMutableParagraphStyle()
                 issuerParagraph.alignment = .right
                 issuerParagraph.lineSpacing = 6
                 
-                // 広く余裕をもたせて配置
-                let issuerRect = CGRect(
-                    x: pageWidth - 340,
-                    y: pageHeight - 150,
-                    width: 280,
-                    height: 120
-                )
+                let issuerAttr: [NSAttributedString.Key: Any] = [
+                    .font: ReceiptFont.regular(size: 16),
+                    .paragraphStyle: issuerParagraph,
+                    .foregroundColor: UIColor.black
+                ]
                 
-                (receipt.issuer as NSString).draw(
-                    in: issuerRect,
-                    withAttributes: [
-                        .font: ReceiptFont.regular(size: 16),
-                        .paragraphStyle: issuerParagraph
-                    ]
+                let issuerRect = CGRect(
+                    x: pageWidth - 360,
+                    y: pageHeight - 150,
+                    width: 320,
+                    height: 130
                 )
+                (receipt.issuer as NSString).draw(with: issuerRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: issuerAttr, context: nil)
             }
         }
+        
+        return data
     }
+
 
 }
