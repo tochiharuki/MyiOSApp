@@ -62,19 +62,22 @@ struct PDFGenerator {
             let titleFont = ReceiptFont.bold(size: 32)
             let titleAttr: [NSAttributedString.Key: Any] = [.font: titleFont]
             let titleSize = title.size(withAttributes: titleAttr)
-            title.draw(at: CGPoint(x: (pageWidth - titleSize.width)/2, y: 50), withAttributes: titleAttr)
+            
+            // 少し上余裕をもたせる
+            let titleY: CGFloat = 60
+            title.draw(at: CGPoint(x: (pageWidth - titleSize.width)/2, y: titleY), withAttributes: titleAttr)
             
             // 下線
             ctx.setStrokeColor(UIColor.black.cgColor)
             ctx.setLineWidth(1.2)
-            ctx.move(to: CGPoint(x: 60, y: 90))
-            ctx.addLine(to: CGPoint(x: pageWidth - 60, y: 90))
+            ctx.move(to: CGPoint(x: 60, y: titleY + titleSize.height + 15))
+            ctx.addLine(to: CGPoint(x: pageWidth - 60, y: titleY + titleSize.height + 15))
             ctx.strokePath()
             
             // --- 宛名 ---
             let nameFont = ReceiptFont.regular(size: 22)
             let recipient = "\(receipt.recipient) \(receipt.recipientSuffix)"
-            let recipientY: CGFloat = 130
+            let recipientY: CGFloat = titleY + titleSize.height + 60
             recipient.draw(at: CGPoint(x: 80, y: recipientY), withAttributes: [.font: nameFont])
             
             let recipientSize = recipient.size(withAttributes: [.font: nameFont])
@@ -96,9 +99,16 @@ struct PDFGenerator {
             let amountFont = ReceiptFont.bold(size: 36)
             let amountSize = amountText.size(withAttributes: [.font: amountFont])
             let amountY = recipientY + 100
-            amountText.draw(at: CGPoint(x: (pageWidth - amountSize.width)/2, y: amountY), withAttributes: [.font: amountFont])
+            let amountX = (pageWidth - amountSize.width)/2
+            amountText.draw(at: CGPoint(x: amountX, y: amountY), withAttributes: [.font: amountFont])
             
-            "(税込)".draw(at: CGPoint(x: (pageWidth + amountSize.width)/2 + 10, y: amountY + 10),
+            // 金額下線
+            ctx.setLineWidth(1.0)
+            ctx.move(to: CGPoint(x: amountX - 10, y: amountY + amountSize.height + 6))
+            ctx.addLine(to: CGPoint(x: amountX + amountSize.width + 10, y: amountY + amountSize.height + 6))
+            ctx.strokePath()
+            
+            "(税込)".draw(at: CGPoint(x: amountX + amountSize.width + 20, y: amountY + 10),
                           withAttributes: [.font: ReceiptFont.regular(size: 14)])
             
             // --- 但し書き ---
@@ -142,24 +152,38 @@ struct PDFGenerator {
                 UIColor.gray.setStroke()
                 path.setLineDash([5, 4], count: 2, phase: 0)
                 path.stroke()
+                
+                // 完全中央配置
                 let stampText = "収 入\n印 紙"
                 let stampParagraph = NSMutableParagraphStyle()
                 stampParagraph.alignment = .center
-                (stampText as NSString).draw(in: stampRect, withAttributes: [
-                    .font: ReceiptFont.regular(size: 16),
-                    .paragraphStyle: stampParagraph
-                ])
+                (stampText as NSString).draw(
+                    in: CGRect(x: 80, y: tableY + 40, width: 100, height: 100),
+                    withAttributes: [
+                        .font: ReceiptFont.regular(size: 16),
+                        .paragraphStyle: stampParagraph
+                    ]
+                )
             }
             
             // --- 発行者情報（右下） ---
             if !receipt.issuer.isEmpty {
                 let issuerParagraph = NSMutableParagraphStyle()
                 issuerParagraph.alignment = .right
-                issuerParagraph.lineSpacing = 4
+                issuerParagraph.lineSpacing = 6
+                
+                // 広く余裕をもたせて配置
+                let issuerRect = CGRect(
+                    x: pageWidth - 340,
+                    y: pageHeight - 150,
+                    width: 280,
+                    height: 120
+                )
+                
                 (receipt.issuer as NSString).draw(
-                    in: CGRect(x: pageWidth - 330, y: pageHeight - 120, width: 260, height: 100),
+                    in: issuerRect,
                     withAttributes: [
-                        .font: ReceiptFont.regular(size: 15),
+                        .font: ReceiptFont.regular(size: 16),
                         .paragraphStyle: issuerParagraph
                     ]
                 )
