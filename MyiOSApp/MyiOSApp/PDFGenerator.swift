@@ -58,14 +58,17 @@ struct PDFGenerator {
             let ctx = UIGraphicsGetCurrentContext()!
             
             // --- タイトル ---
-            let title = "領 収 書"
+            let title = "領　収　書"
             let titleFont = ReceiptFont.bold(size: 32)
             let titleAttr: [NSAttributedString.Key: Any] = [.font: titleFont]
             let titleSize = title.size(withAttributes: titleAttr)
             
-            // 少し上余裕をもたせる
-            let titleY: CGFloat = 60
+            // ✅ タイトルの描画位置を調整
+            let titleY: CGFloat = 60  // ← 上に余裕（上マージン）
             title.draw(at: CGPoint(x: (pageWidth - titleSize.width)/2, y: titleY), withAttributes: titleAttr)
+            
+            // ✅ タイトルの下に余裕を追加
+            let afterTitleY = titleY + titleSize.height + 40  // ← "+40" で下マージン（数値を増やせばさらに余裕）
             
             // 下線
             ctx.setStrokeColor(UIColor.black.cgColor)
