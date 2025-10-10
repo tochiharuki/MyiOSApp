@@ -62,7 +62,7 @@ struct PDFGenerator {
             
             // タイトル
             let title = "領収書"
-            let titleFont = ReceiptFont.bold(size: 24)
+            let titleFont = ReceiptFont.bold(size: 35)
             let titleAttributes: [NSAttributedString.Key: Any] = [.font: titleFont]
             let titleSize = title.size(withAttributes: titleAttributes)
             let titleRect = CGRect(x: (pageWidth - titleSize.width)/2,
@@ -79,7 +79,7 @@ struct PDFGenerator {
             ctx.strokePath()
             
             // 宛名
-            let nameFont = ReceiptFont.regular(size: 16)
+            let nameFont = ReceiptFont.regular(size: 24)
             let recipient = "\(receipt.recipient) \(receipt.recipientSuffix)"   // ← ここで連動
             let recipientPoint = CGPoint(x: 50, y: titleRect.maxY + 40)
             recipient.draw(at: recipientPoint, withAttributes: [.font: nameFont])

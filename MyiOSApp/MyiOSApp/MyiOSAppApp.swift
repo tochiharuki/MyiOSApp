@@ -12,7 +12,7 @@ struct MyiOSAppApp: App {
     init() {
         let appearance = UINavigationBarAppearance()
         appearance.configureWithOpaqueBackground()
-        appearance.backgroundColor = .systemBlue.withAlphaComponent(0.95)
+        appearance.backgroundColor = .systemBlue
         let backButtonAppearance = UIBarButtonItemAppearance()
         backButtonAppearance.normal.titleTextAttributes = [.foregroundColor: UIColor.white]
         appearance.backButtonAppearance = backButtonAppearance
