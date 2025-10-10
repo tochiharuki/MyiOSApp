@@ -150,39 +150,49 @@ struct PDFGenerator {
             
             // --- 収入印紙枠 ---
             if receipt.showStampBox {
-                // ✅ ページサイズ
-                let pageWidth: CGFloat = 595
-                let pageHeight: CGFloat = 842
-                
-                // ✅ 収入印紙枠のサイズと位置調整
+                // 枠のサイズと位置（上に少し余裕を持たせる）
                 let stampWidth: CGFloat = 100
-                let stampHeight: CGFloat = 60
-                let margin: CGFloat = 40
-                
-                // ← ページの高さ - 枠の高さ - マージン で、下に余裕を持たせる
-                let stampRect = CGRect(
-                    x: margin,
-                    y: pageHeight - stampHeight - margin,
-                    width: stampWidth,
-                    height: stampHeight
-                )
-                
-                // ✅ 枠の線を描画
-                context.stroke(stampRect, width: 1.0)
-                
-                // ✅ 枠内中央に「収入印紙」テキストを描く
-                let stampText = "収入印紙"
-                let stampFont = UIFont.systemFont(ofSize: 12)
-                let stampAttr: [NSAttributedString.Key: Any] = [
-                    .font: stampFont,
-                    .foregroundColor: UIColor.black
+                let stampHeight: CGFloat = 100
+                let stampX: CGFloat = 80
+                let stampY: CGFloat = tableY + 40  // ← 下の表との距離が近いなら +40 → +60 でもOK
+            
+                let stampRect = CGRect(x: stampX, y: stampY, width: stampWidth, height: stampHeight)
+            
+                // 点線枠
+                let path = UIBezierPath(rect: stampRect)
+                UIColor.gray.setStroke()
+                path.setLineDash([5, 4], count: 2, phase: 0)
+                path.stroke()
+            
+                // テキスト中央配置用の段落設定
+                let stampText = "収 入\n印 紙"
+                let stampParagraph = NSMutableParagraphStyle()
+                stampParagraph.alignment = .center
+            
+                // 行間を少し広げてバランス調整
+                stampParagraph.lineSpacing = 6
+            
+                let textAttributes: [NSAttributedString.Key: Any] = [
+                    .font: ReceiptFont.regular(size: 16),
+                    .paragraphStyle: stampParagraph
                 ]
-                let textSize = (stampText as NSString).size(withAttributes: stampAttr)
-                let textPoint = CGPoint(
-                    x: stampRect.midX - textSize.width / 2,
-                    y: stampRect.midY - textSize.height / 2
-                )
-                (stampText as NSString).draw(at: textPoint, withAttributes: stampAttr)
+            
+                // テキストサイズを計算
+                let textSize = (stampText as NSString).boundingRect(
+                    with: CGSize(width: stampWidth, height: CGFloat.greatestFiniteMagnitude),
+                    options: [.usesLineFragmentOrigin, .usesFontLeading],
+                    attributes: textAttributes,
+                    context: nil
+                ).size
+            
+                // 完全中央に配置（枠の中でテキスト高さを考慮）
+                let textY = stampRect.midY - textSize.height / 2
+                let textRect = CGRect(x: stampRect.origin.x,
+                                      y: textY,
+                                      width: stampRect.width,
+                                      height: textSize.height)
+            
+                (stampText as NSString).draw(in: textRect, withAttributes: textAttributes)
             }
             
             // --- 発行者情報（右下） ---
