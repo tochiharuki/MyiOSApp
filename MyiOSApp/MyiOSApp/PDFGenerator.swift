@@ -68,7 +68,7 @@ struct PDFGenerator {
             title.draw(at: CGPoint(x: (pageWidth - titleSize.width)/2, y: titleY), withAttributes: titleAttr)
             
             // ✅ タイトルの下に余裕を追加
-            let afterTitleY = titleY + titleSize.height + 40  // ← "+40" で下マージン（数値を増やせばさらに余裕）
+            let afterTitleY = titleY + titleSize.height + 60  // ← "+40" で下マージン（数値を増やせばさらに余裕）
             
             // 下線
             ctx.setStrokeColor(UIColor.black.cgColor)
