@@ -150,23 +150,39 @@ struct PDFGenerator {
             
             // --- 収入印紙枠 ---
             if receipt.showStampBox {
-                let stampRect = CGRect(x: 80, y: tableY + 40, width: 100, height: 100)
-                let path = UIBezierPath(rect: stampRect)
-                UIColor.gray.setStroke()
-                path.setLineDash([5, 4], count: 2, phase: 0)
-                path.stroke()
+                // ✅ ページサイズ
+                let pageWidth: CGFloat = 595
+                let pageHeight: CGFloat = 842
                 
-                // 完全中央配置
-                let stampText = "収 入\n印 紙"
-                let stampParagraph = NSMutableParagraphStyle()
-                stampParagraph.alignment = .center
-                (stampText as NSString).draw(
-                    in: CGRect(x: 80, y: tableY + 40, width: 100, height: 100),
-                    withAttributes: [
-                        .font: ReceiptFont.regular(size: 16),
-                        .paragraphStyle: stampParagraph
-                    ]
+                // ✅ 収入印紙枠のサイズと位置調整
+                let stampWidth: CGFloat = 100
+                let stampHeight: CGFloat = 60
+                let margin: CGFloat = 40
+                
+                // ← ページの高さ - 枠の高さ - マージン で、下に余裕を持たせる
+                let stampRect = CGRect(
+                    x: margin,
+                    y: pageHeight - stampHeight - margin,
+                    width: stampWidth,
+                    height: stampHeight
                 )
+                
+                // ✅ 枠の線を描画
+                context.stroke(stampRect, width: 1.0)
+                
+                // ✅ 枠内中央に「収入印紙」テキストを描く
+                let stampText = "収入印紙"
+                let stampFont = UIFont.systemFont(ofSize: 12)
+                let stampAttr: [NSAttributedString.Key: Any] = [
+                    .font: stampFont,
+                    .foregroundColor: UIColor.black
+                ]
+                let textSize = (stampText as NSString).size(withAttributes: stampAttr)
+                let textPoint = CGPoint(
+                    x: stampRect.midX - textSize.width / 2,
+                    y: stampRect.midY - textSize.height / 2
+                )
+                (stampText as NSString).draw(at: textPoint, withAttributes: stampAttr)
             }
             
             // --- 発行者情報（右下） ---
