@@ -120,7 +120,7 @@ struct PDFGenerator {
             
             // --- 右側の起点（但し書き・内訳を右にまとめる） ---
             let contentTop: CGFloat = amountY + amountSize.height + 24
-            let rightAreaX: CGFloat = pageWidth / 2 + 20
+            let rightAreaX: CGFloat = pageWidth / 2 - 20
             let rightAreaWidth: CGFloat = pageWidth - rightAreaX - 80
             
             // --- 但し書き（右側） ---
@@ -165,7 +165,7 @@ struct PDFGenerator {
                 // stamp を右側要素と重ならない高さにする：contentTop を基準にする
                 var stampY: CGFloat = contentTop
                 // 収入印紙がページ下にはみ出すのを防ぐため調整
-                let bottomMargin: CGFloat = 60
+                let bottomMargin: CGFloat = 30
                 if stampY + stampHeight + bottomMargin > pageHeight {
                     stampY = pageHeight - stampHeight - bottomMargin
                 }
