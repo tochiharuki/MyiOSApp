@@ -92,7 +92,7 @@ struct PDFGenerator {
             ctx.strokePath()
             
             // --- 発行日・領収番号（右上） ---
-            let infoFont = ReceiptFont.regular(size: 14)
+            let infoFont = ReceiptFont.regular(size: 20)
             let dateFormatter = DateFormatter()
             dateFormatter.locale = Locale(identifier: "ja_JP")
             dateFormatter.dateFormat = "yyyy年MM月dd日"
