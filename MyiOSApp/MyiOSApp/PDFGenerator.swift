@@ -119,7 +119,7 @@ struct PDFGenerator {
             ("(税込)" as NSString).draw(at: CGPoint(x: amountX + amountSize.width + 18, y: amountY + 10), withAttributes: [.font: ReceiptFont.regular(size: 14)])
             
             // --- 右側の起点（但し書き・内訳を右にまとめる） ---
-            let contentTop: CGFloat = amountY + amountSize.height + 24
+            let contentTop: CGFloat = amountY + amountSize.height + 60
             let rightAreaX: CGFloat = pageWidth / 2 - 200
             let rightAreaWidth: CGFloat = pageWidth - rightAreaX - 80
             
