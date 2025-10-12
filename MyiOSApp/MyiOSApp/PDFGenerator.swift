@@ -137,7 +137,7 @@ struct PDFGenerator {
                 .font: ReceiptFont.regular(size: 16),
                 .paragraphStyle: remarksParagraph
             ]
-            let remarksRect = CGRect(x: rightAreaX, y: contentTop, width: rightAreaWidth, height: 120)
+            let remarksRect = CGRect(x: rightAreaX, y: contentTop, width: rightAreaWidth, height: 60)
             (remarksText as NSString).draw(with: remarksRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: remarksAttr, context: nil)
             
             // --- 内訳表（但し書きの下、右側） ---
