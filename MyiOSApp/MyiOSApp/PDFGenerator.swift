@@ -120,7 +120,7 @@ struct PDFGenerator {
             
             // --- 右側の起点（但し書き・内訳を右にまとめる） ---
             let contentTop: CGFloat = amountY + amountSize.height + 24
-            let rightAreaX: CGFloat = pageWidth / 2 - -80
+            let rightAreaX: CGFloat = pageWidth / 2 - 80
             let rightAreaWidth: CGFloat = pageWidth - rightAreaX - 80
             
             // --- 但し書き（右側） ---
