@@ -26,6 +26,7 @@
 		888609BD2E922F80006948EE /* TemplateManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609BC2E922F80006948EE /* TemplateManager.swift */; };
 		888609C02E92491E006948EE /* ReceiptHistory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609BF2E92491E006948EE /* ReceiptHistory.swift */; };
 		888609C22E924937006948EE /* ReceiptHistoryManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609C12E924937006948EE /* ReceiptHistoryManager.swift */; };
+		888609C62E9CA94D006948EE /* RequestFormView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 888609C52E9CA94D006948EE /* RequestFormView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +77,7 @@
 		888609BC2E922F80006948EE /* TemplateManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TemplateManager.swift; sourceTree = "<group>"; };
 		888609BF2E92491E006948EE /* ReceiptHistory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptHistory.swift; sourceTree = "<group>"; };
 		888609C12E924937006948EE /* ReceiptHistoryManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReceiptHistoryManager.swift; sourceTree = "<group>"; };
+		888609C52E9CA94D006948EE /* RequestFormView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RequestFormView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -129,6 +131,7 @@
 				884FF4152E7E6CAA00C1C682 /* Preview Content */,
 				884FF4172E7E6CAA00C1C682 /* MyiOSAppApp.swift */,
 				884FF4182E7E6CAA00C1C682 /* MyiOSApp.entitlements */,
+				888609C52E9CA94D006948EE /* RequestFormView.swift */,
 				888609A42E80386F006948EE /* ReceiptData.swift */,
 				888609A62E80397C006948EE /* HistoryView.swift */,
 				888609A82E803A9D006948EE /* PDFGenerator.swift */,
@@ -355,6 +358,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				888609C62E9CA94D006948EE /* RequestFormView.swift in Sources */,
 				884FF4382E7E6DE600C1C682 /* ContentView.swift in Sources */,
 				888609A92E803A9D006948EE /* PDFGenerator.swift in Sources */,
 				888609A72E80397C006948EE /* HistoryView.swift in Sources */,
