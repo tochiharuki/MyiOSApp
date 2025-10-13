@@ -27,7 +27,7 @@
 
     <!-- Team ID（Apple Developer のチームID） -->
     <key>teamID</key>
-    <string>YOUR_TEAM_ID</string>
+    <string>8UT7U3MV6X</string>
 
     <!-- App Store では不要な項目は削除済み -->
 </dict>
