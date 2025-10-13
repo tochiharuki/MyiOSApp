@@ -28,23 +28,26 @@ struct ContentView: View {
 // スプラッシュ画面
 struct SplashView: View {
     var body: some View {
-        ZStack {
+       ZStack {
             // 背景色
             Color.white.ignoresSafeArea()
             
-            // 画像を背景に表示（薄く）
-            Image("topbackground") // ← Assets に追加した画像の名前
-                .resizable()     // リサイズ可能に
-                .scaledToFit()       // 画面内に収まるように縮小
-                .frame(maxWidth: .infinity, maxHeight: .infinity)
-                .opacity(0.2)    // 薄さを調整（0.0〜1.0）
-                .ignoresSafeArea()
-            
-            // 上にテキスト
-            Text("領収書さん")
-                .font(.largeTitle)
-                .fontWeight(.bold)
-                .foregroundColor(.blue)
+            VStack(spacing: 20) {
+                // 背景画像（タイトルの上に薄く表示）
+                Image("topbackground") // ← Assets に追加した画像の名前
+                    .resizable()
+                    .scaledToFit()       // 画像比率を維持して縮小
+                    .frame(width: 150, height: 150) // 適度なサイズ
+                    .opacity(0.2)       // 薄くして邪魔にならないように
+                
+                // タイトル
+                Text("領収書さん")
+                    .font(.largeTitle)
+                    .fontWeight(.bold)
+                    .foregroundColor(.blue)
+            }
+            .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .padding(.top, 80) // 上部余白を追加
         }
     }
 }
