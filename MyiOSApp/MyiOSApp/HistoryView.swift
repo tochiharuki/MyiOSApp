@@ -29,6 +29,19 @@ struct HistoryView: View {
         .onAppear {
             histories = manager.loadHistory()
         }
+        .toolbar {
+            ToolbarItem(placement: .navigationBarLeading) {
+                Button(action: { dismiss() }) {
+                    HStack(spacing: 4) {
+                        Image(systemName: "chevron.backward")
+                            .foregroundColor(.white)
+                        Text("戻る")
+                            .foregroundColor(.white)  // ← ここで白に固定
+                    }
+                }
+            }
+        }
+        .navigationBarBackButtonHidden(true) // ← 標準の戻るを非表示に
     }
     
     /// ✅ ReceiptData を安全に復元
