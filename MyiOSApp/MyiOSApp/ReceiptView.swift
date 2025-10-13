@@ -37,7 +37,6 @@ struct ReceiptView: View {
             
             ScrollView {
                 VStack(alignment: .leading, spacing: 20) {
-                    headerSection
                     issueDateSection
                     recipientSection
                     taxSection
