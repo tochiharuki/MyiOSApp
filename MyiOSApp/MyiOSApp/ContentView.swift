@@ -51,6 +51,7 @@ struct MainView: View {
                 VStack(spacing: 24) {
                     NavigationLink(destination: ReceiptView()) {
                         Text("領収書を作成")
+                            .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.blue)
                             .foregroundColor(.white)
@@ -78,9 +79,8 @@ struct MainView: View {
                         Text("履歴から作成")
                             .frame(maxWidth: .infinity)
                             .padding()
-                            .foregroundColor(.gray)
-                            .background(Color.blue.opacity(0.1))
                             .foregroundColor(.blue)
+                            .background(Color.blue.opacity(0.1))
                             .cornerRadius(10)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10)
@@ -99,7 +99,6 @@ struct MainView: View {
                         }
                         .padding(.horizontal, 14)
                         .padding(.vertical, 10)
-                        .frame(maxWidth: .infinity)
                         .background(Color.gray.opacity(0.1))
                         .foregroundColor(.gray)
                         .cornerRadius(25)
