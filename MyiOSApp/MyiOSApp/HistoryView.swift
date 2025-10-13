@@ -10,6 +10,7 @@ import Foundation  // JSONDecoder, Data など
 
 struct HistoryView: View {
     @State private var histories: [ReceiptHistory] = []
+    @Environment(\.dismiss) private var dismiss
     private let manager = ReceiptHistoryManager()
     
     var body: some View {
