@@ -28,17 +28,19 @@ jobs:
           pod install --project-directory=MyiOSApp
         fi
 
-    # 3. Provisioning Profile（App Store用）を復元
+    # 3. Provisioning Profile を復元
     - name: Decode and install App Store provisioning profile
       run: |
         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
         echo "$APPSTORE_MOBILEPROVISION" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/MyiOSApp_AppStore.mobileprovision
+        ls -al ~/Library/MobileDevice/Provisioning\ Profiles/
       env:
         APPSTORE_MOBILEPROVISION: ${{ secrets.APPSTORE_MOBILEPROVISION }}
 
-    # 4. App Store 用証明書を Keychain にインポート
+    # 4. App Store 証明書を Keychain にインポート
     - name: Import App Store certificate to keychain
       run: |
+        echo "Importing App Store certificate..."
         echo "$CERTIFICATE_APPSTORE" | base64 --decode > /tmp/certificate_appstore.p12
         security create-keychain -p "$CERTIFICATE_APPSTORE_PASSWORD" build.keychain
         security import /tmp/certificate_appstore.p12 -k ~/Library/Keychains/build.keychain -P "$CERTIFICATE_APPSTORE_PASSWORD" -T /usr/bin/codesign
@@ -46,6 +48,7 @@ jobs:
         security default-keychain -s ~/Library/Keychains/build.keychain
         security unlock-keychain -p "$CERTIFICATE_APPSTORE_PASSWORD" ~/Library/Keychains/build.keychain
         security set-key-partition-list -S apple-tool:,apple: -s -k "$CERTIFICATE_APPSTORE_PASSWORD" ~/Library/Keychains/build.keychain
+        echo "Available code signing identities:"
         security find-identity -v -p codesigning || true
       env:
         CERTIFICATE_APPSTORE: ${{ secrets.CERTIFICATE_APPSTORE }}
@@ -55,12 +58,14 @@ jobs:
     - name: Clean DerivedData
       run: rm -rf ~/Library/Developer/Xcode/DerivedData
 
-    # 6. アーカイブ作成（App Store用）
+    # 6. アーカイブ作成
     - name: Build archive (App Store)
       working-directory: MyiOSApp
       run: |
         set -e
+        echo "Cleaning project..."
         xcodebuild clean -project MyiOSApp.xcodeproj -scheme MyiOSApp -configuration Release
+        echo "Building archive..."
         xcodebuild \
           -project MyiOSApp.xcodeproj \
           -scheme MyiOSApp \
@@ -72,12 +77,15 @@ jobs:
           CODE_SIGN_IDENTITY="Apple Distribution: Tochishita Haruki (8UT7U3MV6X)" \
           PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AppStore_Profile" \
           DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}"
+        echo "Archive created at $PWD/build/MyiOSApp_AppStore.xcarchive"
+        ls -al build
 
-    # 7. .ipa エクスポート（App Store）
+    # 7. IPA エクスポート
     - name: Export IPA (App Store)
       working-directory: MyiOSApp
       run: |
         set -e
+        echo "Exporting IPA..."
         xcodebuild -exportArchive \
           -archivePath $PWD/build/MyiOSApp_AppStore.xcarchive \
           -exportOptionsPlist ExportOptions_AppStore.plist \
@@ -88,6 +96,7 @@ jobs:
     # 8. アップロード（App Store Connect）
     - name: Upload IPA to App Store Connect
       run: |
+        echo "Uploading IPA to App Store Connect..."
         xcrun altool --upload-app \
           -f MyiOSApp/build/MyiOSApp.ipa \
           -t ios \
