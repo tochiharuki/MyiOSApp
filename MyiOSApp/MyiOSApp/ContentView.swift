@@ -39,7 +39,7 @@ struct SplashView: View {
                 Image("topbackground")
                     .resizable()
                     .scaledToFit()
-                    .frame(width: 120, height: 120)
+                    .frame(width: 170, height: 170)
                     .opacity(0.2)
                 
                 // アプリ名（少し小さく）
