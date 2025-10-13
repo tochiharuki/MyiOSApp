@@ -40,7 +40,7 @@ struct SplashView: View {
 
 // メイン画面
 struct MainView: View {
-    @State private var showRequestView = false
+    @State private var RequestFormView = false
     var body: some View {
         NavigationStack {
             ZStack {
@@ -89,7 +89,7 @@ struct MainView: View {
                     }
                     // --- ご要望ボタン（右下固定） ---
                     Button(action: {
-                        showRequestView = true
+                        RequestFormView = true
                     }) {
                         HStack {
                             Image(systemName: "envelope.fill")
@@ -104,7 +104,7 @@ struct MainView: View {
                     }
                     .padding(.trailing, 20)
                     .padding(.bottom, 30)
-                    .sheet(isPresented: $showRequestView) {
+                    .sheet(isPresented: $RequestFormView) {
                         RequestFormView() // ← ここでさっき作ったビューを呼び出す
                     }
                 }
