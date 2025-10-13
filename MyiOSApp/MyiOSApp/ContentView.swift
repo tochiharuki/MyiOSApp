@@ -28,33 +28,32 @@ struct ContentView: View {
 // スプラッシュ画面
 struct SplashView: View {
     var body: some View {
-       ZStack {
+        ZStack {
             // 背景
-            LinearGradient(
-                gradient: Gradient(colors: [Color.white, Color.blue.opacity(0.1)]),
-                startPoint: .top,
-                endPoint: .bottom
-            )
-            .ignoresSafeArea()
+            Color.white
+                .ignoresSafeArea()
             
+            // 中央にVStackでまとめる
             VStack(spacing: 20) {
-                // ロゴやイメージ
+                // 背景画像（タイトルの上に薄く表示）
                 Image("topbackground")
                     .resizable()
                     .scaledToFit()
                     .frame(width: 120, height: 120)
                     .opacity(0.2)
                 
-                // アプリ名
+                // アプリ名（少し小さく）
                 Text("領収書さん")
-                    .font(.largeTitle)
+                    .font(.title) // ← largeTitleからtitleに変更
                     .fontWeight(.bold)
                     .foregroundColor(.blue)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
+            .contentShape(Rectangle()) // VStack全体を中央に
         }
     }
 }
+
 
 
 // メイン画面
