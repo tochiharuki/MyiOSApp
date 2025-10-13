@@ -26,6 +26,7 @@ jobs:
       run: |
         if [ -f "MyiOSApp/Podfile" ]; then
           pod install --project-directory=MyiOSApp
+          pod --version
         fi
 
     # 3. Provisioning Profile を復元
@@ -33,14 +34,16 @@ jobs:
       run: |
         mkdir -p ~/Library/MobileDevice/Provisioning\ Profiles
         echo "$APPSTORE_MOBILEPROVISION" | base64 --decode > ~/Library/MobileDevice/Provisioning\ Profiles/MyiOSApp_AppStore.mobileprovision
+        echo "Provisioning profile installed:"
         ls -al ~/Library/MobileDevice/Provisioning\ Profiles/
+        echo "Profile details:"
+        security cms -D -i ~/Library/MobileDevice/Provisioning\ Profiles/MyiOSApp_AppStore.mobileprovision | plutil -p - | grep -A3 DeveloperCertificates
       env:
         APPSTORE_MOBILEPROVISION: ${{ secrets.APPSTORE_MOBILEPROVISION }}
 
     # 4. App Store 証明書を Keychain にインポート
     - name: Import App Store certificate to keychain
       run: |
-        echo "Importing App Store certificate..."
         echo "$CERTIFICATE_APPSTORE" | base64 --decode > /tmp/certificate_appstore.p12
         security create-keychain -p "$CERTIFICATE_APPSTORE_PASSWORD" build.keychain
         security import /tmp/certificate_appstore.p12 -k ~/Library/Keychains/build.keychain -P "$CERTIFICATE_APPSTORE_PASSWORD" -T /usr/bin/codesign
@@ -49,14 +52,16 @@ jobs:
         security unlock-keychain -p "$CERTIFICATE_APPSTORE_PASSWORD" ~/Library/Keychains/build.keychain
         security set-key-partition-list -S apple-tool:,apple: -s -k "$CERTIFICATE_APPSTORE_PASSWORD" ~/Library/Keychains/build.keychain
         echo "Available code signing identities:"
-        security find-identity -v -p codesigning || true
+        security find-identity -v -p codesigning ~/Library/Keychains/build.keychain
       env:
         CERTIFICATE_APPSTORE: ${{ secrets.CERTIFICATE_APPSTORE }}
         CERTIFICATE_APPSTORE_PASSWORD: ${{ secrets.CERTIFICATE_APPSTORE_PASSWORD }}
 
     # 5. DerivedData をクリーン
     - name: Clean DerivedData
-      run: rm -rf ~/Library/Developer/Xcode/DerivedData
+      run: |
+        rm -rf ~/Library/Developer/Xcode/DerivedData
+        echo "DerivedData cleaned"
 
     # 6. アーカイブ作成
     - name: Build archive (App Store)
@@ -91,12 +96,13 @@ jobs:
           -exportOptionsPlist ExportOptions_AppStore.plist \
           -exportPath $PWD/build
         echo "Contents of build directory:"
-        ls -al build || true
+        ls -al build
 
     # 8. アップロード（App Store Connect）
     - name: Upload IPA to App Store Connect
       run: |
         echo "Uploading IPA to App Store Connect..."
+        ls -al MyiOSApp/build
         xcrun altool --upload-app \
           -f MyiOSApp/build/MyiOSApp.ipa \
           -t ios \
