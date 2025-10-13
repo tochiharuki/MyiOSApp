@@ -4,7 +4,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var showMainView = false
-    @State private var showRequestView = false
+    
     
     var body: some View {
         Group {
@@ -40,6 +40,7 @@ struct SplashView: View {
 
 // メイン画面
 struct MainView: View {
+    @State private var showRequestView = false
     var body: some View {
         NavigationStack {
             ZStack {
