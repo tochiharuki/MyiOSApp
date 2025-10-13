@@ -10,7 +10,7 @@
     <key>signingStyle</key>
     <string>manual</string>
 
-    <!-- プロビジョニングプロファイル指定 -->
+    <!-- プロビジョニングプロファイルの指定 -->
     <key>provisioningProfiles</key>
     <dict>
         <key>tochi.MyiOSApp</key>
