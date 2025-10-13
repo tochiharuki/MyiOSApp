@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+    <!-- App Store 配布用 -->
+    <key>method</key>
+    <string>app-store</string>
+
+    <!-- 手動署名 -->
+    <key>signingStyle</key>
+    <string>manual</string>
+
+    <!-- プロビジョニングプロファイルの指定 -->
+    <key>provisioningProfiles</key>
+    <dict>
+        <key>tochi.MyiOSApp</key>
+        <string>MyiOSApp_AppStore_Profile</string>
+    </dict>
+
+    <!-- Bitcode は App Store 用では通常 false -->
+    <key>compileBitcode</key>
+    <false/>
+
+    <!-- Swift シンボルを除去（App Store 用） -->
+    <key>stripSwiftSymbols</key>
+    <true/>
+
+    <!-- Team ID（Apple Developer のチームID） -->
+    <key>teamID</key>
+    <string>YOUR_TEAM_ID</string>
+
+    <!-- App Store では不要な項目は削除済み -->
+</dict>
+</plist>
