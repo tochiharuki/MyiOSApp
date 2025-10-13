@@ -92,7 +92,7 @@ struct PDFGenerator {
             ctx.strokePath()
             
             // --- 発行日・領収番号（右上） ---
-            let infoFont = ReceiptFont.regular(size: 20)
+            let infoFont = ReceiptFont.regular(size: 17)
             let dateFormatter = DateFormatter()
             dateFormatter.locale = Locale(identifier: "ja_JP")
             dateFormatter.dateFormat = "yyyy年MM月dd日"
@@ -143,7 +143,7 @@ struct PDFGenerator {
             // --- 内訳表（但し書きの下、右側） ---
             var tableY = remarksRect.maxY + 12
             let col1X: CGFloat = rightAreaX
-            let col2X: CGFloat = rightAreaX + 100
+            let col2X: CGFloat = rightAreaX + 200
             func drawRow(label: String, value: String) {
                 (label as NSString).draw(at: CGPoint(x: col1X, y: tableY), withAttributes: [.font: infoFont])
                 (value as NSString).draw(at: CGPoint(x: col2X, y: tableY), withAttributes: [.font: infoFont])
@@ -162,7 +162,6 @@ struct PDFGenerator {
                 let stampWidth: CGFloat = 100
                 let stampHeight: CGFloat = 100
                 let stampX: CGFloat = 80
-                // stamp を右側要素と重ならない高さにする
                 var stampY: CGFloat = 400
                 // 収入印紙がページ下にはみ出すのを防ぐため調整
                 let bottomMargin: CGFloat = 30
