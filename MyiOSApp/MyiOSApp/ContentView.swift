@@ -87,28 +87,29 @@ struct MainView: View {
                                     .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                             )
                     }
-                    // --- ご要望ボタン（右下固定） ---
-                    Button(action: {
-                        showRequestForm = true
-                    }) {
-                        HStack {
-                            Image(systemName: "envelope.fill")
-                            Text("ご要望はこちら")
-                        }
-                        .padding(.horizontal, 14)
-                        .padding(.vertical, 10)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(25)
-                        .shadow(radius: 3)
-                    }
-                    .padding(.trailing, 20)
-                    .padding(.bottom, 30)
-                    .sheet(isPresented: $showRequestForm) {
-                        RequestFormView() // ← ここでさっき作ったビューを呼び出す
-                    }
                 }
                 .padding()
+
+                // --- ご要望ボタン（右下固定） ---
+                Button(action: {
+                    showRequestForm = true
+                }) {
+                    HStack {
+                        Image(systemName: "envelope.fill")
+                        Text("ご要望はこちら")
+                    }
+                    .padding(.horizontal, 16)
+                    .padding(.vertical, 12)
+                    .background(Color.blue)
+                    .foregroundColor(.white)
+                    .cornerRadius(30)
+                    .shadow(radius: 4)
+                }
+                .padding(.trailing, 20)
+                .padding(.bottom, 30)
+                .sheet(isPresented: $showRequestForm) {
+                    RequestFormView()
+                }
             }
             .navigationTitle("領収書作成")
             .navigationBarTitleDisplayMode(.inline)
