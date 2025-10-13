@@ -29,25 +29,29 @@ struct ContentView: View {
 struct SplashView: View {
     var body: some View {
        ZStack {
-            // 背景色
-            Color.white.ignoresSafeArea()
+            // 背景
+            LinearGradient(
+                gradient: Gradient(colors: [Color.white, Color.blue.opacity(0.1)]),
+                startPoint: .top,
+                endPoint: .bottom
+            )
+            .ignoresSafeArea()
             
             VStack(spacing: 20) {
-                // 背景画像（タイトルの上に薄く表示）
-                Image("topbackground") // ← Assets に追加した画像の名前
+                // ロゴやイメージ
+                Image("topbackground")
                     .resizable()
-                    .scaledToFit()       // 画像比率を維持して縮小
-                    .frame(width: 150, height: 150) // 適度なサイズ
-                    .opacity(0.2)       // 薄くして邪魔にならないように
+                    .scaledToFit()
+                    .frame(width: 120, height: 120)
+                    .opacity(0.2)
                 
-                // タイトル
+                // アプリ名
                 Text("領収書さん")
                     .font(.largeTitle)
                     .fontWeight(.bold)
                     .foregroundColor(.blue)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .padding(.top, 80) // 上部余白を追加
         }
     }
 }
