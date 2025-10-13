@@ -8,7 +8,7 @@
 import SwiftUI
 import MessageUI
 
-struct FeedbackView: View {
+struct RequestFormView: View {
     @State private var showMailView = false
     @State private var result: Result<MFMailComposeResult, Error>? = nil
     
