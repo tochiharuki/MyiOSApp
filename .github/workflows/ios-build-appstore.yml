@@ -73,7 +73,7 @@ jobs:
           PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AppStore_Profile" \
           DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}"
 
-    # 7. .ipa にエクスポート（App Store）
+    # 7. .ipa エクスポート（App Store）
     - name: Export IPA (App Store)
       working-directory: MyiOSApp
       run: |
