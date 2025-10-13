@@ -29,27 +29,27 @@ struct ContentView: View {
 struct SplashView: View {
     var body: some View {
         ZStack {
-            // 背景
-            Color.white
+            // 背景（青）
+            Color.blue
                 .ignoresSafeArea()
             
-            // 中央にVStackでまとめる
-            VStack(spacing: 20) {
-                // 背景画像（タイトルの上に薄く表示）
-                Image("topbackground")
-                    .resizable()
-                    .scaledToFit()
-                    .frame(width: 170, height: 170)
-                    .opacity(0.2)
-                
-                // アプリ名（少し小さく）
+            // アイコン（中央）
+            Image("topbackground") // ← Assets に白いアイコン画像を入れておく
+                .resizable()
+                .scaledToFit()
+                .frame(width: 120, height: 120)
+                .foregroundColor(.white)
+                .opacity(0.9)
+            
+            // タイトル（画面下）
+            VStack {
+                Spacer() // 上部スペース
                 Text("領収書さん")
-                    .font(.title) // ← largeTitleからtitleに変更
-                    .fontWeight(.bold)
-                    .foregroundColor(.blue)
+                    .font(.caption2) // ← かなり小さい
+                    .foregroundColor(.white.opacity(0.8))
+                    .padding(.bottom, 30)
             }
             .frame(maxWidth: .infinity, maxHeight: .infinity)
-            .contentShape(Rectangle()) // VStack全体を中央に
         }
     }
 }
