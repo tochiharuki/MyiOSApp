@@ -50,7 +50,6 @@ struct ReceiptView: View {
             }
         }
         .onTapGesture { hideKeyboard() }
-        .navigationTitle("領収書作成")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .navigationBarLeading) {
