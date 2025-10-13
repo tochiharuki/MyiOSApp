@@ -197,7 +197,7 @@ struct PDFGenerator {
                 (stampText as NSString).draw(in: textRect, withAttributes: textAttributes)
             }
             
-            // --- 発行元（右下、余裕を持って） ---
+            // --- 発行元（右下、余裕を持ってマージン付き） ---
             if !receipt.issuer.isEmpty {
                 let issuerParagraph = NSMutableParagraphStyle()
                 issuerParagraph.alignment = .right
@@ -209,13 +209,23 @@ struct PDFGenerator {
                     .foregroundColor: UIColor.black
                 ]
                 
+                // ✅ 右と下にマージンを追加（20pt）
+                let marginRight: CGFloat = 20
+                let marginBottom: CGFloat = 20
+                
                 let issuerRect = CGRect(
-                    x: pageWidth - 360,
-                    y: pageHeight - 150,
+                    x: pageWidth - 360 - marginRight, // ← 右に余白
+                    y: pageHeight - 150 - marginBottom, // ← 下に余白
                     width: 320,
                     height: 130
                 )
-                (receipt.issuer as NSString).draw(with: issuerRect, options: [.usesLineFragmentOrigin, .usesFontLeading], attributes: issuerAttr, context: nil)
+                
+                (receipt.issuer as NSString).draw(
+                    with: issuerRect,
+                    options: [.usesLineFragmentOrigin, .usesFontLeading],
+                    attributes: issuerAttr,
+                    context: nil
+                )
             }
         }
         
