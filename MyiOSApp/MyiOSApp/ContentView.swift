@@ -87,6 +87,7 @@ struct MainView: View {
                                     .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                             )
                     }
+                    .padding(.top, 30)
                     // --- ご要望ボタン（右下固定） ---
                     Button(action: {
                         showRequestForm = true
@@ -96,7 +97,7 @@ struct MainView: View {
                             Text("ご要望はこちら")
                         }
                         .padding(.horizontal, 14)
-                        .padding(.vertical, 40)
+                        .padding(.vertical, 10)
                         .background(Color.blue)
                         .foregroundColor(.white)
                         .cornerRadius(25)
