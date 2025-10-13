@@ -4,6 +4,7 @@ import SwiftUI
 
 struct ContentView: View {
     @State private var showMainView = false
+    @State private var showRequestView = false
     
     var body: some View {
         Group {
@@ -87,7 +88,7 @@ struct MainView: View {
                     }
                     // --- ご要望ボタン（右下固定） ---
                     Button(action: {
-                        showFeedback = true
+                        showRequestView = true
                     }) {
                         HStack {
                             Image(systemName: "envelope.fill")
@@ -102,7 +103,7 @@ struct MainView: View {
                     }
                     .padding(.trailing, 20)
                     .padding(.bottom, 30)
-                    .sheet(isPresented: $showFeedback) {
+                    .sheet(isPresented: $showRequestView) {
                         RequestFormView() // ← ここでさっき作ったビューを呼び出す
                     }
                 }
