@@ -87,7 +87,7 @@ struct MainView: View {
                                     .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                             )
                     }
-                    .padding(.top, 30)
+                    
                     // --- ご要望ボタン（右下固定） ---
                     Button(action: {
                         showRequestForm = true
@@ -103,6 +103,7 @@ struct MainView: View {
                         .cornerRadius(25)
                         .shadow(radius: 3)
                     }
+                    .padding(.top, 30)
                     .padding(.trailing, 20)
                     .padding(.bottom, 30)
                     .sheet(isPresented: $showRequestForm) {
