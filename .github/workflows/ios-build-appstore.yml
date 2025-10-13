@@ -92,4 +92,4 @@ jobs:
           -f MyiOSApp/build/MyiOSApp.ipa \
           -t ios \
           -u "${{ secrets.APPLE_ID }}" \
-          -p "${{ secrets.APP_SPECIFIC_PASSWORD }}"
+          -p "${{ secrets.APPSTORE_APP_SPECIFIC_PASSWORD }}"
