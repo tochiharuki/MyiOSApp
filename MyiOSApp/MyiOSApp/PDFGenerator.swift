@@ -143,7 +143,7 @@ struct PDFGenerator {
             // --- 内訳表（但し書きの下、右側） ---
             var tableY = remarksRect.maxY + 12
             let col1X: CGFloat = rightAreaX
-            let col2X: CGFloat = rightAreaX + 200
+            let col2X: CGFloat = rightAreaX + 150
             func drawRow(label: String, value: String) {
                 (label as NSString).draw(at: CGPoint(x: col1X, y: tableY), withAttributes: [.font: infoFont])
                 (value as NSString).draw(at: CGPoint(x: col2X, y: tableY), withAttributes: [.font: infoFont])
