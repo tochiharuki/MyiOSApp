@@ -51,11 +51,10 @@ struct MainView: View {
                 VStack(spacing: 24) {
                     NavigationLink(destination: ReceiptView()) {
                         Text("領収書を作成")
-                            .frame(maxWidth: .infinity)
                             .padding()
                             .background(Color.blue)
                             .foregroundColor(.white)
-                            .cornerRadius(25)
+                            .cornerRadius(10)
                             .shadow(radius: 3)
                             
                     }
@@ -80,10 +79,12 @@ struct MainView: View {
                             .frame(maxWidth: .infinity)
                             .padding()
                             .foregroundColor(.gray)
-                            .background(Color.white)
+                            .background(Color.blue.opacity(0.1))
+                            .foregroundColor(.blue)
+                            .cornerRadius(10)
                             .overlay(
                                 RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.gray, lineWidth: 1.5)
+                                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                             )
                             
                     }
@@ -98,9 +99,10 @@ struct MainView: View {
                         }
                         .padding(.horizontal, 14)
                         .padding(.vertical, 10)
+                        .frame(maxWidth: .infinity)
                         .background(Color.gray.opacity(0.1))
                         .foregroundColor(.gray)
-                        .cornerRadius(10)
+                        .cornerRadius(25)
                         .overlay(
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(Color.gray.opacity(0.3), lineWidth: 1)
