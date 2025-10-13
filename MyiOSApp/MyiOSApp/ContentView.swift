@@ -53,6 +53,17 @@ struct MainView: View {
                         Text("領収書を作成")
                             .frame(maxWidth: .infinity)
                             .padding()
+                            .background(Color.blue)
+                            .foregroundColor(.white)
+                            .cornerRadius(25)
+                            .shadow(radius: 3)
+                            
+                    }
+
+                    NavigationLink(destination: TemplateView()) {
+                        Text("テンプレートから作成")
+                            .frame(maxWidth: .infinity)
+                            .padding()
                             .background(Color.blue.opacity(0.1))
                             .foregroundColor(.blue)
                             .cornerRadius(10)
@@ -60,10 +71,12 @@ struct MainView: View {
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(Color.gray.opacity(0.3), lineWidth: 1)
                             )
+                            
+                            .cornerRadius(10)
                     }
 
-                    NavigationLink(destination: TemplateView()) {
-                        Text("テンプレートから作成")
+                    NavigationLink(destination: HistoryView()) {
+                        Text("履歴から作成")
                             .frame(maxWidth: .infinity)
                             .padding()
                             .foregroundColor(.gray)
@@ -72,20 +85,7 @@ struct MainView: View {
                                 RoundedRectangle(cornerRadius: 10)
                                     .stroke(Color.gray, lineWidth: 1.5)
                             )
-                            .cornerRadius(10)
-                    }
-
-                    NavigationLink(destination: HistoryView()) {
-                        Text("履歴から作成")
-                            .frame(maxWidth: .infinity)
-                            .padding()
-                            .background(Color.gray.opacity(0.1))
-                            .foregroundColor(.gray)
-                            .cornerRadius(10)
-                            .overlay(
-                                RoundedRectangle(cornerRadius: 10)
-                                    .stroke(Color.gray.opacity(0.3), lineWidth: 1)
-                            )
+                            
                     }
                     
                     // --- ご要望ボタン（右下固定） ---
@@ -98,10 +98,14 @@ struct MainView: View {
                         }
                         .padding(.horizontal, 14)
                         .padding(.vertical, 10)
-                        .background(Color.blue)
-                        .foregroundColor(.white)
-                        .cornerRadius(25)
-                        .shadow(radius: 3)
+                        .background(Color.gray.opacity(0.1))
+                        .foregroundColor(.gray)
+                        .cornerRadius(10)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                        )
+                        
                     }
                     .padding(.top, 30)
                     .padding(.trailing, 20)
