@@ -29,7 +29,17 @@ struct ContentView: View {
 struct SplashView: View {
     var body: some View {
         ZStack {
+            // 背景色
             Color.white.ignoresSafeArea()
+            
+            // 画像を背景に表示（薄く）
+            Image("トップ画面背景") // ← Assets に追加した画像の名前
+                .resizable()     // リサイズ可能に
+                .scaledToFill()  // 画面全体にフィット
+                .opacity(0.2)    // 薄さを調整（0.0〜1.0）
+                .ignoresSafeArea()
+            
+            // 上にテキスト
             Text("領収書さん")
                 .font(.largeTitle)
                 .fontWeight(.bold)
@@ -37,6 +47,7 @@ struct SplashView: View {
         }
     }
 }
+
 
 // メイン画面
 struct MainView: View {
