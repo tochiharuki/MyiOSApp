@@ -102,8 +102,10 @@ struct MainView: View {
                         .background(Color.gray.opacity(0.1))
                         .foregroundColor(.gray)
                         .cornerRadius(25)
-                        .shadow(radius: 3)
-                        
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 25)
+                                .stroke(Color.gray.opacity(0.3), lineWidth: 1)
+                        )
                         
                     }
                     .padding(.top, 30)
