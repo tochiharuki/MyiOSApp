@@ -96,7 +96,7 @@ struct MainView: View {
                             Text("ご要望はこちら")
                         }
                         .padding(.horizontal, 14)
-                        .padding(.vertical, 10)
+                        .padding(.vertical, 40)
                         .background(Color.blue)
                         .foregroundColor(.white)
                         .cornerRadius(25)
