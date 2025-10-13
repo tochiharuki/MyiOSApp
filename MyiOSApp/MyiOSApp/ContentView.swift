@@ -34,7 +34,7 @@ struct SplashView: View {
                 .ignoresSafeArea()
             
             // アイコン（中央）
-            Image("topbackground") // ← Assets に白いアイコン画像を入れておく
+            Image("topbackground3") // ← Assets に白いアイコン画像を入れておく
                 .resizable()
                 .scaledToFit()
                 .frame(width: 120, height: 120)
