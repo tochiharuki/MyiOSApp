@@ -81,7 +81,7 @@ jobs:
           CODE_SIGN_STYLE=Manual \
           CODE_SIGN_IDENTITY="Apple Distribution: Tochishita Haruki (8UT7U3MV6X)" \
           PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AppStore_Profile" \
-          DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}"
+          DEVELOPMENT_TEAM="${{ secrets.TEAM_ID_APPSTORE }}"
         echo "Archive created at $PWD/build/MyiOSApp_AppStore.xcarchive"
         ls -al build
 
