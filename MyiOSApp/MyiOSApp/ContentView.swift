@@ -36,11 +36,11 @@ struct SplashView: View {
             Image("topbackground") // ← Assets に追加した画像の名前
                 .resizable()     // リサイズ可能に
                 .scaledToFill()  // 画面全体にフィット
-                .opacity(1.0)    // 薄さを調整（0.0〜1.0）
+                .opacity(0.2)    // 薄さを調整（0.0〜1.0）
                 .ignoresSafeArea()
             
             // 上にテキスト
-            Text("領収書さん")
+            Text("領収書さ")
                 .font(.largeTitle)
                 .fontWeight(.bold)
                 .foregroundColor(.blue)
