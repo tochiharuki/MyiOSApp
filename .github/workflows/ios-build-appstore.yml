@@ -69,7 +69,7 @@ jobs:
           -archivePath $PWD/build/MyiOSApp_AppStore.xcarchive \
           archive \
           CODE_SIGN_STYLE=Manual \
-          CODE_SIGN_IDENTITY="Apple Distribution" \
+          CODE_SIGN_IDENTITY="Apple Distribution: Tochishita Haruki (8UT7U3MV6X)" \
           PROVISIONING_PROFILE_SPECIFIER="MyiOSApp_AppStore_Profile" \
           DEVELOPMENT_TEAM="${{ secrets.TEAM_ID }}"
 
