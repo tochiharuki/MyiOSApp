@@ -217,27 +217,33 @@ struct PDFGenerator {
             // --- 発行元（右下、余裕を持ってマージン付き） ---
             if !receipt.issuer.isEmpty {
                 let issuerParagraph = NSMutableParagraphStyle()
-                issuerParagraph.alignment = .left // ← 左揃え
+                issuerParagraph.alignment = .left
                 issuerParagraph.lineSpacing = 6
 
+                let font = ReceiptFont.regular(size: 16)
                 let issuerAttr: [NSAttributedString.Key: Any] = [
-                    .font: ReceiptFont.regular(size: 16),
+                    .font: font,
                     .paragraphStyle: issuerParagraph,
                     .foregroundColor: UIColor.black
                 ]
-                
-                // ✅ マージン設定
+
+                // テキストの実際のサイズを計算
+                let textSize = (receipt.issuer as NSString).boundingRect(
+                    with: CGSize(width: 320, height: .greatestFiniteMagnitude),
+                    options: [.usesLineFragmentOrigin],
+                    attributes: issuerAttr,
+                    context: nil
+                ).size
+
                 let marginRight: CGFloat = 20
                 let marginBottom: CGFloat = 20
-                let issuerWidth: CGFloat = 320
-                let issuerHeight: CGFloat = 130
-                
-                // ✅ 右下に配置（左揃えのまま）
+
+                // ✅ 実際の文字幅に基づいて右下配置
                 let issuerRect = CGRect(
-                    x: pageWidth - issuerWidth - marginRight, // ← 幅を引いて右下基準に
-                    y: pageHeight - issuerHeight - marginBottom,
-                    width: issuerWidth,
-                    height: issuerHeight
+                    x: pageWidth - textSize.width - marginRight,
+                    y: pageHeight - textSize.height - marginBottom,
+                    width: textSize.width,
+                    height: textSize.height
                 )
 
                 (receipt.issuer as NSString).draw(
@@ -247,6 +253,7 @@ struct PDFGenerator {
                     context: nil
                 )
             }
+
 
         }
         
