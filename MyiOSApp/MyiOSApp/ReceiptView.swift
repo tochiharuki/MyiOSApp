@@ -287,7 +287,7 @@ struct ReceiptView: View {
                 axis: .vertical
             )
             .lineLimit(7, reservesSpace: true)
-            .padding(8)
+            .padding(2)
             .background(Color.white)
             .cornerRadius(8)
             .overlay(
