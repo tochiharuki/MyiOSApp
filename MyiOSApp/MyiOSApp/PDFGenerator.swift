@@ -217,26 +217,29 @@ struct PDFGenerator {
             // --- 発行元（右下、余裕を持ってマージン付き） ---
             if !receipt.issuer.isEmpty {
                 let issuerParagraph = NSMutableParagraphStyle()
-                issuerParagraph.alignment = .left
+                issuerParagraph.alignment = .left // ← 左揃え
                 issuerParagraph.lineSpacing = 6
-                
+
                 let issuerAttr: [NSAttributedString.Key: Any] = [
                     .font: ReceiptFont.regular(size: 16),
                     .paragraphStyle: issuerParagraph,
                     .foregroundColor: UIColor.black
                 ]
                 
-                // ✅ 右と下にマージンを追加（20pt）
+                // ✅ マージン設定
                 let marginRight: CGFloat = 20
                 let marginBottom: CGFloat = 20
+                let issuerWidth: CGFloat = 320
+                let issuerHeight: CGFloat = 130
                 
+                // ✅ 右下に配置（左揃えのまま）
                 let issuerRect = CGRect(
-                    x: pageWidth - 360 - marginRight, // ← 右に余白
-                    y: pageHeight - 150 - marginBottom, // ← 下に余白
-                    width: 320,
-                    height: 130
+                    x: pageWidth - issuerWidth - marginRight, // ← 幅を引いて右下基準に
+                    y: pageHeight - issuerHeight - marginBottom,
+                    width: issuerWidth,
+                    height: issuerHeight
                 )
-                
+
                 (receipt.issuer as NSString).draw(
                     with: issuerRect,
                     options: [.usesLineFragmentOrigin, .usesFontLeading],
@@ -244,6 +247,7 @@ struct PDFGenerator {
                     context: nil
                 )
             }
+
         }
         
         return data
