@@ -262,7 +262,6 @@ struct ReceiptView: View {
                     withAnimation {
                         showToast = true
                     }
-                    // 2秒後に非表示
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                         withAnimation {
                             showToast = false
@@ -281,14 +280,14 @@ struct ReceiptView: View {
                 .opacityEffectOnPress()
             }
 
-            // ✅ テキストエリア（左揃え、最大7行）
+            // ✅ テキストフィールド本体（左揃えで最大7行）
             TextField(
                 "〇〇株式会社\n〒123-4567\n東京都新宿区〇〇町1-2-3\nTEL: 03-1234-5678\n登録番号：T1234567890123",
                 text: $receiptData.issuer,
                 axis: .vertical
             )
-            .multilineTextAlignment(.leading) // ← 左揃えにする
-            .lineLimit(7, reservesSpace: true) // ← 最大7行まで
+            .multilineTextAlignment(.leading) // ← 左揃え
+            .lineLimit(7, reservesSpace: true) // ← 最大7行
             .padding(8)
             .background(Color.white)
             .cornerRadius(8)
@@ -296,13 +295,14 @@ struct ReceiptView: View {
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.gray.opacity(0.5))
             )
-            .frame(maxWidth: .infinity, alignment: .trailing) // ← 全体は右下に配置
-            .padding(.top, 4)
 
             stampSection
         }
-        .frame(maxWidth: .infinity, alignment: .trailing) // ← 右下寄せ
+        // ✅ 外枠は右下寄せ。ただし内部は leading 揃えを保つ
+        .frame(maxWidth: .infinity, alignment: .trailing)
+        .padding(.trailing, 16)
     }
+
 
     // MARK: - 印紙枠切り替えセクション
     private var stampSection: some View {
