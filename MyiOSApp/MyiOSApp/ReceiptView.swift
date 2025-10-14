@@ -271,8 +271,8 @@ struct ReceiptView: View {
                 }) {
                     Text("発行元を保存")
                         .font(.caption)
-                        .padding(.horizontal, 8)
-                        .padding(.vertical, 4)
+                        .padding(.horizontal, 4)
+                        .padding(.vertical, 2)
                         .background(Color.blue.opacity(0.85))
                         .foregroundColor(.white)
                         .cornerRadius(6)
@@ -282,7 +282,7 @@ struct ReceiptView: View {
             }
 
             TextField(
-                "〇〇株式会社\n〒123-4567\n東京都新宿区〇〇町1-2-3\nTEL: 03-1234-5678\n登録番号：T1234567890123",
+                "〇〇株式会社\n〒123-4567\n東京都新宿区〇〇町1-2-3\nTEL: 03-1234-5678",
                 text: $receiptData.issuer,
                 axis: .vertical
             )
