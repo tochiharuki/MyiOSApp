@@ -81,7 +81,7 @@ struct PDFGenerator {
             
             // --- 宛名 ---
             let nameFont = ReceiptFont.regular(size: 22)
-            let recipient = "\(receipt.recipient) \(receipt.recipientSuffix)"
+            let recipient = "\(receipt.recipient)   \(receipt.recipientSuffix)"
             let recipientY: CGFloat = afterTitleY + 10
             recipient.draw(at: CGPoint(x: 80, y: recipientY), withAttributes: [.font: nameFont])
             
@@ -96,9 +96,26 @@ struct PDFGenerator {
             let dateFormatter = DateFormatter()
             dateFormatter.locale = Locale(identifier: "ja_JP")
             dateFormatter.dateFormat = "yyyy年MM月dd日"
-            let rightX = pageWidth - 260
-            ("領収番号: \(generateReceiptNo(from: receipt.issueDate))" as NSString).draw(at: CGPoint(x: rightX, y: recipientY), withAttributes: [.font: infoFont])
-            ("発行日: \(dateFormatter.string(from: receipt.issueDate))" as NSString).draw(at: CGPoint(x: rightX, y: recipientY + 24), withAttributes: [.font: infoFont])
+
+            let rightMargin: CGFloat = 40 // 右端からの余白
+            let baseY = recipientY
+
+            // 領収番号
+            let receiptNumberText = "領収番号: \(generateReceiptNo(from: receipt.issueDate))" as NSString
+            let receiptNumberSize = receiptNumberText.size(withAttributes: [.font: infoFont])
+            receiptNumberText.draw(
+                at: CGPoint(x: pageWidth - rightMargin - receiptNumberSize.width, y: baseY),
+                withAttributes: [.font: infoFont]
+            )
+
+            // 発行日
+            let issueDateText = "発行日: \(dateFormatter.string(from: receipt.issueDate))" as NSString
+            let issueDateSize = issueDateText.size(withAttributes: [.font: infoFont])
+            issueDateText.draw(
+                at: CGPoint(x: pageWidth - rightMargin - issueDateSize.width, y: baseY + 24),
+                withAttributes: [.font: infoFont]
+            )
+
             
             // --- 金額 ---
             let total = receipt.totalAmount
@@ -200,7 +217,7 @@ struct PDFGenerator {
             // --- 発行元（右下、余裕を持ってマージン付き） ---
             if !receipt.issuer.isEmpty {
                 let issuerParagraph = NSMutableParagraphStyle()
-                issuerParagraph.alignment = .right
+                issuerParagraph.alignment = .left
                 issuerParagraph.lineSpacing = 6
                 
                 let issuerAttr: [NSAttributedString.Key: Any] = [

@@ -253,15 +253,16 @@ struct ReceiptView: View {
 
                 Button(action: {
                     AppSettings.issuer = receiptData.issuer
-
+                    
                     // ✅ バイブ
                     let generator = UIImpactFeedbackGenerator(style: .light)
                     generator.impactOccurred()
-
+                    
                     // ✅ トーストを表示
                     withAnimation {
                         showToast = true
                     }
+                    // 2秒後に非表示
                     DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
                         withAnimation {
                             showToast = false
@@ -280,14 +281,12 @@ struct ReceiptView: View {
                 .opacityEffectOnPress()
             }
 
-            // ✅ テキストフィールド本体（左揃えで最大7行）
             TextField(
                 "〇〇株式会社\n〒123-4567\n東京都新宿区〇〇町1-2-3\nTEL: 03-1234-5678\n登録番号：T1234567890123",
                 text: $receiptData.issuer,
                 axis: .vertical
             )
-            .multilineTextAlignment(.leading) // ← 左揃え
-            .lineLimit(7, reservesSpace: true) // ← 最大7行
+            .lineLimit(7, reservesSpace: true)
             .padding(8)
             .background(Color.white)
             .cornerRadius(8)
@@ -295,15 +294,9 @@ struct ReceiptView: View {
                 RoundedRectangle(cornerRadius: 8)
                     .stroke(Color.gray.opacity(0.5))
             )
-
             stampSection
         }
-        // ✅ 外枠は右下寄せ。ただし内部は leading 揃えを保つ
-        .frame(maxWidth: .infinity, alignment: .trailing)
-        .padding(.trailing, 16)
     }
-
-
     // MARK: - 印紙枠切り替えセクション
     private var stampSection: some View {
         VStack(alignment: .leading, spacing: 6) {
