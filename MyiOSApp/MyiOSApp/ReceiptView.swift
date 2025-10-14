@@ -271,8 +271,8 @@ struct ReceiptView: View {
                 }) {
                     Text("発行元を保存")
                         .font(.caption)
-                        .padding(.horizontal, 4)
-                        .padding(.vertical, 2)
+                        .padding(.horizontal, 8)
+                        .padding(.vertical, 4)
                         .background(Color.blue.opacity(0.85))
                         .foregroundColor(.white)
                         .cornerRadius(6)
@@ -287,7 +287,7 @@ struct ReceiptView: View {
                 axis: .vertical
             )
             .lineLimit(7, reservesSpace: true)
-            .padding(2)
+            .padding(8)
             .background(Color.white)
             .cornerRadius(8)
             .overlay(
