@@ -229,7 +229,7 @@ struct PDFGenerator {
 
                 let marginRight: CGFloat = 20
                 let marginBottom: CGFloat = 20
-                let textBlockWidth: CGFloat = 320
+                let textBlockWidth: CGFloat = 220
 
                 // ✅ 幅を固定して、右端を marginRight に合わせる
                 let issuerRect = CGRect(
