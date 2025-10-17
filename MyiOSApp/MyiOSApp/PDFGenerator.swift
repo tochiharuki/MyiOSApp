@@ -217,28 +217,33 @@ struct PDFGenerator {
             // --- 発行元（右下、余裕を持ってマージン付き） ---
             if !receipt.issuer.isEmpty {
                 let issuerParagraph = NSMutableParagraphStyle()
-                issuerParagraph.alignment = .left  // ← 左揃えのままでOK
+                issuerParagraph.alignment = .left  // ← 左揃え
                 issuerParagraph.lineSpacing = 6
-
+            
                 let font = ReceiptFont.regular(size: 16)
                 let issuerAttr: [NSAttributedString.Key: Any] = [
                     .font: font,
                     .paragraphStyle: issuerParagraph,
                     .foregroundColor: UIColor.black
                 ]
-
-                let marginRight: CGFloat = 20
-                let marginBottom: CGFloat = 20
-                let textBlockWidth: CGFloat = 250
-
-                // ✅ 幅を固定して、右端を marginRight に合わせる
-                let issuerRect = CGRect(
-                    x: pageWidth - textBlockWidth - marginRight,
-                    y: pageHeight - 150 - marginBottom,
-                    width: textBlockWidth,
-                    height: 150
+            
+                let marginRight: CGFloat = 40
+                let marginBottom: CGFloat = 40
+                let maxWidth: CGFloat = 250
+            
+                // --- テキストサイズを計算 ---
+                let textBounding = (receipt.issuer as NSString).boundingRect(
+                    with: CGSize(width: maxWidth, height: CGFloat.greatestFiniteMagnitude),
+                    options: [.usesLineFragmentOrigin, .usesFontLeading],
+                    attributes: issuerAttr,
+                    context: nil
                 )
-
+            
+                // ✅ 右下に合わせるように配置
+                let x = pageWidth - textBounding.width - marginRight
+                let y = pageHeight - textBounding.height - marginBottom
+                let issuerRect = CGRect(x: x, y: y, width: textBounding.width, height: textBounding.height)
+            
                 (receipt.issuer as NSString).draw(
                     with: issuerRect,
                     options: [.usesLineFragmentOrigin, .usesFontLeading],
