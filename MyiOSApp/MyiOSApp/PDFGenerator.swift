@@ -239,7 +239,7 @@ struct PDFGenerator {
                     context: nil
                 )
             
-                // ✅ 右下に合わせるように配置
+                // ✅  右下に合わせるように配置
                 let x = pageWidth - textBounding.width - marginRight
                 let y = pageHeight - textBounding.height - marginBottom
                 let issuerRect = CGRect(x: x, y: y, width: textBounding.width, height: textBounding.height)
