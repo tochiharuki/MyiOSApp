@@ -23,6 +23,18 @@ struct ReceiptView: View {
     @State private var showSaveAlert = false
     @State private var templateName = ""
     @Environment(\.dismiss) private var dismiss
+    // ✅ init はここに書く
+    init(prefilledData: ReceiptData? = nil, useAppSettings: Bool = true) {
+        if let data = prefilledData {
+            _receiptData = State(initialValue: data)
+        } else if useAppSettings {
+            var newData = ReceiptData()
+            newData.issuer = AppSettings.issuer
+            _receiptData = State(initialValue: newData)
+        } else {
+            _receiptData = State(initialValue: ReceiptData())
+        }
+    }
 
     func saveAsTemplate() {
         showSaveAlert = true
@@ -108,19 +120,7 @@ struct ReceiptView: View {
             .environment(\.locale, Locale(identifier: "ja_JP"))
             .padding()
         }
-        init(prefilledData: ReceiptData? = nil, useAppSettings: Bool = true) {
-            if let data = prefilledData {
-                // 履歴やテンプレートから作成 → そのまま使う
-                _receiptData = State(initialValue: data)
-            } else if useAppSettings {
-                // 新規作成 → AppSettings から初期値を取得
-                var newData = ReceiptData()
-                newData.issuer = AppSettings.issuer
-                _receiptData = State(initialValue: newData)
-            } else {
-                _receiptData = State(initialValue: ReceiptData())
-            }
-        }
+        
 
         // ✅ 全画面オーバーレイ
         .overlay(
