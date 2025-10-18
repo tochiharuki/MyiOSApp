@@ -31,15 +31,6 @@ struct ReceiptView: View {
     @State private var showSaveAlert = false
     @State private var templateName = ""
     @Environment(\.dismiss) private var dismiss
-
-    init(prefilledData: ReceiptData? = nil) {
-        if let data = prefilledData {
-            _receiptData = State(initialValue: data)
-        } else {
-            _receiptData = State(initialValue: ReceiptData())
-        }
-    }
-
     func saveAsTemplate() {
         showSaveAlert = true
     }
