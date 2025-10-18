@@ -9,9 +9,17 @@ import SwiftUI
 import UIKit
 
 struct ReceiptView: View {
+    private let prefilledData: ReceiptData?  // ← ここに保持する
+
     @State private var receiptData = ReceiptData()
+
     init(prefilledData: ReceiptData? = nil) {
-        _receiptData = State(initialValue: prefilledData ?? ReceiptData())
+        self.prefilledData = prefilledData  // ← プロパティに保存
+        if let data = prefilledData {
+            _receiptData = State(initialValue: data)
+        } else {
+            _receiptData = State(initialValue: ReceiptData())
+        }
     }
     @State private var showPreview = false
     @State private var showDatePicker = false
@@ -118,7 +126,8 @@ struct ReceiptView: View {
         }
         
         .onAppear {
-            if prefilledData == nil {        // 新規作成時のみ
+            // 新規作成（履歴やテンプレートではない）場合のみ AppSettings から issuer を読み込む
+            if prefilledData == nil {
                 receiptData.issuer = AppSettings.issuer
             }
         }
