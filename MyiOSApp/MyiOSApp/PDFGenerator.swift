@@ -167,10 +167,10 @@ struct PDFGenerator {
                 tableY += 28
             }
             if receipt.taxRate == "8%" {
-                // drawRow(label: "8%対象小計", value: "¥\(formatNumber(receipt.subtotal))")
+                drawRow(label: "税抜金額", value: "¥\(formatNumber(receipt.subtotal))")
                 drawRow(label: "8% 消費税", value: "¥\(formatNumber(receipt.tax))")
             } else if receipt.taxRate == "10%" {
-                // drawRow(label: "10%対象小計", value: "¥\(formatNumber(receipt.subtotal))")
+                drawRow(label: "税抜金額", value: "¥\(formatNumber(receipt.subtotal))")
                 drawRow(label: "10% 消費税", value: "¥\(formatNumber(receipt.tax))")
             }
             
