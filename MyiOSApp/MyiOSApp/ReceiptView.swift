@@ -23,14 +23,10 @@ struct ReceiptView: View {
     @State private var showSaveAlert = false
     @State private var templateName = ""
     @Environment(\.dismiss) private var dismiss
-    // ✅ init はここに書く
-    init(prefilledData: ReceiptData? = nil, useAppSettings: Bool = true) {
+
+    init(prefilledData: ReceiptData? = nil) {
         if let data = prefilledData {
             _receiptData = State(initialValue: data)
-        } else if useAppSettings {
-            var newData = ReceiptData()
-            newData.issuer = AppSettings.issuer
-            _receiptData = State(initialValue: newData)
         } else {
             _receiptData = State(initialValue: ReceiptData())
         }
@@ -121,7 +117,12 @@ struct ReceiptView: View {
             .padding()
         }
         
-
+        .onAppear {
+            if prefilledData == nil {        // 新規作成時のみ
+                receiptData.issuer = AppSettings.issuer
+            }
+        }
+        
         // ✅ 全画面オーバーレイ
         .overlay(
             Group {
